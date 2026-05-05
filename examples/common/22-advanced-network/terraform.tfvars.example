@@ -1,0 +1,29 @@
+zstack_host              = "zstack.example.com"
+zstack_port              = 8080
+zstack_access_key_id     = "replace-me"
+zstack_access_key_secret = "replace-me"
+
+ipsec_name   = "tf-ipsec"
+vip_uuid     = "replace-me"
+peer_address = "198.51.100.10"
+auth_key     = "replace-me"
+auth_mode    = "psk"
+
+ike_auth_algorithm          = null
+ike_encryption_algorithm    = null
+policy_auth_algorithm       = null
+policy_encryption_algorithm = null
+policy_mode                 = null
+transform_protocol          = null
+pfs                         = null
+
+rule_set_name    = "tf-policy-route-set"
+vrouter_uuid     = "replace-me"
+rule_set_type    = null
+route_table_uuid = "replace-me"
+rule_number      = 100
+source_ip        = null
+source_port      = null
+dest_ip          = "10.10.0.0/16"
+dest_port        = null
+protocol         = null

@@ -1,0 +1,83 @@
+site_name: Terraform Provider ZStack Docs
+site_description: Guides and examples for managing ZStack resources with Terraform.
+repo_name: terraform-provider-zstack-docs
+docs_dir: docs
+site_dir: site
+exclude_docs: |
+  ../internal/**
+  ../skills/**
+  ../website/**
+  ../assets/**/*.md
+  ../.claude/**
+theme:
+  name: material
+  language: en
+  features:
+    - navigation.sections
+    - navigation.expand
+    - content.code.copy
+markdown_extensions:
+  - admonition
+  - toc:
+      permalink: true
+  - pymdownx.highlight
+  - pymdownx.superfences
+nav:
+  - Home: index.md
+  - 中文:
+      - Overview: zh/index.md
+      - 客户使用手册:
+          - Getting Started: zh/manual/getting-started.md
+          - Authentication: zh/manual/authentication.md
+          - Query Existing Resources: zh/manual/query-existing-resources.md
+          - Create VM: zh/manual/create-vm.md
+          - Networking: zh/manual/networking.md
+          - Storage: zh/manual/storage.md
+          - Image: zh/manual/image.md
+          - IAM: zh/manual/iam.md
+          - Load Balancer: zh/manual/load-balancer.md
+          - Monitoring & Notification: zh/manual/monitoring-notification.md
+          - Admin Operations: zh/manual/admin-operations.md
+          - Backup & CDP: zh/manual/backup-cdp.md
+          - Network Observability: zh/manual/network-observability.md
+          - Advanced Network: zh/manual/advanced-network.md
+          - Resource Stack: zh/manual/resource-stack.md
+          - Specialized Resources: zh/manual/specialized-resources.md
+      - 场景化 Examples: zh/scenarios/index.md
+      - 最佳实践: zh/best-practices/index.md
+      - Troubleshooting: zh/troubleshooting/index.md
+      - FAQ: zh/faq/index.md
+      - Migration Guide:
+          - Overview: zh/migration/index.md
+          - Import Existing Resources: zh/migration/import-existing-resources.md
+      - 截图与架构图: zh/diagrams/index.md
+  - English:
+      - Overview: en/index.md
+      - User Manual:
+          - Overview: en/manual/index.md
+          - Getting Started: en/manual/getting-started.md
+          - Authentication: en/manual/authentication.md
+          - Query Existing Resources: en/manual/query-existing-resources.md
+          - Create VM: en/manual/create-vm.md
+          - Networking: en/manual/networking.md
+          - Storage: en/manual/storage.md
+          - Image: en/manual/image.md
+          - IAM: en/manual/iam.md
+          - Load Balancer: en/manual/load-balancer.md
+          - Monitoring & Notification: en/manual/monitoring-notification.md
+          - Admin Operations: en/manual/admin-operations.md
+          - Backup & CDP: en/manual/backup-cdp.md
+          - Network Observability: en/manual/network-observability.md
+          - Advanced Network: en/manual/advanced-network.md
+          - Resource Stack: en/manual/resource-stack.md
+          - Specialized Resources: en/manual/specialized-resources.md
+      - Scenario Examples: en/scenarios/index.md
+      - Best Practices: en/best-practices/index.md
+      - Troubleshooting: en/troubleshooting/index.md
+      - FAQ: en/faq/index.md
+      - Migration Guide:
+          - Overview: en/migration/index.md
+          - Import Existing Resources: en/migration/import-existing-resources.md
+      - Screenshots & Diagrams: en/diagrams/index.md
+  - Examples:
+      - Overview: examples/index.md

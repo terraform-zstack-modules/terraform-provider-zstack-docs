@@ -1,0 +1,29 @@
+zstack_host              = "zstack.example.com"
+zstack_port              = 8080
+zstack_access_key_id     = "replace-me"
+zstack_access_key_secret = "replace-me"
+
+backup_storage_uuid = "replace-me"
+
+cdp_policy_name              = "tf-cdp-policy"
+recovery_point_per_second    = 1
+retention_time_per_day       = 7
+full_backup_interval_in_day  = 7
+expire_time_in_day           = 30
+daily_rp_since_day           = 7
+hourly_rp_since_day          = 1
+
+cdp_task_name     = "tf-cdp-task"
+cdp_resource_uuids = ["replace-me"]
+cdp_task_type     = "replace-me"
+backup_bandwidth  = null
+max_capacity      = null
+max_latency       = null
+
+volume_backup_name   = "tf-volume-backup"
+volume_uuid          = "replace-me"
+database_backup_name = "tf-database-backup"
+
+zbox_uuid        = null
+zbox_backup_name = "tf-zbox-backup"
+zbox_dry_run     = true

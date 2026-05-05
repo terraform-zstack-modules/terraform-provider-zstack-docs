@@ -1,0 +1,16 @@
+zstack_host              = "zstack.example.com"
+zstack_port              = 8080
+zstack_access_key_id     = "replace-me"
+zstack_access_key_secret = "replace-me"
+
+existing_image_name = "Ubuntu-24.04"
+
+create_image        = false
+new_image_name      = "tf-managed-image"
+new_image_url       = null
+backup_storage_uuid = null
+new_image_format    = "qcow2"
+new_image_platform  = "Linux"
+new_image_guest_os_type = "Linux"
+new_image_architecture  = "x86_64"
+new_image_boot_mode     = "legacy"

@@ -1,0 +1,12 @@
+zstack_host              = "zstack.example.com"
+zstack_port              = 8080
+zstack_access_key_id     = "replace-me"
+zstack_access_key_secret = "replace-me"
+
+vpc_name            = "tf-vpc"
+l2_network_uuid     = "replace-me"
+virtual_router_uuid = "replace-me"
+subnet_name         = "tf-private-subnet"
+subnet_cidr         = "192.168.10.0/24"
+subnet_gateway      = "192.168.10.1"
+dns                 = "223.5.5.5"

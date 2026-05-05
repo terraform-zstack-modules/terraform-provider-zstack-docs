@@ -1,0 +1,23 @@
+zstack_host              = "zstack.example.com"
+zstack_port              = 8080
+zstack_access_key_id     = "replace-me"
+zstack_access_key_secret = "replace-me"
+
+flow_meter_name              = "tf-flow-meter"
+flow_meter_type              = "replace-me"
+flow_meter_server            = "192.0.2.10"
+flow_meter_port              = 2055
+flow_meter_version           = "5"
+flow_meter_sample            = 1
+flow_meter_generate_interval = 60
+
+flow_collector_name   = "tf-flow-collector"
+flow_collector_server = "192.0.2.10"
+flow_collector_port   = 2055
+
+port_mirror_name         = "tf-port-mirror"
+mirror_network_uuid      = "replace-me"
+port_mirror_session_name = "tf-port-mirror-session"
+port_mirror_session_type = "replace-me"
+src_end_point            = "replace-me"
+dst_end_point            = "replace-me"

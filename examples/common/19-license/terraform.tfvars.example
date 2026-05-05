@@ -1,0 +1,9 @@
+zstack_host              = "zstack.example.com"
+zstack_port              = 8080
+zstack_access_key_id     = "replace-me"
+zstack_access_key_secret = "replace-me"
+
+node_name_pattern    = "%"
+upload_license       = false
+management_node_uuid = null
+license_text         = null

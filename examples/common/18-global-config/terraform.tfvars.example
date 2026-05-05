@@ -1,0 +1,9 @@
+zstack_host              = "zstack.example.com"
+zstack_port              = 8080
+zstack_access_key_id     = "replace-me"
+zstack_access_key_secret = "replace-me"
+
+global_config_category = "vm"
+global_config_name     = "deletionPolicy"
+global_config_value    = null
+manage_global_config   = false

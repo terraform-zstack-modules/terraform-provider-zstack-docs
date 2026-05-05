@@ -1,0 +1,29 @@
+zstack_host              = "zstack.example.com"
+zstack_port              = 8080
+zstack_access_key_id     = "replace-me"
+zstack_access_key_secret = "replace-me"
+
+security_group_name = "tf-web"
+vm_name             = "tf-sg-demo"
+image_name          = "Ubuntu-24.04"
+l3_network_name     = "default-l3"
+instance_offering_name = "small"
+static_ip           = null
+vswitch_type        = "LinuxBridge"
+
+ingress_rules = {
+  ssh = {
+    protocol                = "TCP"
+    priority                = 10
+    ip_ranges               = "10.0.0.0/8"
+    destination_port_ranges = "22"
+    description             = "Allow SSH from private networks"
+  }
+  http = {
+    protocol                = "TCP"
+    priority                = 20
+    ip_ranges               = "0.0.0.0/0"
+    destination_port_ranges = "80"
+    description             = "Allow HTTP from anywhere"
+  }
+}
