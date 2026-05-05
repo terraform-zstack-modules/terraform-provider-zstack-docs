@@ -1,29 +1,35 @@
 variable "zstack_host" {
-  type = string
+  description = "ZStack management endpoint host or IP address."
+  type        = string
 }
 
 variable "zstack_port" {
-  type    = number
-  default = 8080
+  description = "ZStack management endpoint port."
+  type        = number
+  default     = 8080
 }
 
 variable "zstack_access_key_id" {
-  type = string
+  description = "AccessKey ID used to authenticate to ZStack."
+  type        = string
 }
 
 variable "zstack_access_key_secret" {
-  type      = string
-  sensitive = true
+  description = "AccessKey secret used to authenticate to ZStack."
+  type        = string
+  sensitive   = true
 }
 
 variable "vip_name" {
-  type    = string
-  default = "tf-demo-vip"
+  description = "Name of the vip to create or query."
+  type        = string
+  default     = "tf-demo-vip"
 }
 
 variable "eip_name" {
-  type    = string
-  default = "tf-demo-eip"
+  description = "Name of the eip to create or query."
+  type        = string
+  default     = "tf-demo-eip"
 }
 
 variable "public_l3_network_uuid" {

@@ -1,19 +1,23 @@
 variable "zstack_host" {
-  type = string
+  description = "ZStack management endpoint host or IP address."
+  type        = string
 }
 
 variable "zstack_port" {
-  type    = number
-  default = 8080
+  description = "ZStack management endpoint port."
+  type        = number
+  default     = 8080
 }
 
 variable "zstack_access_key_id" {
-  type = string
+  description = "AccessKey ID used to authenticate to ZStack."
+  type        = string
 }
 
 variable "zstack_access_key_secret" {
-  type      = string
-  sensitive = true
+  description = "AccessKey secret used to authenticate to ZStack."
+  type        = string
+  sensitive   = true
 }
 
 variable "public_l3_network_uuid" {
@@ -22,31 +26,37 @@ variable "public_l3_network_uuid" {
 }
 
 variable "vip_name" {
-  type    = string
-  default = "tf-web-vip"
+  description = "Name of the vip to create or query."
+  type        = string
+  default     = "tf-web-vip"
 }
 
 variable "load_balancer_name" {
-  type    = string
-  default = "tf-web-lb"
+  description = "Name of the load balancer to create or query."
+  type        = string
+  default     = "tf-web-lb"
 }
 
 variable "server_group_name" {
-  type    = string
-  default = "tf-web-backends"
+  description = "Name of the server group to create or query."
+  type        = string
+  default     = "tf-web-backends"
 }
 
 variable "listener_name" {
-  type    = string
-  default = "tf-web-http"
+  description = "Name of the listener to create or query."
+  type        = string
+  default     = "tf-web-http"
 }
 
 variable "frontend_port" {
-  type    = number
-  default = 80
+  description = "Port number for the frontend."
+  type        = number
+  default     = 80
 }
 
 variable "backend_port" {
-  type    = number
-  default = 8080
+  description = "Port number for the backend."
+  type        = number
+  default     = 8080
 }

@@ -22,6 +22,7 @@ Use this skill to produce customer-ready Terraform configuration and guidance fo
 8. For new VM examples, use `network_interfaces`; do not recommend old `l3_network_uuids`.
 9. For batch resources, prefer `for_each` with stable keys over `count`.
 10. Never hard-code real credentials, real AccessKeys, or customer secrets.
+11. Before delivering repository changes, run the quality gate from `references/quality-gates.md` or explain why it could not be run.
 
 ## Provider Source
 
@@ -51,3 +52,4 @@ Load only the reference needed for the task:
 - `references/scenario-patterns.md`
 - `references/troubleshooting.md`
 - `references/anti-patterns.md`
+- `references/quality-gates.md`

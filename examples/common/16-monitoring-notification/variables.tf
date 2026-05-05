@@ -1,85 +1,103 @@
 variable "zstack_host" {
-  type = string
+  description = "ZStack management endpoint host or IP address."
+  type        = string
 }
 
 variable "zstack_port" {
-  type    = number
-  default = 8080
+  description = "ZStack management endpoint port."
+  type        = number
+  default     = 8080
 }
 
 variable "zstack_access_key_id" {
-  type = string
+  description = "AccessKey ID used to authenticate to ZStack."
+  type        = string
 }
 
 variable "zstack_access_key_secret" {
-  type      = string
-  sensitive = true
+  description = "AccessKey secret used to authenticate to ZStack."
+  type        = string
+  sensitive   = true
 }
 
 variable "topic_name" {
-  type    = string
-  default = "tf-ops-topic"
+  description = "Name of the topic to create or query."
+  type        = string
+  default     = "tf-ops-topic"
 }
 
 variable "email_endpoint_name" {
-  type    = string
-  default = "tf-ops-email"
+  description = "Name of the email endpoint to create or query."
+  type        = string
+  default     = "tf-ops-email"
 }
 
 variable "notification_email" {
-  type = string
+  description = "Email address for the notification."
+  type        = string
 }
 
 variable "webhook_name" {
-  type    = string
-  default = "tf-ops-webhook"
+  description = "Name of the webhook to create or query."
+  type        = string
+  default     = "tf-ops-webhook"
 }
 
 variable "webhook_type" {
-  type    = string
-  default = "HTTP"
+  description = "Type value for the webhook."
+  type        = string
+  default     = "HTTP"
 }
 
 variable "webhook_url" {
-  type = string
+  description = "Notification webhook endpoint URL."
+  type        = string
 }
 
 variable "webhook_opaque" {
-  type    = string
-  default = "{}"
+  description = "Input value for webhook opaque."
+  type        = string
+  default     = "{}"
 }
 
 variable "alarm_name" {
-  type    = string
-  default = "tf-high-cpu"
+  description = "Name of the alarm to create or query."
+  type        = string
+  default     = "tf-high-cpu"
 }
 
 variable "metric_namespace" {
-  type    = string
-  default = "ZStack/VM"
+  description = "Input value for metric namespace."
+  type        = string
+  default     = "ZStack/VM"
 }
 
 variable "metric_name" {
-  type    = string
-  default = "CPUUtilization"
+  description = "Name of the metric to create or query."
+  type        = string
+  default     = "CPUUtilization"
 }
 
 variable "comparison_operator" {
-  type    = string
-  default = "GreaterThanOrEqualTo"
+  description = "Input value for comparison operator."
+  type        = string
+  default     = "GreaterThanOrEqualTo"
 }
 
 variable "threshold" {
-  type    = number
-  default = 80
+  description = "Input value for threshold."
+  type        = number
+  default     = 80
 }
 
 variable "period" {
-  type    = number
-  default = 60
+  description = "Input value for period."
+  type        = number
+  default     = 60
 }
 
 variable "repeat_interval" {
-  type    = number
-  default = 300
+  description = "Interval value for the repeat interval."
+  type        = number
+  default     = 300
 }
