@@ -1,0 +1,18 @@
+zstack_host              = "zstack.example.com"
+zstack_port              = 8080
+zstack_access_key_id     = "replace-me"
+zstack_access_key_secret = "replace-me"
+
+vpc_name            = "tf-vpc-routing"
+l2_network_uuid     = "replace-me"
+virtual_router_uuid = "replace-me"
+subnet_name         = "tf-vpc-subnet"
+subnet_cidr         = "192.168.20.0/24"
+subnet_gateway      = "192.168.20.1"
+dns                 = "223.5.5.5"
+
+route_table_name   = "tf-vpc-route-table"
+route_destination  = "0.0.0.0/0"
+route_target       = "replace-me"
+route_type         = "UserStatic"
+route_distance     = 100

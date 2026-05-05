@@ -1,0 +1,9 @@
+zstack_host              = "zstack.example.com"
+zstack_port              = 8080
+zstack_access_key_id     = "replace-me"
+zstack_access_key_secret = "replace-me"
+
+vip_name               = "tf-demo-vip"
+eip_name               = "tf-demo-eip"
+public_l3_network_uuid = "replace-me"
+vm_nic_uuid            = "replace-me"

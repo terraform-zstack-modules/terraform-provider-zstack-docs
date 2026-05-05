@@ -1,0 +1,10 @@
+zstack_host              = "zstack.example.com"
+zstack_port              = 8080
+zstack_access_key_id     = "replace-me"
+zstack_access_key_secret = "replace-me"
+
+account_name        = "tf-automation"
+account_password    = "replace-with-secure-password"
+project_name        = "tf-project"
+virtual_id_name     = "tf-virtual-id"
+virtual_id_password = "replace-with-secure-password"

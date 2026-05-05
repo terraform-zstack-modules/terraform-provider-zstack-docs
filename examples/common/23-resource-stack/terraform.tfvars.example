@@ -1,0 +1,16 @@
+zstack_host              = "zstack.example.com"
+zstack_port              = 8080
+zstack_access_key_id     = "replace-me"
+zstack_access_key_secret = "replace-me"
+
+stack_template_name = "tf-stack-template"
+stack_template_type = null
+resource_stack_name = "tf-resource-stack"
+resource_stack_type = null
+stack_parameters    = null
+rollback            = true
+
+preconfiguration_template_name = "tf-preconfiguration-template"
+preconfiguration_template_type = "kickstart"
+preconfiguration_distribution  = "Linux"
+preconfiguration_content       = "REPO_URL USERNAME PASSWORD NETWORK_CFGS FORCE_INSTALL PRE_SCRIPTS POST_SCRIPTS"

@@ -1,0 +1,15 @@
+zstack_host              = "zstack.example.com"
+zstack_port              = 8080
+zstack_access_key_id     = "replace-me"
+zstack_access_key_secret = "replace-me"
+
+job_name             = "tf-scheduler-job"
+job_type             = "replace-me"
+target_resource_uuid = "replace-me"
+
+trigger_name       = "tf-scheduler-trigger"
+scheduler_type     = "cron"
+cron               = "0 0 2 * * ?"
+scheduler_interval = null
+repeat_count       = null
+start_time         = null

@@ -1,0 +1,21 @@
+zstack_host              = "zstack.example.com"
+zstack_port              = 8080
+zstack_access_key_id     = "replace-me"
+zstack_access_key_secret = "replace-me"
+
+topic_name          = "tf-ops-topic"
+email_endpoint_name = "tf-ops-email"
+notification_email  = "ops@example.com"
+
+webhook_name   = "tf-ops-webhook"
+webhook_type   = "HTTP"
+webhook_url    = "https://hooks.example.com/zstack"
+webhook_opaque = "{}"
+
+alarm_name          = "tf-high-cpu"
+metric_namespace    = "ZStack/VM"
+metric_name         = "CPUUtilization"
+comparison_operator = "GreaterThanOrEqualTo"
+threshold           = 80
+period              = 60
+repeat_interval     = 300
