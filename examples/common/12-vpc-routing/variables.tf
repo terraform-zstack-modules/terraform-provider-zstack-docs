@@ -1,60 +1,73 @@
 variable "zstack_host" {
-  type = string
+  description = "ZStack management endpoint host or IP address."
+  type        = string
 }
 
 variable "zstack_port" {
-  type    = number
-  default = 8080
+  description = "ZStack management endpoint port."
+  type        = number
+  default     = 8080
 }
 
 variable "zstack_access_key_id" {
-  type = string
+  description = "AccessKey ID used to authenticate to ZStack."
+  type        = string
 }
 
 variable "zstack_access_key_secret" {
-  type      = string
-  sensitive = true
+  description = "AccessKey secret used to authenticate to ZStack."
+  type        = string
+  sensitive   = true
 }
 
 variable "vpc_name" {
-  type    = string
-  default = "tf-vpc-routing"
+  description = "Name of the vpc to create or query."
+  type        = string
+  default     = "tf-vpc-routing"
 }
 
 variable "l2_network_uuid" {
-  type = string
+  description = "UUID of the l2 network to use in this example."
+  type        = string
 }
 
 variable "virtual_router_uuid" {
-  type = string
+  description = "UUID of the virtual router to use in this example."
+  type        = string
 }
 
 variable "subnet_name" {
-  type    = string
-  default = "tf-vpc-subnet"
+  description = "Name of the subnet to create or query."
+  type        = string
+  default     = "tf-vpc-subnet"
 }
 
 variable "subnet_cidr" {
-  type = string
+  description = "CIDR block for the subnet."
+  type        = string
 }
 
 variable "subnet_gateway" {
-  type = string
+  description = "Gateway address for the subnet."
+  type        = string
 }
 
 variable "dns" {
-  type    = string
-  default = "223.5.5.5"
+  description = "Input value for dns."
+  type        = string
+  default     = "223.5.5.5"
 }
 
 variable "route_table_name" {
-  type    = string
-  default = "tf-vpc-route-table"
+  description = "Name of the route table to create or query."
+  type        = string
+  default     = "tf-vpc-route-table"
 }
 
 variable "route_destination" {
-  type    = string
-  default = "0.0.0.0/0"
+  description = "Input value for route destination."
+  type        = string
+  default     = "0.0.0.0/0"
 }
 
 variable "route_target" {
@@ -63,11 +76,13 @@ variable "route_target" {
 }
 
 variable "route_type" {
-  type    = string
-  default = "UserStatic"
+  description = "Type value for the route."
+  type        = string
+  default     = "UserStatic"
 }
 
 variable "route_distance" {
-  type    = number
-  default = 100
+  description = "Input value for route distance."
+  type        = number
+  default     = 100
 }

@@ -4,10 +4,10 @@
 
 ## 推荐流程
 
-1. Write the Terraform resource block with the intended final configuration.
-2. Import the remote object into state.
-3. Run `terraform plan`.
-4. Adjust configuration until the plan shows no unintended replacement.
+1. 先编写目标 Terraform resource block，内容应接近最终期望配置。
+2. 使用 import 将远端已有对象导入 Terraform state。
+3. 执行 `terraform plan` 查看 state、HCL 与远端对象之间的差异。
+4. 按 plan 结果补齐或调整配置，直到不再出现非预期 replacement。
 
 !!! warning
     import 后必须反复执行 `terraform plan` 并补齐 resource block，直到

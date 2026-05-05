@@ -104,6 +104,36 @@ Internal planning and validation documents include execution trackers, resource
 priority planning, and `internal/plan/environment-validation-plan.md`. These are
 for maintainers and are not published to the customer-facing site.
 
+## Quality Gates
+
+Run the shared local gate before opening a pull request:
+
+```bash
+make quality
+```
+
+The gate requires Terraform and ripgrep (`rg`). It checks repository layout,
+sensitive file tracking, Terraform formatting, example structure, variable
+descriptions, provider version consistency, deprecated patterns, and placeholder
+hygiene. To install the same gate as a local pre-commit hook:
+
+```bash
+make hooks
+```
+
+When documentation navigation or Markdown pages change, also run:
+
+```bash
+make docs
+```
+
+This target runs `python3 -m mkdocs build --strict`.
+CI installs MkDocs dependencies from `requirements-docs.txt`.
+
+CI runs `make quality` and `make docs` on pull requests and selected branch
+pushes. Environment-backed Terraform validation remains separate because it
+requires ZStack credentials and real infrastructure.
+
 ## Provider Version Updates
 
 This documentation and all runnable examples are based on ZStack provider

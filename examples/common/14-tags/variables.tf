@@ -1,39 +1,47 @@
 variable "zstack_host" {
-  type = string
+  description = "ZStack management endpoint host or IP address."
+  type        = string
 }
 
 variable "zstack_port" {
-  type    = number
-  default = 8080
+  description = "ZStack management endpoint port."
+  type        = number
+  default     = 8080
 }
 
 variable "zstack_access_key_id" {
-  type = string
+  description = "AccessKey ID used to authenticate to ZStack."
+  type        = string
 }
 
 variable "zstack_access_key_secret" {
-  type      = string
-  sensitive = true
+  description = "AccessKey secret used to authenticate to ZStack."
+  type        = string
+  sensitive   = true
 }
 
 variable "tag_name" {
-  type    = string
-  default = "environment"
+  description = "Name of the tag to create or query."
+  type        = string
+  default     = "environment"
 }
 
 variable "tag_description" {
-  type    = string
-  default = "Environment tag managed by Terraform"
+  description = "Input value for tag description."
+  type        = string
+  default     = "Environment tag managed by Terraform"
 }
 
 variable "tag_value" {
-  type    = string
-  default = "production"
+  description = "Value assigned to the tag."
+  type        = string
+  default     = "production"
 }
 
 variable "tag_color" {
-  type    = string
-  default = "#57D355"
+  description = "Color value for the tag."
+  type        = string
+  default     = "#57D355"
 }
 
 variable "resource_uuids" {

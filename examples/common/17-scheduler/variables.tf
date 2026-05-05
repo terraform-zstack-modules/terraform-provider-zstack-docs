@@ -1,24 +1,29 @@
 variable "zstack_host" {
-  type = string
+  description = "ZStack management endpoint host or IP address."
+  type        = string
 }
 
 variable "zstack_port" {
-  type    = number
-  default = 8080
+  description = "ZStack management endpoint port."
+  type        = number
+  default     = 8080
 }
 
 variable "zstack_access_key_id" {
-  type = string
+  description = "AccessKey ID used to authenticate to ZStack."
+  type        = string
 }
 
 variable "zstack_access_key_secret" {
-  type      = string
-  sensitive = true
+  description = "AccessKey secret used to authenticate to ZStack."
+  type        = string
+  sensitive   = true
 }
 
 variable "job_name" {
-  type    = string
-  default = "tf-scheduler-job"
+  description = "Name of the job to create or query."
+  type        = string
+  default     = "tf-scheduler-job"
 }
 
 variable "job_type" {
@@ -32,8 +37,9 @@ variable "target_resource_uuid" {
 }
 
 variable "trigger_name" {
-  type    = string
-  default = "tf-scheduler-trigger"
+  description = "Name of the trigger to create or query."
+  type        = string
+  default     = "tf-scheduler-trigger"
 }
 
 variable "scheduler_type" {

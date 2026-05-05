@@ -1,46 +1,56 @@
 variable "zstack_host" {
-  type = string
+  description = "ZStack management endpoint host or IP address."
+  type        = string
 }
 
 variable "zstack_port" {
-  type    = number
-  default = 8080
+  description = "ZStack management endpoint port."
+  type        = number
+  default     = 8080
 }
 
 variable "zstack_access_key_id" {
-  type = string
+  description = "AccessKey ID used to authenticate to ZStack."
+  type        = string
 }
 
 variable "zstack_access_key_secret" {
-  type      = string
-  sensitive = true
+  description = "AccessKey secret used to authenticate to ZStack."
+  type        = string
+  sensitive   = true
 }
 
 variable "vm_name" {
-  type    = string
-  default = "tf-init-demo"
+  description = "Name of the vm to create or query."
+  type        = string
+  default     = "tf-init-demo"
 }
 
 variable "image_name" {
-  type = string
+  description = "Name of the image to create or query."
+  type        = string
 }
 
 variable "l3_network_name" {
-  type = string
+  description = "Name of the l3 network to create or query."
+  type        = string
 }
 
 variable "instance_offering_name" {
-  type = string
+  description = "Name of the instance offering to create or query."
+  type        = string
 }
 
 variable "static_ip" {
-  type    = string
-  default = null
+  description = "IP address for the static."
+  type        = string
+  default     = null
 }
 
 variable "ssh_key_name" {
-  type    = string
-  default = "tf-admin-key"
+  description = "Name of the ssh key to create or query."
+  type        = string
+  default     = "tf-admin-key"
 }
 
 variable "ssh_public_key" {
@@ -49,8 +59,9 @@ variable "ssh_public_key" {
 }
 
 variable "script_name" {
-  type    = string
-  default = "tf-bootstrap"
+  description = "Name of the script to create or query."
+  type        = string
+  default     = "tf-bootstrap"
 }
 
 variable "script_content" {
@@ -60,6 +71,7 @@ variable "script_content" {
 }
 
 variable "script_timeout" {
-  type    = number
-  default = 180
+  description = "Time value for the script timeout."
+  type        = number
+  default     = 180
 }
