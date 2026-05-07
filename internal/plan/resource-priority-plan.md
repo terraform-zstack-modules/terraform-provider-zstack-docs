@@ -77,7 +77,6 @@ P2 面向平台管理员和高级交付场景。第一版可做索引和简短�
 | CDP / Backup | `zstack_cdp_policy`, `zstack_cdp_task`, `zstack_volume_backup`, `zstack_database_backup`, `zstack_zbox_backup` | 备份、恢复、数据保护 |
 | Flow / Mirror | `zstack_flow_meter`, `zstack_flow_collector`, `zstack_port_mirror`, `zstack_port_mirror_session` | 网络流量观测和排障 |
 | IPSec / Policy Route | `zstack_ipsec_connection`, `zstack_policy_route_rule_set`, `zstack_policy_route_rule` | 高级网络互联 |
-| Resource Stack | `zstack_resource_stack`, `zstack_stack_template`, `zstack_preconfiguration_template` | 模板化交付 |
 
 ## P3：专项/行业/硬件/集成类
 
@@ -171,7 +170,7 @@ P3 不阻塞第一版客户手册。先建立 reference 索引，后续根据客
 
 | 来源 | 用途 |
 |---|---|
-| `https://registry.terraform.io/providers/ZStack-Robot/zstack/1.1.2` | 当前文档基准版本的 provider 文档 |
+| `https://registry.terraform.io/providers/ZStack-Robot/zstack/1.1.3` | 当前文档基准版本的 provider 文档 |
 | `https://github.com/ZStack-Robot/terraform-provider-zstack/tree/main/docs/resources` | resource reference、字段说明、导入支持 |
 | `https://github.com/ZStack-Robot/terraform-provider-zstack/tree/main/docs/data-sources` | data source reference、查询字段 |
 | `https://github.com/ZStack-Robot/terraform-provider-zstack/tree/main/examples/resources` | 真实 resource HCL 片段 |

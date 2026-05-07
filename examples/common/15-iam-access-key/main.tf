@@ -4,7 +4,7 @@ terraform {
   required_providers {
     zstack = {
       source  = "ZStack-Robot/zstack"
-      version = "1.1.2"
+      version = "1.1.3"
     }
   }
 }
@@ -35,6 +35,7 @@ resource "zstack_iam2_virtual_id" "automation" {
 
 resource "zstack_access_key" "automation" {
   account_uuid = zstack_account.automation.uuid
+  user_uuid    = zstack_account.automation.uuid
   description  = "AccessKey for Terraform automation"
 }
 

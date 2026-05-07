@@ -26,9 +26,10 @@ variable "vpc_name" {
   default     = "tf-vpc"
 }
 
-variable "virtual_router_uuid" {
-  description = "UUID of the virtual router to use in this example."
+variable "virtual_router_name_pattern" {
+  description = "Virtual router name pattern used by this example."
   type        = string
+  default     = "%"
 }
 
 variable "subnet_name" {
@@ -37,9 +38,10 @@ variable "subnet_name" {
   default     = "tf-private-subnet"
 }
 
-variable "l2_network_uuid" {
-  description = "UUID of the l2 network to use in this example."
+variable "l2_network_name_pattern" {
+  description = "L2 network name pattern used by this example."
   type        = string
+  default     = "%"
 }
 
 variable "subnet_cidr" {

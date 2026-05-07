@@ -1,0 +1,26 @@
+zstack_host              = "zstack.example.com"
+zstack_port              = 8080
+zstack_access_key_id     = "replace-me"
+zstack_access_key_secret = "replace-me"
+
+vm_01 = {
+  uuid            = "replace-me"
+  name            = "existing-app-01"
+  description     = "Existing application VM imported into Terraform"
+  image_uuid      = "replace-me"
+  cpu_num         = 2
+  memory_size     = 4096
+  l3_network_uuid = "replace-me"
+  static_ip       = "10.0.100.21"
+}
+
+vm_02 = {
+  uuid            = "replace-me"
+  name            = "existing-app-02"
+  description     = "Existing application VM imported into Terraform"
+  image_uuid      = "replace-me"
+  cpu_num         = 2
+  memory_size     = 4096
+  l3_network_uuid = "replace-me"
+  static_ip       = "10.0.100.22"
+}

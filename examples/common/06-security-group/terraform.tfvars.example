@@ -14,16 +14,16 @@ vswitch_type        = "LinuxBridge"
 ingress_rules = {
   ssh = {
     protocol                = "TCP"
-    priority                = 10
+    priority                = 1
     ip_ranges               = "10.0.0.0/8"
     destination_port_ranges = "22"
     description             = "Allow SSH from private networks"
   }
   http = {
     protocol                = "TCP"
-    priority                = 20
-    ip_ranges               = "0.0.0.0/0"
+    priority                = 3
+    ip_ranges               = "10.0.0.0/8"
     destination_port_ranges = "80"
-    description             = "Allow HTTP from anywhere"
+    description             = "Allow HTTP from private networks"
   }
 }

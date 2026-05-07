@@ -32,6 +32,12 @@ variable "email_endpoint_name" {
   default     = "tf-ops-email"
 }
 
+variable "email_platform_uuid" {
+  description = "SNS platform UUID used by the email endpoint."
+  type        = string
+  default     = null
+}
+
 variable "notification_email" {
   description = "Email address for the notification."
   type        = string

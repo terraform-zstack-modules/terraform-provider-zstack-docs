@@ -38,7 +38,6 @@ P2 administrator scenarios:
 - Backup/CDP: `zstack_cdp_policy`, `zstack_cdp_task`, `zstack_volume_backup`, `zstack_database_backup`, `zstack_zbox_backup`
 - Network observability: `zstack_flow_meter`, `zstack_flow_collector`, `zstack_port_mirror`, `zstack_port_mirror_session`
 - Advanced network: `zstack_ipsec_connection`, `zstack_policy_route_rule_set`, `zstack_policy_route_rule`
-- Resource stack/template: `zstack_resource_stack`, `zstack_stack_template`, `zstack_preconfiguration_template`
 
 P3 specialized resources are indexed but should not be deeply generated without a concrete customer environment:
 

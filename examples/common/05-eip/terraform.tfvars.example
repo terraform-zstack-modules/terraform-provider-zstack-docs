@@ -5,5 +5,6 @@ zstack_access_key_secret = "replace-me"
 
 vip_name               = "tf-demo-vip"
 eip_name               = "tf-demo-eip"
-public_l3_network_uuid = "replace-me"
-vm_nic_uuid            = "replace-me"
+public_l3_network_name_pattern = "%"
+target_vm_name                 = "tf-demo-01"
+target_vm_nic_index            = 0

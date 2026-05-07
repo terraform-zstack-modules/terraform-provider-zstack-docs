@@ -4,7 +4,7 @@
 客户文档和 examples。当前文档与 examples 基准版本为：
 
 - Terraform CLI: `>= 1.5`
-- ZStack provider: `ZStack-Robot/zstack` `1.1.2`
+- ZStack provider: `ZStack-Robot/zstack` `1.1.3`
 - Examples 根目录：`examples/common`
 
 ## 验证目标
@@ -12,7 +12,7 @@
 - 确认 examples 中的 HCL 能在真实环境完成 `init`、`validate`、`plan`。
 - 对低风险场景执行 `apply` 和 `destroy`，确认资源生命周期正确。
 - 对管理员、高风险或环境强依赖场景先执行 data source 查询和 plan 验证。
-- 记录 provider `1.1.2` 下的字段差异、环境限制和需要更新的文档说明。
+- 记录 provider `1.1.3` 下的字段差异、环境限制和需要更新的文档说明。
 - 为后续截图、FAQ、troubleshooting 和客户交付材料提供真实依据。
 
 ## 环境准备
@@ -22,7 +22,7 @@
 | 项目 | 要求 |
 |---|---|
 | ZStack 管理节点 | Terraform runner 可访问管理节点 API |
-| Provider 来源 | 公网 Registry `ZStack-Robot/zstack` 或客户内网 mirror 中的 `1.1.2` |
+| Provider 来源 | 公网 Registry `ZStack-Robot/zstack` 或客户内网 mirror 中的 `1.1.3` |
 | 凭证 | 测试专用 AccessKey，权限覆盖验证资源 |
 | 基础镜像 | 一个可启动、状态正常的 image |
 | L3 网络 | 一个可分配 IP 的 L3 network |
@@ -33,18 +33,53 @@
 | 管理员权限 | P2 场景需要单独确认，默认不直接 apply |
 | 备份/观测/高级网络 | 需要对应 storage、collector、IPsec peer 等真实外部条件 |
 
+## 本地 `.env` 配置
+
+根目录维护一个本地 `.env`，只用于放真实 ZStack 测试环境的 host、port 和
+AccessKey。`.env` 已加入 `.gitignore`，不要提交真实凭证。
+
+首次验证前：
+
+```bash
+cp .env.example .env
+# edit only authentication values for the disposable test environment
+```
+
+`.env.example` 使用 `TF_VAR_*` 变量名，Terraform 会把它们映射到 examples
+中的同名 input variables。不要把大量资源 UUID 手工塞进根目录 `.env`；
+能通过 provider data source 查询的资源，先用 `02-query-existing-resources`
+发现并输出候选列表。只有 data source 无法安全推断、或必须人工确认的高风险
+输入，才写入对应 example 的本地 `terraform.tfvars`。
+
 ## 通用执行流程
 
 每个 example 使用独立目录和独立 state。不要复用生产 state。
 
 ```bash
 cd examples/common/<example>
-cp terraform.tfvars.example terraform.tfvars
-# edit terraform.tfvars with test environment values
+source ../../../.env
+# optional: create terraform.tfvars for irreducible scenario-specific inputs
 terraform init
 terraform validate
 terraform plan -out=tfplan
 ```
+
+第一步优先执行 discovery example：
+
+```bash
+cd examples/common/02-query-existing-resources
+source ../../../.env
+terraform init
+terraform plan
+```
+
+根据输出确认 image、L3 network、offering、zone、cluster、host 等候选资源。
+后续创建类 examples 应继续使用 data source 查询这些资源，而不是在根目录
+`.env` 中集中维护 UUID 清单。
+
+如果从 `terraform.tfvars.example` 复制 `terraform.tfvars`，要么删除其中的
+`zstack_*` 凭证字段，要么确保它们和根目录 `.env` 一致；`terraform.tfvars`
+的优先级高于 `TF_VAR_*` 环境变量。
 
 低风险场景在 plan 结果符合预期后继续：
 
@@ -69,7 +104,7 @@ rm -rf .terraform .terraform.lock.hcl terraform.tfvars terraform.tfstate terrafo
 | Example | `examples/common/<id>` |
 | 日期 | YYYY-MM-DD |
 | ZStack 版本 | 待填写 |
-| Provider 版本 | `1.1.2` |
+| Provider 版本 | `1.1.3` |
 | Terraform 版本 | `terraform version` 输出 |
 | 验证人 | 待填写 |
 | 执行级别 | `init` / `validate` / `plan` / `apply` / `destroy` |
@@ -106,10 +141,10 @@ rm -rf .terraform .terraform.lock.hcl terraform.tfvars terraform.tfstate terrafo
 
 | Example | 级别 | 前置条件 | 重点检查 | Apply 建议 |
 |---|---|---|---|---|
-| `05-eip` | L3/L4 | public L3 UUID、测试 VM NIC UUID | VIP/EIP 创建和绑定 | 可 apply/destroy；确认公网资源可回收 |
-| `07-vpc` | L2/L3 | L2 UUID、vRouter UUID、CIDR 规划 | VPC 基础网络字段和依赖 | 先 plan；apply 需网络管理员确认 |
+| `05-eip` | L3/L4 | public L3 查询条件、测试 VM 名称 | VIP/EIP 创建和绑定 | 可 apply/destroy；确认公网资源可回收 |
+| `07-vpc` | L2/L3 | L2/vRouter 查询条件、CIDR 规划 | VPC 基础网络字段和依赖 | 先 plan；apply 需网络管理员确认 |
 | `11-load-balancer-web` | L3/L4 | public L3、后端 VM/网络设计 | VIP、LB、listener、server group | 可在测试网络 apply |
-| `12-vpc-routing` | L2/L3 | VPC、route table、目标路由 | route table/entry 关联 | 先 plan；apply 需网络管理员确认 |
+| `12-vpc-routing` | L2/L3 | L2/vRouter 查询条件、route table、目标路由 | route table/entry 关联 | 先 plan；apply 需网络管理员确认 |
 | `13-vm-init-scripts` | L3/L4 | image、L3、offering、SSH public key | script 创建和执行链路 | 可 apply；避免真实密钥 |
 | `14-tags` | L3/L4 | 可打 tag 的测试资源 UUID | tag 和 attachment | 可 apply/destroy |
 | `15-iam-access-key` | L2/L5 | 管理员权限、测试账号命名 | account/project/virtual ID/AccessKey | 默认只 plan；apply 需管理员确认 |
@@ -125,7 +160,8 @@ rm -rf .terraform .terraform.lock.hcl terraform.tfvars terraform.tfstate terrafo
 | `20-backup-cdp` | L2/L5 | backup storage、resource UUID、容量策略 | CDP/backup 字段和依赖 | 不建议无演练 apply |
 | `21-network-observability` | L2/L5 | collector server、mirror network、endpoint | flow/mirror 配置 | 需网络观测环境 |
 | `22-advanced-network` | L2/L5 | VIP、peer address、auth key、route table | IPsec 和 policy route | 需对端和网络管理员确认 |
-| `23-resource-stack` | L2/L5 | template 内容、参数、预配置格式 | stack/template 创建 | 先 plan；apply 需交付场景 |
+
+资源编排功能及编排模板已取消，不再纳入当前 examples 和环境验证范围。
 
 ## Import 验证专项
 
@@ -167,7 +203,7 @@ rm -rf .terraform .terraform.lock.hcl terraform.tfvars terraform.tfstate terrafo
 - Provider 错误信息。
 - ZStack API 或控制台可见的资源状态。
 - 输入变量值是否来自真实环境。
-- 是否存在 provider `1.1.2` schema 与文档不一致。
+- 是否存在 provider `1.1.3` schema 与文档不一致。
 
 处理路径：
 
@@ -185,4 +221,4 @@ rm -rf .terraform .terraform.lock.hcl terraform.tfvars terraform.tfstate terrafo
 - 失败和修复记录。
 - 可发布截图清单和截图文件。
 - FAQ/troubleshooting 增量。
-- 是否可以对外声明“examples verified against ZStack provider 1.1.2”。
+- 是否可以对外声明“examples verified against ZStack provider 1.1.3”。

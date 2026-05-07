@@ -20,6 +20,10 @@ Security group workflow:
 3. Attach the group to a VM NIC with
    `zstack_networking_secgroup_attachment`.
 
+Some ZStack environments reject IPv4 `0.0.0.0/0` in security group CIDR
+fields. The example defaults to private CIDRs; adjust the range only after
+confirming the customer network policy.
+
 See `examples/common/06-security-group`.
 
 ## VIP And EIP

@@ -20,37 +20,44 @@ variable "zstack_access_key_secret" {
   sensitive   = true
 }
 
-variable "image_name" {
+variable "image_name_pattern" {
   type        = string
-  description = "Existing image name."
+  description = "Image name pattern used for environment discovery."
+  default     = "%"
 }
 
-variable "l3_network_name" {
+variable "l3_network_name_pattern" {
   type        = string
-  description = "Existing L3 network name."
+  description = "L3 network name pattern used for environment discovery."
+  default     = "%"
 }
 
-variable "instance_offering_name" {
+variable "instance_offering_name_pattern" {
   type        = string
-  description = "Existing instance offering name."
+  description = "Instance offering name pattern used for environment discovery."
+  default     = "%"
 }
 
-variable "disk_offering_name" {
+variable "disk_offering_name_pattern" {
   type        = string
-  description = "Existing disk offering name."
+  description = "Disk offering name pattern used for environment discovery."
+  default     = "%"
 }
 
-variable "zone_name" {
+variable "zone_name_pattern" {
   type        = string
-  description = "Existing zone name."
+  description = "Zone name pattern used for environment discovery."
+  default     = "%"
 }
 
-variable "cluster_name" {
+variable "cluster_name_pattern" {
   type        = string
-  description = "Existing cluster name."
+  description = "Cluster name pattern used for environment discovery."
+  default     = "%"
 }
 
-variable "host_name" {
+variable "host_name_pattern" {
   type        = string
-  description = "Existing host name."
+  description = "Host name pattern used for environment discovery."
+  default     = "%"
 }

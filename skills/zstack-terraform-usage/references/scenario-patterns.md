@@ -99,10 +99,6 @@ Use `zstack_flow_meter`, `zstack_flow_collector`, `zstack_port_mirror`, and `zst
 
 Use `zstack_ipsec_connection`, `zstack_policy_route_rule_set`, and `zstack_policy_route_rule`. Treat IPsec auth keys as sensitive and never invent peer or route values.
 
-## Resource Stack
-
-Use `zstack_stack_template`, `zstack_resource_stack`, and `zstack_preconfiguration_template`. Template content must include required ZStack markers and should be reviewed like application code.
-
 ## Specialized Resources
 
 P3 resources should be indexed first and generated only after the customer confirms the environment, external system, hardware, credentials, and lifecycle expectations. Use variables for UUIDs and secrets; do not invent vendor/device details.

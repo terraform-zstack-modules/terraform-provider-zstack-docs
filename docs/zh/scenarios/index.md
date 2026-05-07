@@ -1,6 +1,7 @@
 # 场景化 Examples
 
 本章节用于按真实客户场景解释 `examples/common` 中的可运行 Terraform 示例。
+更大的生产形态参考见 [生产参考样例](production-examples.md)。
 
 ## P0 第一批场景
 
@@ -28,6 +29,5 @@
 | Backup / CDP | `examples/common/20-backup-cdp` |
 | Network Observability | `examples/common/21-network-observability` |
 | Advanced Network | `examples/common/22-advanced-network` |
-| Resource Stack | `examples/common/23-resource-stack` |
 
 后续每个场景应补充：适用对象、前置条件、拓扑图、执行步骤、预期输出、清理方式和常见失败原因。

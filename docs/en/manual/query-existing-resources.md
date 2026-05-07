@@ -12,6 +12,9 @@ Common data sources:
 - `zstack_zone`
 - `zstack_clusters`
 - `zstack_hosts`
+- `zstack_l2networks`
+- `zstack_virtual_routers`
+- `zstack_instances`
 
 ## Lookup Strategy
 
@@ -23,6 +26,7 @@ Common data sources:
 
 See `examples/common/02-query-existing-resources`.
 
-The example queries image, L3 network, instance offering, disk offering, zone,
-cluster, and host inputs that are later used by VM, storage, and networking
-examples.
+For first-time environment validation, source only the root `.env`
+authentication variables and run the example. It uses broad discovery patterns
+by default and outputs candidate images, L3 networks, offerings, zones,
+clusters, and hosts for later examples.

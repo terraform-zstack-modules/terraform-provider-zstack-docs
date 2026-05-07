@@ -25,9 +25,9 @@ Public Terraform Registry source:
 
 ```hcl
 source  = "ZStack-Robot/zstack"
-version = "1.1.2"
+version = "1.1.3"
 ```
 
 Provider documentation baseline:
 
-- <https://registry.terraform.io/providers/ZStack-Robot/zstack/1.1.2>
+- <https://registry.terraform.io/providers/ZStack-Robot/zstack/1.1.3>

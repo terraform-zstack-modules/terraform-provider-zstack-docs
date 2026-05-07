@@ -34,7 +34,13 @@ examples 是可运行起点，不是完整生产模块。生产使用前需要�
 
 ## Provider 版本应该怎么升级？
 
-本文档和示例基于 provider `1.1.2`。升级时统一修改 `required_providers.zstack.version`，执行 `terraform init -upgrade`，再对要发布或演示的场景逐一执行 `terraform plan`。未验证的新版本按 migration 处理，不要直接批量替换后 apply。
+本文档和示例基于 provider `1.1.3`。升级时统一修改 `required_providers.zstack.version`，执行 `terraform init -upgrade`，再对要发布或演示的场景逐一执行 `terraform plan`。未验证的新版本按 migration 处理，不要直接批量替换后 apply。
+
+## 升级到 1.1.3 有哪些字段变化？
+
+`zstack_access_key` 需要 `user_uuid`，`zstack_sns_email_endpoint` 需要
+`platform_uuid`，`zstack_license_authorized_nodes` 不再支持
+`name_pattern`。资源编排功能及编排模板已取消，不再维护对应 example。
 
 ## Load Balancer example 为什么没有完整后端绑定？
 
@@ -75,7 +81,3 @@ examples 是可运行起点，不是完整生产模块。生产使用前需要�
 ## IPsec 的算法字段可以省略吗？
 
 如果 ZStack 和对端有默认协商策略，可以先省略；生产环境建议明确记录双方使用的算法、PFS 和 transform protocol。
-
-## Resource Stack 模板应该放在哪里？
-
-小模板可以内联，生产模板建议单独文件化、评审和版本化，再由 Terraform 读取或渲染。

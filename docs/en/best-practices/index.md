@@ -6,7 +6,7 @@
 - Pass secrets through CI/CD secret stores or environment variables.
 - Do not commit `terraform.tfvars`, state files, plan files, or AccessKeys.
 - This documentation and public examples are based on `ZStack-Robot/zstack`
-  provider `1.1.2`.
+  provider `1.1.3`.
 - In private registry or ZStack application-market environments, use the exact
   provider source shown by the customer platform.
 
@@ -25,6 +25,8 @@
 - Manage independent data disks with `zstack_volume`.
 - Add explicit destroy and cleanup instructions for examples that create
   billable or capacity-consuming resources.
+- Use `examples/production` as reference structure for customer delivery, not
+  as complete production modules.
 
 ## State And Import
 

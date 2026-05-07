@@ -17,5 +17,4 @@ Avoid:
 - Creating CDP tasks from fuzzy-matched resource lists.
 - Guessing scheduler job types or backup storage compatibility.
 - Guessing port mirror endpoint formats or IPsec cryptographic settings.
-- Creating stack/preconfiguration templates without required ZStack format markers.
 - Generating P3 specialized resource examples without a real customer environment and required hardware/external system context.

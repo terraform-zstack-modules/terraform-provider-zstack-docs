@@ -19,3 +19,22 @@ import 只会把远端对象写入 Terraform state，不会自动生成完整、
 迁移生产资源时建议先在低风险环境演练，并保留 state 备份和回滚方案。
 
 当前示例重点覆盖已有 VM 的导入流程，见“导入已有资源”章节和 `examples/common/10-import-existing-vm`。
+
+## Provider 1.1.3 注意事项
+
+从旧版本升级到 `1.1.3` 时，先统一修改 `required_providers.zstack.version`
+并执行 `terraform init -upgrade`，再逐个 example 或模块执行
+`terraform validate` 和 `terraform plan`。
+
+已验证的 `1.1.3` 行为变化：
+
+- `zstack_access_key` 创建时需要显式设置 `user_uuid`。如果为新建 account
+  创建 AccessKey，可使用该 account 的 UUID 作为 owner。
+- `zstack_sns_email_endpoint` 需要 `platform_uuid`。当前 provider 未提供 SNS
+  platform data source，生产环境需要管理员从目标环境确认该 UUID。
+- `zstack_license_authorized_nodes` 不再支持 `name_pattern` 参数；查询时使用
+  provider schema 支持的 `uuid` 或 `filter`。
+- 资源编排功能及编排模板已取消，不再维护对应 example 或手册页面。
+
+升级后如果 plan 出现非预期 replacement 或 readback drift，先记录字段差异，
+不要直接 apply 到生产环境。

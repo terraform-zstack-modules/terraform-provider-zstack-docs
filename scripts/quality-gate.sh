@@ -37,9 +37,9 @@ require_command rg
 
 info "checking committed sensitive files"
 for pattern in 'terraform.tfvars' 'terraform.tfstate' 'terraform.tfstate.*' '*.tfplan' '*.plan' '.env' '.env.*' '*.pem' '*.key' '*.p12' '*.pfx'; do
-  if git ls-files -- "$pattern" | grep -q .; then
+  if git ls-files -- "$pattern" | grep -vx '.env.example' | grep -q .; then
     fail "sensitive/generated file is tracked: $pattern"
-    git ls-files -- "$pattern" >&2
+    git ls-files -- "$pattern" | grep -vx '.env.example' >&2
   fi
 done
 
@@ -57,7 +57,7 @@ while IFS= read -r dir; do
       fail "$dir is missing $file"
     fi
   done
-done < <(find examples/common -mindepth 1 -maxdepth 1 -type d | sort)
+done < <(find examples/common examples/production -mindepth 1 -maxdepth 1 -type d | sort)
 
 info "checking MkDocs nav targets"
 if require_command python3; then
@@ -142,10 +142,10 @@ else
   rm -f /tmp/zstack-provider-source-mismatch.$$
 fi
 
-if rg -n -P '^\s*version\s*=\s*"(?!1\.1\.2")' examples skills --glob '*.tf' >/tmp/zstack-provider-version-mismatch.$$ 2>/dev/null; then
+if rg -n -P '^\s*version\s*=\s*"(?!1\.1\.3")' examples skills --glob '*.tf' >/tmp/zstack-provider-version-mismatch.$$ 2>/dev/null; then
   cat /tmp/zstack-provider-version-mismatch.$$ >&2
   rm -f /tmp/zstack-provider-version-mismatch.$$
-  fail "Terraform provider version must remain 1.1.2 unless the docs baseline is upgraded"
+  fail "Terraform provider version must remain 1.1.3 unless the docs baseline is upgraded"
 else
   rm -f /tmp/zstack-provider-version-mismatch.$$
 fi

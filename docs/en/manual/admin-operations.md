@@ -23,5 +23,7 @@ See `examples/common/18-global-config`.
 
 Use license data sources to inspect authorized nodes and capacity. If uploading
 a license, pass license text as a sensitive variable and never commit it.
+Provider `1.1.3` does not support `name_pattern` on authorized nodes; use
+schema-supported `uuid` or `filter` arguments when you need to narrow results.
 
 See `examples/common/19-license`.

@@ -1,0 +1,16 @@
+zstack_host              = "zstack.example.com"
+zstack_port              = 8080
+zstack_access_key_id     = "replace-me"
+zstack_access_key_secret = "replace-me"
+
+cluster_name                   = "prod-k8s"
+node_image_name                = "zstack-image"
+private_l3_network_name        = "l3-private-1"
+public_l3_network_name_pattern = "l3-public"
+control_plane_offering_name    = "medium-vm"
+worker_offering_name           = "medium-vm"
+control_plane_count            = 3
+worker_count                   = 3
+api_allowed_cidr               = "10.0.0.0/8"
+node_internal_cidr             = "10.0.0.0/8"
+vswitch_type                   = "LinuxBridge"

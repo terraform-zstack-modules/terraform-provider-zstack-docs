@@ -1,13 +1,14 @@
 # Examples
 
-`examples/common` contains runnable Terraform examples shared by all language versions of the documentation.
+`examples/common` contains focused runnable Terraform examples shared by all language versions of the documentation.
+`examples/production` contains larger production reference examples.
 
 Localized documentation should explain these examples from `docs/zh` and `docs/en` instead of duplicating Terraform code.
 
 ## Provider Version Policy
 
 Public examples use `ZStack-Robot/zstack` and currently pin provider version
-`1.1.2`. Private-registry examples must use the exact source string shown by the
+`1.1.3`. Private-registry examples must use the exact source string shown by the
 customer's ZStack platform or provider mirror.
 
 When upgrading examples, update the provider constraint consistently, run
@@ -47,4 +48,12 @@ credentials, or environment-specific names.
 | `20-backup-cdp` | Create CDP and backup resources |
 | `21-network-observability` | Create flow and port mirror observability resources |
 | `22-advanced-network` | Create IPsec and policy route resources |
-| `23-resource-stack` | Create stack and preconfiguration templates |
+
+## Production Examples
+
+| Directory | Scenario |
+|---|---|
+| `three-tier-web` | Web/application infrastructure with LB, security groups, volumes, and tags |
+| `k8s-reference` | Kubernetes node infrastructure reference without Kubernetes installation |
+| `import-vm-fleet` | Import existing VMs into Terraform state in reviewed batches |
+| `automation-iam` | Dedicated automation account, IAM2 objects, and AccessKey |

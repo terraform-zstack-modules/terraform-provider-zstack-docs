@@ -11,7 +11,7 @@ Use this skill to produce customer-ready Terraform configuration and guidance fo
 
 1. Follow HashiCorp Terraform style conventions for file layout, naming, variables, outputs, formatting, and secrets handling.
 2. Use ZStack provider facts from public, customer-accessible sources:
-   - Terraform Registry provider docs for the documentation baseline version: `https://registry.terraform.io/providers/ZStack-Robot/zstack/1.1.2`
+   - Terraform Registry provider docs for the documentation baseline version: `https://registry.terraform.io/providers/ZStack-Robot/zstack/1.1.3`
    - Public provider repository: `https://github.com/ZStack-Robot/terraform-provider-zstack`
    - This documentation repository's `docs/`, `examples/`, and `skills/` directories.
 3. Do not invent resource names, data source names, or attributes. If unsure, inspect provider docs/examples/tests first.
@@ -30,7 +30,7 @@ Public Terraform Registry:
 
 ```hcl
 source  = "ZStack-Robot/zstack"
-version = "1.1.2"
+version = "1.1.3"
 ```
 
 ZStack application-market or private registry environments may use an internal source, for example:

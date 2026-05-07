@@ -20,9 +20,10 @@ variable "zstack_access_key_secret" {
   sensitive   = true
 }
 
-variable "public_l3_network_uuid" {
+variable "public_l3_network_name_pattern" {
   type        = string
-  description = "Public L3 network UUID used to allocate the VIP."
+  description = "Public L3 network name pattern used to allocate the VIP."
+  default     = "%"
 }
 
 variable "vip_name" {

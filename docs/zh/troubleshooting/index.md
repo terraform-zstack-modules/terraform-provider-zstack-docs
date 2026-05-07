@@ -58,12 +58,14 @@
 ## IAM / AccessKey 问题
 
 - AccessKey secret 创建后只在创建阶段可见，应及时保存。
+- Provider `1.1.3` 创建 `zstack_access_key` 时需要 `user_uuid`。
 - 检查 account、user、virtual ID 的权限边界。
 - 不要把敏感 output 打到普通 CI 日志。
 
 ## 告警或通知不触发
 
 - 确认 metric namespace 和 metric name 在当前环境存在。
+- 创建 SNS email endpoint 时确认 `platform_uuid` 来自真实环境。
 - 检查 threshold、period、comparison operator。
 - 检查通知端点是否启用以及 Webhook URL 是否可达。
 
@@ -82,6 +84,8 @@
 ## License 上传失败
 
 - 检查 management node UUID。
+- `zstack_license_authorized_nodes` 在 provider `1.1.3` 中不支持
+  `name_pattern`，不要沿用旧版本参数。
 - 确认 license 文本完整且没有换行/转义损坏。
 - 不要在日志中打印 license 内容。
 
@@ -103,9 +107,3 @@
 - 确认 VIP、peer address、auth key 与对端配置一致。
 - 检查加密算法、认证算法和 PFS 设置。
 - 检查 policy route rule 的 route table UUID、rule number 和匹配条件。
-
-## Resource Stack 创建失败
-
-- 确认模板包含 `ZStackTemplateFormatVersion`。
-- 检查 stack parameters 是否与模板定义匹配。
-- Preconfiguration template 必须包含 ZStack 要求的系统变量标记。

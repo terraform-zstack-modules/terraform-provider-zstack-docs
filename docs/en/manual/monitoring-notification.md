@@ -17,6 +17,8 @@ Common resources:
 
 - Metric namespace and metric name must come from the real ZStack environment.
 - Do not let an agent invent metric names.
+- Provider `1.1.3` requires `platform_uuid` when creating SNS email endpoints;
+  confirm the SNS platform UUID in the target environment before applying.
 - Webhook URLs should be supplied through secure variables or CI/CD secret
   stores when they contain tokens.
 - Test notification endpoints before production use.

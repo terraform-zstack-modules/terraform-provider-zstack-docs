@@ -26,7 +26,6 @@ Status values:
 | Backup & CDP | `docs/zh/manual/backup-cdp.md` | `docs/en/manual/backup-cdp.md` | Summary | Expand prerequisites before customer delivery. |
 | Network Observability | `docs/zh/manual/network-observability.md` | `docs/en/manual/network-observability.md` | Summary | Validate collector and mirror fields with real environment. |
 | Advanced Network | `docs/zh/manual/advanced-network.md` | `docs/en/manual/advanced-network.md` | Summary | Expand IPsec and policy route caveats with customer scenarios. |
-| Resource Stack | `docs/zh/manual/resource-stack.md` | `docs/en/manual/resource-stack.md` | Summary | Expand template lifecycle notes before external release. |
 | Specialized Resources | `docs/zh/manual/specialized-resources.md` | `docs/en/manual/specialized-resources.md` | Needs Expansion | P3 resources are indexed only; expand after concrete customer scenarios. |
 | Best Practices | `docs/zh/best-practices/index.md` | `docs/en/best-practices/index.md` | Summary | Keep secrets, state, UUID, and provider baseline guidance aligned. |
 | Troubleshooting | `docs/zh/troubleshooting/index.md` | `docs/en/troubleshooting/index.md` | Summary | Add more English symptom/remediation pairs as validation finds issues. |

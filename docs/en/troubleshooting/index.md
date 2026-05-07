@@ -46,5 +46,10 @@
 ## Admin Operations Are Risky
 
 - For global config, query current value and default value before managing it.
+- For AccessKey creation with provider `1.1.3`, set `user_uuid`.
+- For SNS email endpoints with provider `1.1.3`, confirm `platform_uuid` in the
+  target environment.
+- For license authorized nodes with provider `1.1.3`, do not use
+  `name_pattern`; use schema-supported `uuid` or `filter`.
 - For license upload, keep license text in a secret store.
 - For backup and CDP, confirm backup storage type, capacity, and bandwidth.

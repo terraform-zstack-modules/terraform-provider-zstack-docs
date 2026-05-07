@@ -32,12 +32,20 @@ variable "eip_name" {
   default     = "tf-demo-eip"
 }
 
-variable "public_l3_network_uuid" {
+variable "public_l3_network_name_pattern" {
   type        = string
-  description = "Public L3 network UUID used to allocate the VIP."
+  description = "Public L3 network name pattern used to allocate the VIP."
+  default     = "%"
 }
 
-variable "vm_nic_uuid" {
+variable "target_vm_name" {
   type        = string
-  description = "VM NIC UUID that should receive the EIP."
+  description = "Existing VM name whose NIC should receive the EIP."
+  default     = "tf-demo-01"
+}
+
+variable "target_vm_nic_index" {
+  type        = number
+  description = "Index of the target VM NIC to bind the EIP to."
+  default     = 0
 }

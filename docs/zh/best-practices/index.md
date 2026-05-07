@@ -6,7 +6,7 @@
 - 生产环境通过 CI/CD secret store 或环境变量传递凭证。
 - 不提交 `terraform.tfvars`、state、plan 文件和 AccessKey。
 - public Registry 和内网 Registry provider source 不要混用。
-- 本文档和公网示例基于 `ZStack-Robot/zstack` provider `1.1.2`；内网 source 以客户平台实际显示的字符串为准。
+- 本文档和公网示例基于 `ZStack-Robot/zstack` provider `1.1.3`；内网 source 以客户平台实际显示的字符串为准。
 - 升级 provider 时先统一修改 version 约束，再执行 `terraform init -upgrade` 和逐场景 `terraform plan`。
 
 ## 查询资源
@@ -32,6 +32,7 @@
 
 ## P1 生产场景
 
+- 生产参考样例放在 `examples/production`，用于展示工程组织方式，不替代客户生产模块。
 - VIP/EIP：输出 VIP/EIP UUID 和绑定的 VM NIC UUID，便于后续排障。
 - Load Balancer：listener 端口、后端端口、server group 使用变量管理。
 - VPC/路由：route table 与 route entry 分开建模，关联关系需按环境确认。

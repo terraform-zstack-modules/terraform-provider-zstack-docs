@@ -54,7 +54,7 @@ Public examples use:
 
 ```hcl
 source  = "ZStack-Robot/zstack"
-version = "1.1.2"
+version = "1.1.3"
 ```
 
 Changing the provider source or version is baseline migration work. Update the

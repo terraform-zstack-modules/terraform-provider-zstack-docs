@@ -3,10 +3,10 @@ zstack_port              = 8080
 zstack_access_key_id     = "replace-me"
 zstack_access_key_secret = "replace-me"
 
-public_l3_network_uuid = "replace-me"
-vip_name               = "tf-web-vip"
-load_balancer_name     = "tf-web-lb"
-server_group_name      = "tf-web-backends"
-listener_name          = "tf-web-http"
-frontend_port          = 80
-backend_port           = 8080
+public_l3_network_name_pattern = "%"
+vip_name                       = "tf-web-vip"
+load_balancer_name             = "tf-web-lb"
+server_group_name              = "tf-web-backends"
+listener_name                  = "tf-web-http"
+frontend_port                  = 80
+backend_port                   = 8080

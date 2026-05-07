@@ -32,7 +32,7 @@ terraform-provider-zstack-docs/
 │       └── diagrams/
 ├── examples/
 │   ├── README.md
-│   └── common/
+│   ├── common/
 │       ├── 01-provider/
 │       ├── 02-query-existing-resources/
 │       ├── 03-create-vm/
@@ -54,8 +54,12 @@ terraform-provider-zstack-docs/
 │       ├── 19-license/
 │       ├── 20-backup-cdp/
 │       ├── 21-network-observability/
-│       ├── 22-advanced-network/
-│       └── 23-resource-stack/
+│       └── 22-advanced-network/
+│   └── production/
+│       ├── three-tier-web/
+│       ├── k8s-reference/
+│       ├── import-vm-fleet/
+│       └── automation-iam/
 ├── skills/
 │   └── zstack-terraform-usage/
 ├── internal/
@@ -137,7 +141,7 @@ requires ZStack credentials and real infrastructure.
 ## Provider Version Updates
 
 This documentation and all runnable examples are based on ZStack provider
-`1.1.2`, using the public provider source `ZStack-Robot/zstack`. When upgrading
+`1.1.3`, using the public provider source `ZStack-Robot/zstack`. When upgrading
 all examples, update the provider version consistently, run
 `terraform init -upgrade`, then run `terraform plan` for each scenario that will
 be published or demonstrated. Treat any unverified provider version as migration
