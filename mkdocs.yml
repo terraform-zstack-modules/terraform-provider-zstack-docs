@@ -27,6 +27,7 @@ nav:
   - 中文:
       - Overview: zh/index.md
       - 客户使用手册:
+          - Overview: zh/manual/index.md
           - Getting Started: zh/manual/getting-started.md
           - Authentication: zh/manual/authentication.md
           - Query Existing Resources: zh/manual/query-existing-resources.md

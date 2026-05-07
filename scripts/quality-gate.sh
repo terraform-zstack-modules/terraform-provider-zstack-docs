@@ -57,7 +57,7 @@ while IFS= read -r dir; do
       fail "$dir is missing $file"
     fi
   done
-done < <(find examples/common -mindepth 1 -maxdepth 1 -type d | sort)
+done < <(find examples/common examples/production -mindepth 1 -maxdepth 1 -type d | sort)
 
 info "checking MkDocs nav targets"
 if require_command python3; then
