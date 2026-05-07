@@ -42,7 +42,9 @@ nav:
           - Network Observability: zh/manual/network-observability.md
           - Advanced Network: zh/manual/advanced-network.md
           - Specialized Resources: zh/manual/specialized-resources.md
-      - 场景化 Examples: zh/scenarios/index.md
+      - 场景化 Examples:
+          - Common Examples: zh/scenarios/index.md
+          - Production Examples: zh/scenarios/production-examples.md
       - 最佳实践: zh/best-practices/index.md
       - Troubleshooting: zh/troubleshooting/index.md
       - FAQ: zh/faq/index.md
@@ -69,7 +71,9 @@ nav:
           - Network Observability: en/manual/network-observability.md
           - Advanced Network: en/manual/advanced-network.md
           - Specialized Resources: en/manual/specialized-resources.md
-      - Scenario Examples: en/scenarios/index.md
+      - Scenario Examples:
+          - Common Examples: en/scenarios/index.md
+          - Production Examples: en/scenarios/production-examples.md
       - Best Practices: en/best-practices/index.md
       - Troubleshooting: en/troubleshooting/index.md
       - FAQ: en/faq/index.md

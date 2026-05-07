@@ -1,6 +1,7 @@
 # 场景化 Examples
 
 本章节用于按真实客户场景解释 `examples/common` 中的可运行 Terraform 示例。
+更大的生产形态参考见 [生产参考样例](production-examples.md)。
 
 ## P0 第一批场景
 

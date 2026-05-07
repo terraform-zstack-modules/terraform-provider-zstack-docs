@@ -1,6 +1,7 @@
 # Examples
 
-`examples/common` contains runnable Terraform examples shared by all language versions of the documentation.
+`examples/common` contains focused runnable Terraform examples shared by all language versions of the documentation.
+`examples/production` contains larger production reference examples.
 
 Localized documentation should explain these examples from `docs/zh` and `docs/en` instead of duplicating Terraform code.
 
@@ -47,3 +48,12 @@ credentials, or environment-specific names.
 | `20-backup-cdp` | Create CDP and backup resources |
 | `21-network-observability` | Create flow and port mirror observability resources |
 | `22-advanced-network` | Create IPsec and policy route resources |
+
+## Production Examples
+
+| Directory | Scenario |
+|---|---|
+| `three-tier-web` | Web/application infrastructure with LB, security groups, volumes, and tags |
+| `k8s-reference` | Kubernetes node infrastructure reference without Kubernetes installation |
+| `import-vm-fleet` | Import existing VMs into Terraform state in reviewed batches |
+| `automation-iam` | Dedicated automation account, IAM2 objects, and AccessKey |

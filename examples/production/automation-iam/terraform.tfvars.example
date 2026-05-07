@@ -1,0 +1,17 @@
+zstack_host              = "zstack.example.com"
+zstack_port              = 8080
+zstack_access_key_id     = "replace-me"
+zstack_access_key_secret = "replace-me"
+
+account_name        = "tf-automation"
+account_password    = "replace-me"
+account_description = "Terraform automation account"
+
+project_name        = "tf-automation-project"
+project_description = "Terraform automation project"
+
+virtual_id_name        = "tf-automation-virtual-id"
+virtual_id_password    = "replace-me"
+virtual_id_description = "Terraform automation virtual ID"
+
+access_key_description = "AccessKey for Terraform automation"

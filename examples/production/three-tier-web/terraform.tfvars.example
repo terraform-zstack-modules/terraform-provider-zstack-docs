@@ -1,0 +1,23 @@
+zstack_host              = "zstack.example.com"
+zstack_port              = 8080
+zstack_access_key_id     = "replace-me"
+zstack_access_key_secret = "replace-me"
+
+name_prefix = "prod-web"
+environment = "production"
+application = "three-tier-web"
+owner       = "platform-team"
+
+image_name                      = "zstack-image"
+private_l3_network_name         = "l3-private-1"
+public_l3_network_name_pattern  = "l3-public"
+web_instance_offering_name      = "small-vm"
+app_instance_offering_name      = "small-vm"
+app_disk_offering_name          = "small-disk-1GB"
+web_instance_count              = 2
+app_instance_count              = 2
+web_port                        = 80
+app_port                        = 8080
+web_ingress_cidr                = "10.0.0.0/8"
+app_ingress_cidr                = "10.0.0.0/8"
+vswitch_type                    = "LinuxBridge"

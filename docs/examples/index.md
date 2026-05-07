@@ -1,7 +1,8 @@
 # Examples
 
 Runnable Terraform examples are kept in the repository root under
-`examples/common`. They are shared by all language versions of the documentation.
+`examples/common` and `examples/production`. They are shared by all language
+versions of the documentation.
 
 ## Common Examples
 
@@ -32,6 +33,15 @@ Runnable Terraform examples are kept in the repository root under
 
 Each directory contains `main.tf`, `variables.tf`, `terraform.tfvars.example`,
 and `README.md`.
+
+## Production Examples
+
+| Directory | Scenario |
+|---|---|
+| [`examples/production/three-tier-web`](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/production/three-tier-web) | Three-tier web infrastructure reference |
+| [`examples/production/k8s-reference`](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/production/k8s-reference) | Kubernetes infrastructure reference |
+| [`examples/production/import-vm-fleet`](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/production/import-vm-fleet) | Existing VM fleet import workflow |
+| [`examples/production/automation-iam`](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/production/automation-iam) | Automation IAM and AccessKey reference |
 
 ## Provider Version Policy
 

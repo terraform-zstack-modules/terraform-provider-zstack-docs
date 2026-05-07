@@ -32,6 +32,7 @@
 
 ## P1 生产场景
 
+- 生产参考样例放在 `examples/production`，用于展示工程组织方式，不替代客户生产模块。
 - VIP/EIP：输出 VIP/EIP UUID 和绑定的 VM NIC UUID，便于后续排障。
 - Load Balancer：listener 端口、后端端口、server group 使用变量管理。
 - VPC/路由：route table 与 route entry 分开建模，关联关系需按环境确认。

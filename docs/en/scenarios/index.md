@@ -2,6 +2,8 @@
 
 Runnable examples are stored in `examples/common`. Each example contains
 `main.tf`, `variables.tf`, `terraform.tfvars.example`, and `README.md`.
+Larger production reference examples are listed in
+[Production Examples](production-examples.md).
 
 | Scenario | Example |
 |---|---|

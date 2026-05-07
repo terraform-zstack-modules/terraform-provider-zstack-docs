@@ -32,7 +32,7 @@ terraform-provider-zstack-docs/
 │       └── diagrams/
 ├── examples/
 │   ├── README.md
-│   └── common/
+│   ├── common/
 │       ├── 01-provider/
 │       ├── 02-query-existing-resources/
 │       ├── 03-create-vm/
@@ -55,6 +55,11 @@ terraform-provider-zstack-docs/
 │       ├── 20-backup-cdp/
 │       ├── 21-network-observability/
 │       └── 22-advanced-network/
+│   └── production/
+│       ├── three-tier-web/
+│       ├── k8s-reference/
+│       ├── import-vm-fleet/
+│       └── automation-iam/
 ├── skills/
 │   └── zstack-terraform-usage/
 ├── internal/

@@ -25,6 +25,8 @@
 - Manage independent data disks with `zstack_volume`.
 - Add explicit destroy and cleanup instructions for examples that create
   billable or capacity-consuming resources.
+- Use `examples/production` as reference structure for customer delivery, not
+  as complete production modules.
 
 ## State And Import
 
