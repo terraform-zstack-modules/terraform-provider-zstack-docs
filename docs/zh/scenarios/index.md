@@ -28,6 +28,5 @@
 | Backup / CDP | `examples/common/20-backup-cdp` |
 | Network Observability | `examples/common/21-network-observability` |
 | Advanced Network | `examples/common/22-advanced-network` |
-| Resource Stack | `examples/common/23-resource-stack` |
 
 后续每个场景应补充：适用对象、前置条件、拓扑图、执行步骤、预期输出、清理方式和常见失败原因。

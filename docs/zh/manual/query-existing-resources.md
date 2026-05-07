@@ -11,6 +11,9 @@ P0 优先掌握这些 data source：
 - `zstack_zone`
 - `zstack_clusters`
 - `zstack_hosts`
+- `zstack_l2networks`
+- `zstack_virtual_routers`
+- `zstack_instances`
 
 ## 查询方式选择
 
@@ -22,6 +25,10 @@ P0 优先掌握这些 data source：
 | `filter` | 按状态、类型、架构等字段筛选 | 适合缩小候选集 |
 
 ## 示例
+
+首次验证环境时，可以只加载根目录 `.env` 中的鉴权变量，然后运行
+`examples/common/02-query-existing-resources`。该 example 默认使用
+`name_pattern = "%"` 做发现查询，并输出候选资源列表。
 
 ```hcl
 data "zstack_images" "ubuntu" {

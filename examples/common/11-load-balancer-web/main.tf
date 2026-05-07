@@ -4,7 +4,7 @@ terraform {
   required_providers {
     zstack = {
       source  = "ZStack-Robot/zstack"
-      version = "1.1.2"
+      version = "1.1.3"
     }
   }
 }
@@ -16,10 +16,14 @@ provider "zstack" {
   access_key_secret = var.zstack_access_key_secret
 }
 
+data "zstack_l3networks" "public" {
+  name_pattern = var.public_l3_network_name_pattern
+}
+
 resource "zstack_vip" "web" {
   name            = var.vip_name
   description     = "VIP for Terraform-managed web load balancer"
-  l3_network_uuid = var.public_l3_network_uuid
+  l3_network_uuid = data.zstack_l3networks.public.l3networks[0].uuid
 }
 
 resource "zstack_load_balancer" "web" {
@@ -47,6 +51,11 @@ resource "zstack_load_balancer_listener" "http" {
 output "vip_uuid" {
   description = "VIP UUID."
   value       = zstack_vip.web.uuid
+}
+
+output "selected_public_l3_network" {
+  description = "Public L3 network selected by the data source."
+  value       = data.zstack_l3networks.public.l3networks[0]
 }
 
 output "load_balancer_uuid" {

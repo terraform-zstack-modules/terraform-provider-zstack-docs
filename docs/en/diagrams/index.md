@@ -8,7 +8,7 @@ documentation package.
 ```mermaid
 flowchart LR
   user[User or CI/CD] --> terraform[Terraform CLI]
-  terraform --> provider[ZStack Provider 1.1.2]
+  terraform --> provider[ZStack Provider 1.1.3]
   provider --> api[ZStack API]
   api --> compute[VMs]
   api --> network[Networks]

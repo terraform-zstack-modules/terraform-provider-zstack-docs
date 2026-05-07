@@ -20,12 +20,6 @@ variable "zstack_access_key_secret" {
   sensitive   = true
 }
 
-variable "node_name_pattern" {
-  type        = string
-  description = "Authorized node name pattern."
-  default     = "%"
-}
-
 variable "upload_license" {
   type        = bool
   description = "Whether to upload a license."

@@ -12,9 +12,13 @@ Load Balancer 是 P1 生产场景的核心入口能力，通常和 VIP、listene
 ## 基础模型
 
 ```hcl
+data "zstack_l3networks" "public" {
+  name_pattern = var.public_l3_network_name_pattern
+}
+
 resource "zstack_vip" "web" {
   name            = var.vip_name
-  l3_network_uuid = var.public_l3_network_uuid
+  l3_network_uuid = data.zstack_l3networks.public.l3networks[0].uuid
 }
 
 resource "zstack_load_balancer" "web" {

@@ -15,5 +15,4 @@
 | 4 | Backup / CDP | Done | `docs/zh/manual/backup-cdp.md` | `examples/common/20-backup-cdp` | cdp/backup docs/examples | `terraform fmt` | CDP policy/task, volume/database/zbox backup；未连接真实环境 apply |
 | 5 | Network Observability | Done | `docs/zh/manual/network-observability.md` | `examples/common/21-network-observability` | flow/port mirror docs/examples | `terraform fmt` | flow meter/collector, port mirror/session；未连接真实环境 apply |
 | 6 | Advanced Network | Done | `docs/zh/manual/advanced-network.md` | `examples/common/22-advanced-network` | ipsec/policy route docs/examples | `terraform fmt` | IPsec, policy route rule set/rule；未连接真实环境 apply |
-| 7 | Resource Stack / Template | Done | `docs/zh/manual/resource-stack.md` | `examples/common/23-resource-stack` | stack/template docs/examples | `terraform fmt` | stack template, resource stack, preconfiguration template；未连接真实环境 apply |
-| 8 | P2 docs/troubleshooting/FAQ/skill refs | Done | `docs/zh/*`, `skills/zstack-terraform-usage/*` | N/A | P2 docs/examples | 文档检查 | 补 P2 管理员场景和风险提示 |
+| 7 | P2 docs/troubleshooting/FAQ/skill refs | Done | `docs/zh/*`, `skills/zstack-terraform-usage/*` | N/A | P2 docs/examples | 文档检查 | 补 P2 管理员场景和风险提示 |

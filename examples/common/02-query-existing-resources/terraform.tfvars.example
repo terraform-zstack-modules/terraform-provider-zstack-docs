@@ -3,10 +3,12 @@ zstack_port              = 8080
 zstack_access_key_id     = "replace-me"
 zstack_access_key_secret = "replace-me"
 
-image_name             = "Ubuntu-24.04"
-l3_network_name        = "default-l3"
-instance_offering_name = "small"
-disk_offering_name     = "data-20g"
-zone_name              = "zone-1"
-cluster_name           = "cluster-1"
-host_name              = "host-1"
+# The defaults are broad discovery patterns. Narrow them when the result list
+# is too large for review.
+image_name_pattern             = "%"
+l3_network_name_pattern        = "%"
+instance_offering_name_pattern = "%"
+disk_offering_name_pattern     = "%"
+zone_name_pattern              = "%"
+cluster_name_pattern           = "%"
+host_name_pattern              = "%"

@@ -4,7 +4,7 @@ terraform {
   required_providers {
     zstack = {
       source  = "ZStack-Robot/zstack"
-      version = "1.1.2"
+      version = "1.1.3"
     }
   }
 }
@@ -22,9 +22,10 @@ resource "zstack_sns_topic" "ops" {
 }
 
 resource "zstack_sns_email_endpoint" "ops" {
-  name        = var.email_endpoint_name
-  description = "Operations email endpoint managed by Terraform"
-  email       = var.notification_email
+  name          = var.email_endpoint_name
+  description   = "Operations email endpoint managed by Terraform"
+  platform_uuid = var.email_platform_uuid
+  email         = var.notification_email
 }
 
 resource "zstack_webhook" "ops" {

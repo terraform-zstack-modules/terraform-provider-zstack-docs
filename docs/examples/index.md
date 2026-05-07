@@ -29,7 +29,6 @@ Runnable Terraform examples are kept in the repository root under
 | [`examples/common/20-backup-cdp`](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/20-backup-cdp) | Create CDP and backup resources |
 | [`examples/common/21-network-observability`](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/21-network-observability) | Create flow and port mirror observability resources |
 | [`examples/common/22-advanced-network`](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/22-advanced-network) | Create IPsec and policy route resources |
-| [`examples/common/23-resource-stack`](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/23-resource-stack) | Create stack and preconfiguration templates |
 
 Each directory contains `main.tf`, `variables.tf`, `terraform.tfvars.example`,
 and `README.md`.
@@ -38,7 +37,7 @@ and `README.md`.
 
 All published examples should use the same provider source and version policy.
 Public examples use `ZStack-Robot/zstack` and currently pin provider version
-`1.1.2`. Private-registry examples must use the exact source string shown by the
+`1.1.3`. Private-registry examples must use the exact source string shown by the
 customer's ZStack platform or provider mirror.
 
 When upgrading examples, update the provider constraint consistently, run

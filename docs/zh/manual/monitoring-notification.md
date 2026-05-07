@@ -31,6 +31,8 @@ resource "zstack_alarm" "cpu" {
 ## 建议
 
 - 先确认 ZStack 环境中的 metric namespace 和 metric name。
+- Provider `1.1.3` 创建 SNS email endpoint 时需要
+  `platform_uuid`；先在目标环境确认 SNS platform UUID。
 - 通知端点和告警规则应分开管理，避免修改告警时误删通知端点。
 - Webhook URL、opaque payload 中可能包含敏感信息，应作为敏感变量管理。
 - 第一版 example 只创建基础对象；告警和通知动作的绑定方式按客户环境再补充。

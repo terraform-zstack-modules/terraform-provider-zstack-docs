@@ -5,6 +5,7 @@ zstack_access_key_secret = "replace-me"
 
 topic_name          = "tf-ops-topic"
 email_endpoint_name = "tf-ops-email"
+email_platform_uuid = "replace-me"
 notification_email  = "ops@example.com"
 
 webhook_name   = "tf-ops-webhook"

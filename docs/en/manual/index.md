@@ -1,7 +1,7 @@
 # User Manual
 
 The user manual explains the customer-facing workflows for ZStack provider
-`1.1.2`. It is not a copy of the provider reference. It focuses on how to use
+`1.1.3`. It is not a copy of the provider reference. It focuses on how to use
 resources safely in real delivery scenarios.
 
 Recommended reading order:

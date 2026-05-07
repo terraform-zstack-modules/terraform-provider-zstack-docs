@@ -8,3 +8,4 @@ Creates advanced networking resources:
 
 Confirm VIP UUID, peer address, authentication key, virtual router UUID, route
 table UUID, and route policy values before applying.
+If `protocol` is set, use `TCP`, `UDP`, or `ICMP`.

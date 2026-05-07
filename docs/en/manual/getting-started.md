@@ -1,6 +1,6 @@
 # Getting Started
 
-This guide uses ZStack provider `1.1.2` and Terraform 1.5 or later.
+This guide uses ZStack provider `1.1.3` and Terraform 1.5 or later.
 
 ## Prerequisites
 

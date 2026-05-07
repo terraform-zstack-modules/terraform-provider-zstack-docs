@@ -9,7 +9,7 @@ shown by the customer platform.
 ## Which provider version is this documentation based on?
 
 This documentation and the runnable examples are based on ZStack provider
-`1.1.2`.
+`1.1.3`.
 
 ## Why is AccessKey recommended?
 
@@ -43,3 +43,10 @@ changes before applying.
 
 Yes, but the environment must provide a private provider source or Terraform
 provider mirror, and the ZStack provider version must be available internally.
+
+## What changed in provider 1.1.3?
+
+`zstack_access_key` requires `user_uuid`, `zstack_sns_email_endpoint` requires
+`platform_uuid`, and `zstack_license_authorized_nodes` no longer supports
+`name_pattern`. Resource orchestration and orchestration templates are canceled,
+so their examples and manual pages are no longer maintained.

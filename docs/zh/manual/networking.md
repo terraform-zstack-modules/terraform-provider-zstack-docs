@@ -26,7 +26,9 @@ P0 安全组资源：
 - `zstack_networking_secgroup_rule`
 - `zstack_networking_secgroup_attachment`
 
-安全组规则应显式写出方向、协议、端口、CIDR、优先级和状态。
+安全组规则应显式写出方向、协议、端口、CIDR、优先级和状态。真实环境验证中
+发现部分 ZStack 环境拒绝 IPv4 `0.0.0.0/0` 作为安全组 CIDR；示例默认使用
+私网 CIDR，生产放通范围应按客户网络策略收窄或确认。
 
 ## VIP/EIP
 

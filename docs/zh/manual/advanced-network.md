@@ -34,4 +34,7 @@ resource "zstack_policy_route_rule" "main" {
 }
 ```
 
+如果设置 `protocol`，使用 provider schema 接受的大写值：`TCP`、`UDP` 或
+`ICMP`。
+
 对应 example：`examples/common/22-advanced-network`。

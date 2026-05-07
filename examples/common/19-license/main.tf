@@ -4,7 +4,7 @@ terraform {
   required_providers {
     zstack = {
       source  = "ZStack-Robot/zstack"
-      version = "1.1.2"
+      version = "1.1.3"
     }
   }
 }
@@ -18,9 +18,7 @@ provider "zstack" {
 
 data "zstack_license_authorized_capacity" "current" {}
 
-data "zstack_license_authorized_nodes" "nodes" {
-  name_pattern = var.node_name_pattern
-}
+data "zstack_license_authorized_nodes" "nodes" {}
 
 resource "zstack_license" "uploaded" {
   count = var.upload_license ? 1 : 0

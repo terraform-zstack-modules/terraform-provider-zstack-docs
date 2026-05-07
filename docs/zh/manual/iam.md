@@ -18,6 +18,8 @@ IAM 是 P1 管理员场景，主要用于多租户、项目隔离和自动化凭
 - Terraform 自动化优先使用专用 AccessKey。
 - 不同环境使用不同账号或不同 AccessKey。
 - AccessKey secret 只在创建后可见，应立即写入 secret store。
+- Provider `1.1.3` 创建 `zstack_access_key` 时需要 `user_uuid`；
+  为新建 account 创建 AccessKey 时，可使用该 account UUID。
 - 账号、项目、角色、策略变更会影响权限边界，生产环境必须走审批。
 - 不要把新创建的 AccessKey 输出到普通日志；Terraform output 应标记 `sensitive`。
 

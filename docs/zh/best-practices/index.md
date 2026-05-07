@@ -6,7 +6,7 @@
 - 生产环境通过 CI/CD secret store 或环境变量传递凭证。
 - 不提交 `terraform.tfvars`、state、plan 文件和 AccessKey。
 - public Registry 和内网 Registry provider source 不要混用。
-- 本文档和公网示例基于 `ZStack-Robot/zstack` provider `1.1.2`；内网 source 以客户平台实际显示的字符串为准。
+- 本文档和公网示例基于 `ZStack-Robot/zstack` provider `1.1.3`；内网 source 以客户平台实际显示的字符串为准。
 - 升级 provider 时先统一修改 version 约束，再执行 `terraform init -upgrade` 和逐场景 `terraform plan`。
 
 ## 查询资源

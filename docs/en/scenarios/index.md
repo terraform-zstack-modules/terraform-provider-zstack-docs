@@ -27,7 +27,6 @@ Runnable examples are stored in `examples/common`. Each example contains
 | Backup and CDP | `examples/common/20-backup-cdp` |
 | Network observability | `examples/common/21-network-observability` |
 | Advanced network | `examples/common/22-advanced-network` |
-| Resource stack | `examples/common/23-resource-stack` |
 
 Replace placeholder values before running `terraform apply`. Examples are
 runnable starting points, not complete production modules.

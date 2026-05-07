@@ -74,6 +74,8 @@ resource "zstack_license" "uploaded" {
 建议：
 
 - 查询授权容量和授权节点作为日常检查。
+- Provider `1.1.3` 的授权节点 data source 不支持 `name_pattern`；
+  如需缩小范围，使用 provider schema 支持的 `uuid` 或 `filter`。
 - 上传 license 只在审批流程中执行。
 - `license_text` 必须来自 secret store。
 

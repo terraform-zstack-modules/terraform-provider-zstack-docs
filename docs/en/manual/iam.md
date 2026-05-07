@@ -19,6 +19,8 @@ Common resources:
 - Use dedicated AccessKeys for Terraform automation.
 - Use separate accounts or AccessKeys for different environments.
 - Store generated AccessKey secrets immediately in a secret store.
+- Provider `1.1.3` requires `user_uuid` when creating `zstack_access_key`.
+  When creating an AccessKey for a newly created account, use the account UUID.
 - Mark password and AccessKey outputs as `sensitive`.
 - Do not print secrets in normal CI logs.
 
