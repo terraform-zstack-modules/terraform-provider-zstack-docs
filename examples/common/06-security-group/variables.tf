@@ -67,4 +67,11 @@ variable "ingress_rules" {
     destination_port_ranges = string
     description             = string
   }))
+
+  validation {
+    condition = alltrue([
+      for rule in values(var.ingress_rules) : trimspace(rule.ip_ranges) != "0.0.0.0/0"
+    ])
+    error_message = "Ingress rule ip_ranges must not be 0.0.0.0/0 in this example. Use a specific trusted CIDR."
+  }
 }

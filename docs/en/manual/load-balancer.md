@@ -5,10 +5,12 @@ listener, and server group resources.
 
 Common resources:
 
-- `zstack_vip`
-- `zstack_load_balancer`
-- `zstack_load_balancer_listener`
-- `zstack_lb_server_group`
+| Terraform object | Type | Purpose |
+|---|---|---|
+| `zstack_vip` | resource | Create the entry VIP used as the load balancer access address. |
+| `zstack_load_balancer` | resource | Create a load balancer instance bound to a VIP. |
+| `zstack_load_balancer_listener` | resource | Create a listener with frontend protocol/port and backend port settings. |
+| `zstack_lb_server_group` | resource | Create a backend server group for VM/NIC members. |
 
 ## Workflow
 
@@ -19,7 +21,7 @@ Common resources:
 5. Add backend binding according to the customer environment and provider
    support.
 
-See `examples/common/11-load-balancer-web`.
+See [examples/common/11-load-balancer-web](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/11-load-balancer-web).
 
 ## Troubleshooting
 

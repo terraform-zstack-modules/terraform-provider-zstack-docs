@@ -1,7 +1,8 @@
 # Screenshots & Diagrams
 
-This section records diagrams and screenshot requirements for the customer
-documentation package.
+This section publishes diagrams for the customer documentation package.
+Console screenshots should be added only after they are captured from a real
+ZStack environment and sanitized.
 
 ## Architecture Diagrams
 
@@ -24,10 +25,3 @@ flowchart TD
   apply --> state[State]
   state --> plan
 ```
-
-## Screenshot Backlog
-
-- How to create or view AccessKey in the ZStack console.
-- How to find resource UUIDs.
-- VM, L3 network, security group, EIP, and load balancer views.
-- Import workflow evidence from `terraform plan`.

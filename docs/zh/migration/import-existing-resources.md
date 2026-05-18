@@ -39,6 +39,6 @@ import {
 - 如果 plan 显示 replacement，先分析不可变字段，不要直接 apply。
 - 不是所有 resource 都适合导入；如果不支持 import，可先作为 data source 查询。
 
-## 对应 Example
+## 对应示例
 
-见 `examples/common/10-import-existing-vm`。
+见 [examples/common/10-import-existing-vm](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/10-import-existing-vm)。

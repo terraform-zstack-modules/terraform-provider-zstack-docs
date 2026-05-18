@@ -1,0 +1,353 @@
+version: 1
+provider_baseline:
+  source: ZStack-Robot/zstack
+  version: 1.1.3
+scenario_defaults:
+  required_files:
+    - main.tf
+    - variables.tf
+    - terraform.tfvars.example
+    - README.md
+  standard_commands:
+    - terraform init
+    - terraform validate
+    - terraform plan
+  repository_checks:
+    - make quality
+    - make docs
+common_scenarios:
+  - id: provider_access_key
+    intent:
+      - configure provider
+      - authenticate Terraform to ZStack
+    example: examples/common/01-provider
+    skill_example: skills/zstack-terraform-usage/examples/provider-accesskey.tf
+    required_inputs:
+      - zstack_host
+      - zstack_port
+      - zstack_access_key_id
+      - zstack_access_key_secret
+    generate:
+      - required_providers block with ZStack-Robot/zstack 1.1.3
+      - provider zstack block or documented ZSTACK_* environment variable flow
+    validation:
+      - terraform init
+      - terraform validate
+      - terraform plan
+    notes:
+      - Use AccessKey by default for automation.
+      - Keep access_key_secret sensitive.
+  - id: query_existing_resources
+    intent:
+      - discover provider 1.1.3 data sources and prioritize lookup targets
+      - choose existing resources before create workflows
+    example: examples/common/02-query-existing-resources
+    required_inputs:
+      - zstack credentials
+      - optional name patterns
+    generate:
+      - foundation data sources for images, L3 networks, instance offerings, disk offerings, zone, clusters, hosts
+      - outputs listing matched candidates
+    validation:
+      - terraform plan
+      - review output candidates
+    notes:
+      - The human manual lists all provider 1.1.3 data sources with priority and frequency.
+      - The runnable discovery example intentionally queries only foundation-first data sources to keep output reviewable.
+      - Broad name_pattern is acceptable only for discovery.
+      - Use exact name or uuid in later create examples.
+  - id: create_vm
+    intent:
+      - create one VM
+      - attach VM to L3 network
+    example: examples/common/03-create-vm
+    skill_example: skills/zstack-terraform-usage/examples/create-vm.tf
+    required_inputs:
+      - image_name or image_uuid
+      - l3_network_name or l3_network_uuid
+      - instance_offering_name or instance_offering_uuid
+      - vm_name
+      - optional static_ip
+    generate:
+      - zstack_instance using network_interfaces
+      - l3_network_uuid as the required network interface binding
+      - optional default_l3 only when a default NIC must be explicit
+      - optional static_ip only when a fixed IP is required
+      - data sources for image, L3 network, and instance offering when UUIDs are not supplied
+      - outputs for VM UUID, name, and NIC/IP details
+    validation:
+      - terraform validate
+      - terraform plan
+    reject_if:
+      - uses l3_network_uuids for a new example
+      - hard-codes customer UUIDs without user-provided values
+  - id: create_vm_batch
+    intent:
+      - create multiple VMs
+      - avoid accidental replacement when adding or removing VMs
+    example: examples/common/04-create-10-vms
+    required_inputs:
+      - stable VM map keys
+      - image and network inputs
+      - offering inputs
+    generate:
+      - for_each keyed by stable VM names or IDs
+      - outputs keyed by the same stable keys
+    reject_if:
+      - uses count for long-lived VM batches
+  - id: eip
+    intent:
+      - allocate VIP
+      - bind EIP to VM NIC
+    example: examples/common/05-eip
+    required_inputs:
+      - public_l3_network_name_pattern or public_l3_network_uuid
+      - target_vm_name or target_vm_uuid
+    generate:
+      - zstack_vip
+      - zstack_eip
+      - outputs for VIP, EIP, and selected VM NIC
+    validation_notes:
+      - Confirm selected public L3 and target VM NIC before apply.
+  - id: security_group
+    intent:
+      - create security group
+      - create rules
+      - attach to VM NIC
+    example: examples/common/06-security-group
+    required_inputs:
+      - VM or VM creation inputs
+      - rule direction
+      - protocol
+      - port range
+      - CIDR
+    generate:
+      - zstack_networking_secgroup
+      - zstack_networking_secgroup_rule
+      - zstack_networking_secgroup_attachment
+    reject_if:
+      - rule intent is implicit or missing CIDR/protocol/port direction
+      - ingress CIDR is 0.0.0.0/0 without an explicit public-ingress request and review note
+  - id: vpc
+    intent:
+      - create basic VPC network
+    example: examples/common/07-vpc
+    required_inputs:
+      - L2 network
+      - virtual router
+      - CIDR
+    generate:
+      - zstack_l2networks data source when selecting an existing L2 network
+      - zstack_virtual_routers data source when selecting an existing virtual router
+      - zstack_vpc resource for the VPC network
+    validation_notes:
+      - Confirm topology and subnet planning before apply.
+  - id: volume
+    intent:
+      - create VM data volume
+      - attach data volume
+    example: examples/common/08-volume
+    required_inputs:
+      - VM inputs
+      - disk offering
+      - data_volume_name
+    generate:
+      - zstack_volume with vm_instance_uuid when independent lifecycle is desired
+  - id: image_query_management
+    intent:
+      - query existing image
+      - optionally create managed image
+    example: examples/common/09-image-query-management
+    required_inputs:
+      - image lookup inputs
+      - optional image URL
+      - optional backup storage UUID
+    validation_notes:
+      - Treat image creation as an administrator workflow.
+  - id: import_existing_vm
+    intent:
+      - import existing VM
+      - converge Terraform HCL to remote object
+    example: examples/common/10-import-existing-vm
+    required_inputs:
+      - existing_vm_uuid
+      - expected VM arguments matching remote object
+    generate:
+      - import block for Terraform 1.5+
+      - documented CLI import alternative
+    validation:
+      - terraform plan repeatedly until no unintended replacement remains
+    reject_if:
+      - suggests terraform apply while plan contains unexpected replacement
+  - id: load_balancer_web
+    intent:
+      - create VIP and load balancer listener
+      - create server group
+    example: examples/common/11-load-balancer-web
+    required_inputs:
+      - public L3 network
+      - VIP name
+      - load balancer name
+      - listener ports
+      - server group name
+    outputs:
+      - vip_uuid
+      - load_balancer_uuid
+      - listener_uuid
+      - server_group_uuid
+    notes:
+      - Backend membership varies by environment and provider support.
+  - id: vpc_routing
+    intent:
+      - create route table and route entry
+    example: examples/common/12-vpc-routing
+    required_inputs:
+      - VPC or virtual router context
+      - route table
+      - destination CIDR
+      - route target
+    reject_if:
+      - route target is guessed
+  - id: vm_init_scripts
+    intent:
+      - create SSH key
+      - create and execute instance script
+    example: examples/common/13-vm-init-scripts
+    required_inputs:
+      - VM inputs
+      - SSH key
+      - script content
+      - timeout
+    reject_if:
+      - script contains long-lived secrets
+  - id: tags
+    intent:
+      - create and attach tags
+    example: examples/common/14-tags
+    required_inputs:
+      - resource UUIDs
+      - tag values
+    preferred_tags:
+      - environment
+      - owner
+      - application
+      - cost-center
+  - id: iam_access_key
+    intent:
+      - create automation account or identity
+      - create AccessKey
+    example: examples/common/15-iam-access-key
+    required_inputs:
+      - account or user ownership model
+      - IAM naming inputs
+      - AccessKey name
+    provider_notes:
+      - provider 1.1.3 requires user_uuid for zstack_access_key
+    reject_if:
+      - outputs AccessKey secret without sensitive = true
+  - id: monitoring_notification
+    intent:
+      - create alarm
+      - create SNS topic and endpoint
+      - create webhook
+    example: examples/common/16-monitoring-notification
+    required_inputs:
+      - metric namespace
+      - metric name
+      - threshold
+      - platform_uuid for email endpoint
+      - endpoint addresses
+    reject_if:
+      - metric namespace or metric name is invented
+  - id: scheduler
+    intent:
+      - create scheduler job
+      - create scheduler trigger
+    example: examples/common/17-scheduler
+    required_inputs:
+      - job type
+      - target resource UUID
+      - trigger semantics
+    reject_if:
+      - job type is guessed
+  - id: global_config
+    intent:
+      - query global config
+      - optionally manage global config
+    example: examples/common/18-global-config
+    required_inputs:
+      - category
+      - name
+      - desired value if management is enabled
+    validation_notes:
+      - Query current and default values before applying changes.
+  - id: license
+    intent:
+      - query license capacity and nodes
+      - optionally upload license
+    example: examples/common/19-license
+    required_inputs:
+      - management node UUID for upload
+      - sensitive license text
+    provider_notes:
+      - provider 1.1.3 authorized nodes lookup does not support name_pattern
+    reject_if:
+      - license text is committed or printed in normal output
+  - id: backup_cdp
+    intent:
+      - create CDP policy
+      - create CDP task
+      - create backup resources
+    example: examples/common/20-backup-cdp
+    required_inputs:
+      - backup storage UUID
+      - protected resource UUIDs
+      - CDP task type
+      - retention settings
+      - volume UUID
+    reject_if:
+      - protected resources come from fuzzy unmatched queries
+  - id: network_observability
+    intent:
+      - create flow collector and flow meter
+      - create port mirror resources
+    example: examples/common/21-network-observability
+    required_inputs:
+      - collector address and port
+      - flow meter type
+      - mirror network UUID
+      - endpoint formats
+    reject_if:
+      - endpoint formats are guessed
+  - id: advanced_network
+    intent:
+      - create IPsec connection
+      - create policy route rule set and rule
+    example: examples/common/22-advanced-network
+    required_inputs:
+      - VIP UUID
+      - peer address
+      - auth key
+      - route table UUID
+      - destination CIDR
+      - protocol
+      - rule number
+    reject_if:
+      - crypto settings, route targets, or peer values are guessed
+production_references:
+  - id: three_tier_web
+    example: examples/production/three-tier-web
+    purpose: Reference structure for web and app VMs, volumes, security groups, VIP/LB, and tags.
+    boundary: Does not deploy application code or fully wire backend membership.
+  - id: k8s_reference
+    example: examples/production/k8s-reference
+    purpose: Reference infrastructure for Kubernetes nodes and API LB.
+    boundary: Does not install Kubernetes.
+  - id: import_vm_fleet
+    example: examples/production/import-vm-fleet
+    purpose: Batch import workflow for existing VMs.
+    boundary: Requires reviewed plan convergence.
+  - id: automation_iam
+    example: examples/production/automation-iam
+    purpose: Automation IAM and AccessKey reference.
+    boundary: Requires permission boundary and secret storage review.

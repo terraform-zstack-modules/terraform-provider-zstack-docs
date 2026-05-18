@@ -4,16 +4,16 @@ Production examples live under `examples/production`. They demonstrate
 Terraform project structure, resource boundaries, and delivery constraints.
 They are references, not complete production modules.
 
-Run `examples/common/02-query-existing-resources` first to confirm candidate
+Run [examples/common/02-query-existing-resources](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/02-query-existing-resources) first to confirm candidate
 images, L3 networks, offerings, disk offerings, and public L3 networks in the
 target ZStack environment.
 
 | Example | Directory | Purpose |
 |---|---|---|
-| Three-tier web infrastructure | `examples/production/three-tier-web` | Creates web/app VMs, data volumes, security groups, VIP/LB, and standard tags |
-| Kubernetes infrastructure reference | `examples/production/k8s-reference` | Creates control-plane/worker VMs, API LB, and node security group without installing Kubernetes |
-| Existing VM fleet import | `examples/production/import-vm-fleet` | Imports existing VMs in reviewed batches and drives the plan toward no-op |
-| Automation IAM | `examples/production/automation-iam` | Creates automation account, IAM2 project, virtual ID, and AccessKey |
+| Three-tier web infrastructure | [examples/production/three-tier-web](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/production/three-tier-web) | Creates web/app VMs, data volumes, security groups, VIP/LB, and standard tags |
+| Kubernetes infrastructure reference | [examples/production/k8s-reference](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/production/k8s-reference) | Creates control-plane/worker VMs, API LB, and node security group without installing Kubernetes |
+| Existing VM fleet import | [examples/production/import-vm-fleet](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/production/import-vm-fleet) | Imports existing VMs in reviewed batches and drives the plan toward no-op |
+| Automation IAM | [examples/production/automation-iam](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/production/automation-iam) | Creates automation account, IAM2 project, virtual ID, and AccessKey |
 
 ## Boundaries
 

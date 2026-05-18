@@ -20,9 +20,19 @@ provider `1.1.3` documentation and examples scope.
 
 ## Start Here
 
-- Read [Getting Started](manual/getting-started.md) for the basic workflow.
+- Read [Installation And Environment](manual/install-environment.md) to confirm
+  Terraform CLI, network access, and credential delivery.
+- Read [Provider Initialization And Offline Mirrors](manual/provider-init-mirror.md)
+  to configure the public Registry, offline mirror, or provider development
+  source.
+- Read [Terraform Workflow](manual/terraform-workflow.md) to understand `init`,
+  `plan`, `apply`, `import`, and CI/CD flow.
 - Use [Authentication](manual/authentication.md) to configure AccessKey or
   account/password authentication.
 - Use [Query Existing Resources](manual/query-existing-resources.md) before
   creating VMs, networks, volumes, or images.
-- Use [Scenario Examples](scenarios/index.md) to choose a runnable example.
+- Use [Practice Tutorials](scenarios/practice-tutorials.md) to choose a learning
+  path for VM, network entry, storage/image, platform governance, or production
+  references.
+- Read the [Production Guide](manual/production-guide.md) before adapting
+  examples for real environments.

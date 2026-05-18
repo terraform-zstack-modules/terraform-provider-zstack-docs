@@ -2,9 +2,11 @@
 
 ## Which provider source should I use?
 
-Use `ZStack-Robot/zstack` for the public Terraform Registry. In ZStack
-application-market or private registry environments, use the exact source string
-shown by the customer platform.
+Use `ZStack-Robot/zstack` for customer-facing documentation and public examples.
+Provider development environments may use a development registry source or
+Terraform CLI development overrides while testing local provider builds. Offline
+customer environments should prefer a Terraform provider mirror that serves the
+same provider source and version.
 
 ## Which provider version is this documentation based on?
 
@@ -41,8 +43,9 @@ changes before applying.
 
 ## Does offline deployment work?
 
-Yes, but the environment must provide a private provider source or Terraform
-provider mirror, and the ZStack provider version must be available internally.
+Yes, but the environment should provide a Terraform provider mirror for the
+target `ZStack-Robot/zstack` version, and the runner must be able to fetch the
+provider from that internal mirror.
 
 ## What changed in provider 1.1.3?
 

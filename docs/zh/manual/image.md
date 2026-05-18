@@ -1,6 +1,13 @@
 # 镜像
 
-镜像是创建 VM 的基础。P0 中先覆盖“查询已有镜像”，再覆盖“创建/管理镜像”。
+镜像是创建 VM 的基础。建议先查询已有镜像，再根据需要创建或管理镜像。
+
+## 常用资源
+
+| Terraform 对象 | 类型 | 用途 |
+|---|---|---|
+| `zstack_images` | data source | 查询已有镜像，给 VM 创建或镜像管理流程选择 `image_uuid`。 |
+| `zstack_image` | resource | 创建并管理镜像，需要镜像 URL、格式、平台信息和镜像存储 UUID。 |
 
 ## 查询已有镜像
 
@@ -37,6 +44,6 @@ resource "zstack_image" "managed" {
 }
 ```
 
-## 对应 Example
+## 对应示例
 
-见 `examples/common/09-image-query-management`。
+见 [examples/common/09-image-query-management](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/09-image-query-management)。

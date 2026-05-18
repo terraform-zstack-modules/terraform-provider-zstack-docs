@@ -1,5 +1,7 @@
 # Terraform Provider ZStack Docs
 
+[English](README.md) | [中文](README.zh-CN.md)
+
 This repository contains user-facing documentation and examples for using the
 ZStack Terraform provider.
 
@@ -8,6 +10,9 @@ ZStack Terraform provider.
 ```text
 terraform-provider-zstack-docs/
 ├── README.md
+├── README.zh-CN.md
+├── AGENTS.md
+├── llms.txt
 ├── assets/
 │   ├── diagrams/
 │   └── screenshots/
@@ -83,6 +88,21 @@ terraform plan
 Most examples use placeholders such as image names, L3 network names, and
 offering names. Replace them with values from your ZStack environment before
 running `terraform apply`.
+
+## AI Agent Usage
+
+General coding agents should start with [`AGENTS.md`](AGENTS.md). LLM tools can
+then read [`llms.txt`](llms.txt), then load the
+[`zstack-terraform-usage`](skills/zstack-terraform-usage/SKILL.md) skill.
+The skill includes machine-readable catalogs for choosing resources and
+scenarios:
+
+- [`resource-catalog.yaml`](skills/zstack-terraform-usage/references/resource-catalog.yaml)
+- [`scenario-catalog.yaml`](skills/zstack-terraform-usage/references/scenario-catalog.yaml)
+
+Use `docs/` for human-facing explanations and `examples/` as runnable source of
+truth. Agent-generated Terraform should follow the skill rules and run
+`make quality` before delivery.
 
 ## Local Documentation Site
 

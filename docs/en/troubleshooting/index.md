@@ -4,7 +4,11 @@
 
 - Check `required_providers.zstack.source`.
 - Use `ZStack-Robot/zstack` for the public Terraform Registry.
-- Use the exact private source shown by the ZStack platform or private registry.
+- Customer delivery examples default to `ZStack-Robot/zstack`; for offline
+  environments, verify that the Terraform provider mirror serves that source and
+  version.
+- In provider development environments, verify that any development registry
+  source or CLI dev override matches the local provider build path.
 - Make sure Terraform CLI can reach the selected registry or mirror.
 
 ## Authentication Fails

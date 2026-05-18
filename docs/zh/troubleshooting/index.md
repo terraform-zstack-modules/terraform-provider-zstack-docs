@@ -4,7 +4,8 @@
 
 - 检查 `required_providers.zstack.source`。
 - 公网环境使用 `ZStack-Robot/zstack`。
-- 内网或应用市场环境使用平台配置的内部 source；以平台或私有 Registry 实际显示的 source 字符串为准。
+- 客户交付示例默认使用 `ZStack-Robot/zstack`；离线环境检查 Terraform provider mirror 是否提供该 source 和版本。
+- Provider 开发环境如果使用开发 Registry source 或 CLI dev override，确认 source 地址和本地 provider 构建路径一致。
 - 确认 Terraform CLI 能访问对应 registry。
 
 ## 认证失败
