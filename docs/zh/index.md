@@ -18,6 +18,14 @@
 
 管理员类资源，例如全局配置、License、IAM、备份和网络高级能力，在执行 `apply` 前必须确认权限边界和变更窗口。
 
-Provider `1.1.3` 中，资源编排功能及编排模板不再作为当前文档和 examples 的交付范围。
+Provider `1.1.3` 中，资源编排功能及编排模板不再作为当前文档和示例的交付范围。
 
 如果需要排查认证、下载 provider、资源查询、VM 创建、网络绑定或 state 迁移问题，请优先查看 Troubleshooting 和 FAQ。
+
+## 建议入口
+
+- [安装与环境准备](manual/install-environment.md)：确认 Terraform CLI、网络和凭证传递方式。
+- [Provider 初始化与离线 Mirror](manual/provider-init-mirror.md)：配置公开 Registry、离线 mirror 或 provider 开发 source。
+- [Terraform 运行流程](manual/terraform-workflow.md)：理解 `init`、`plan`、`apply`、`import` 和 CI/CD 流程。
+- [实践教程](scenarios/practice-tutorials.md)：按 VM、网络入口、存储镜像、平台治理和生产参考路径学习。
+- [生产化指南](manual/production-guide.md)：把示例改造成真实环境可评审的 Terraform 项目。

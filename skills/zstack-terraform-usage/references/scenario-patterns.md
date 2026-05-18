@@ -24,6 +24,12 @@ network_interfaces = [
 ]
 ```
 
+`l3_network_uuid` is the required binding. `default_l3` and `static_ip` are
+optional fields. Omit `default_l3` for simple single-NIC VMs unless a default
+NIC must be explicit. Omit `static_ip` unless a fixed address is required. When
+passing `static_ip` through a variable, use a `null` default so Terraform treats
+the argument as unset and ZStack can allocate the address.
+
 ## Security Group
 
 Use:

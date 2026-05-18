@@ -1,13 +1,15 @@
-# Admin Operations
+# 管理员运维
 
-P2 管理员运维场景覆盖 Scheduler、Global Config 和 License。这些资源通常影响平台行为或许可证状态，生产环境必须经过审批和回滚评估。
+管理员运维场景覆盖 Scheduler、Global Config 和 License。这些资源通常影响平台行为或许可证状态，生产环境必须经过审批和回滚评估。
 
 ## Scheduler
 
 常用资源：
 
-- `zstack_scheduler_job`
-- `zstack_scheduler_trigger`
+| Terraform 对象 | 类型 | 用途 |
+|---|---|---|
+| `zstack_scheduler_job` | resource | 创建计划任务的动作定义，指定任务类型和目标资源 UUID。 |
+| `zstack_scheduler_trigger` | resource | 创建计划任务触发器，定义一次性、周期性或 cron 触发时间。 |
 
 Scheduler job 指定要对哪个资源执行什么类型的任务，trigger 指定什么时候执行。
 
@@ -32,14 +34,16 @@ resource "zstack_scheduler_trigger" "schedule" {
 - trigger 是一次性、周期性还是 cron。
 - 执行结果是否会停止、删除或修改生产资源。
 
-对应 example：`examples/common/17-scheduler`。
+对应示例：[examples/common/17-scheduler](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/17-scheduler)。
 
 ## Global Config
 
 常用资源和 data source：
 
-- `data.zstack_global_configs`
-- `zstack_global_config`
+| Terraform 对象 | 类型 | 用途 |
+|---|---|---|
+| `data.zstack_global_configs` | data source | 查询平台全局配置的当前值、默认值和说明。 |
+| `zstack_global_config` | resource | 纳管并修改指定全局配置项。 |
 
 Global Config 是平台级配置。建议先查询，再决定是否纳管：
 
@@ -52,15 +56,17 @@ data "zstack_global_configs" "selected" {
 
 只有确认 `category`、`name`、当前值、默认值和影响范围后，才设置 `manage_global_config = true`。
 
-对应 example：`examples/common/18-global-config`。
+对应示例：[examples/common/18-global-config](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/18-global-config)。
 
 ## License
 
 常用资源和 data source：
 
-- `data.zstack_license_authorized_capacity`
-- `data.zstack_license_authorized_nodes`
-- `zstack_license`
+| Terraform 对象 | 类型 | 用途 |
+|---|---|---|
+| `data.zstack_license_authorized_capacity` | data source | 查询许可证授权容量，用于日常检查和容量确认。 |
+| `data.zstack_license_authorized_nodes` | data source | 查询许可证授权节点，用于确认授权节点范围。 |
+| `zstack_license` | resource | 上传并管理 license 文本。 |
 
 License 内容是敏感信息，不应提交到仓库。上传 license 前需要确认管理节点 UUID。
 
@@ -79,4 +85,4 @@ resource "zstack_license" "uploaded" {
 - 上传 license 只在审批流程中执行。
 - `license_text` 必须来自 secret store。
 
-对应 example：`examples/common/19-license`。
+对应示例：[examples/common/19-license](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/19-license)。

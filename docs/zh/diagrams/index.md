@@ -2,13 +2,13 @@
 
 本章节用于引用 `assets/diagrams` 和 `assets/screenshots` 中的架构图、流程图和控制台截图。
 
-第一批图先使用 Mermaid，便于在网站和 PDF 中直接渲染。后续如果需要更适合售前材料的视觉效果，可以再导出为 PNG/SVG 放入 `assets/diagrams`。
+当前页面只发布可在站点中直接渲染的 Mermaid 架构图。控制台截图需要来自真实 ZStack 环境并完成脱敏后再发布。
 
 ## Terraform 与 ZStack 交互架构
 
 ```mermaid
 flowchart LR
-  user[用户 / CI Agent] --> cli[Terraform CLI]
+  user[用户 / CI/CD] --> cli[Terraform CLI]
   cli --> state[(Terraform State)]
   cli --> provider[ZStack Terraform Provider]
   provider --> api[ZStack Management Node API]
@@ -20,12 +20,10 @@ flowchart LR
   subgraph repo[文档与代码仓库]
     docs[客户文档]
     examples[examples/common]
-    skill[zstack-terraform-usage skill]
   end
 
   user --> docs
   user --> examples
-  user --> skill
 ```
 
 ## Terraform 执行流程
@@ -127,32 +125,3 @@ flowchart TB
   subnet --> vr
   vr --> table
 ```
-
-## 文档 / Examples / Skill 关系
-
-```mermaid
-flowchart LR
-  providerRepo[terraform-provider-zstack 仓库] --> providerDocs[Provider docs/resources 和 docs/data-sources]
-  providerRepo --> providerExamples[Provider examples]
-  providerRepo --> providerTests[Provider tests]
-
-  providerDocs --> customerDocs[客户文档 docs/zh]
-  providerExamples --> commonExamples[examples/common]
-  providerTests --> commonExamples
-
-  customerDocs --> skill[zstack-terraform-usage skill]
-  commonExamples --> skill
-  customerDocs --> website[网站 / PDF]
-  commonExamples --> website
-```
-
-## 后续截图清单
-
-以下截图需要真实 ZStack 控制台环境，当前先占位：
-
-- 获取 AccessKey 的控制台路径截图。
-- 查看镜像 UUID 的截图。
-- 查看 L3 网络 UUID 的截图。
-- 查看 VM NIC UUID 的截图。
-- 查看 VIP/EIP 绑定关系的截图。
-- 查看 Load Balancer listener/server group 的截图。

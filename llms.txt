@@ -1,0 +1,68 @@
+# Terraform Provider ZStack Docs
+
+This repository contains customer-facing documentation, runnable Terraform
+examples, and agent-facing instructions for the ZStack Terraform provider.
+
+## Provider Baseline
+
+- Terraform provider source: `ZStack-Robot/zstack`
+- Provider version: `1.1.3`
+- Terraform version used by examples: `>= 1.5`
+- Public provider docs: https://registry.terraform.io/providers/ZStack-Robot/zstack/1.1.3
+- Public provider repository: https://github.com/ZStack-Robot/terraform-provider-zstack
+
+## Read Order For AI Agents
+
+1. Read `AGENTS.md` for repository-level operating rules.
+2. Read this file for LLM-oriented repository navigation.
+3. Read `skills/zstack-terraform-usage/SKILL.md` for mandatory generation rules.
+4. Load `skills/zstack-terraform-usage/references/scenario-catalog.yaml` when implementing a specific Terraform scenario.
+5. Load `skills/zstack-terraform-usage/references/resource-catalog.yaml` when choosing resources or data sources.
+6. Use `examples/common/*` and `examples/production/*` as runnable source-of-truth examples.
+7. Use `docs/en/*` and `docs/zh/*` for human-facing explanations, risk notes, and troubleshooting context.
+
+## Human-Facing Documentation
+
+- English overview: `docs/en/index.md`
+- Chinese overview: `docs/zh/index.md`
+- English manual: `docs/en/manual/index.md`
+- Chinese manual: `docs/zh/manual/index.md`
+- Example catalog: `docs/examples/index.md`
+- Troubleshooting: `docs/en/troubleshooting/index.md`, `docs/zh/troubleshooting/index.md`
+- FAQ: `docs/en/faq/index.md`, `docs/zh/faq/index.md`
+
+## Agent-Facing Sources
+
+- Repository guide: `AGENTS.md`
+- Main skill: `skills/zstack-terraform-usage/SKILL.md`
+- Resource catalog: `skills/zstack-terraform-usage/references/resource-catalog.yaml`
+- Scenario catalog: `skills/zstack-terraform-usage/references/scenario-catalog.yaml`
+- Provider auth rules: `skills/zstack-terraform-usage/references/provider-auth.md`
+- Scenario patterns: `skills/zstack-terraform-usage/references/scenario-patterns.md`
+- Terraform style rules: `skills/zstack-terraform-usage/references/terraform-style.md`
+- Anti-patterns: `skills/zstack-terraform-usage/references/anti-patterns.md`
+- Quality gates: `skills/zstack-terraform-usage/references/quality-gates.md`
+
+## Core Generation Rules
+
+- Do not invent ZStack resource names, data source names, attributes, metric names, scheduler job types, route targets, endpoint formats, or cryptographic settings.
+- Prefer AccessKey authentication for automation.
+- Prefer UUID lookup when UUIDs are known.
+- Use exact names only when the target environment guarantees uniqueness.
+- Use `name_pattern` only for discovery and output the matched candidates for review.
+- Use `network_interfaces` for new VM examples. Do not recommend `l3_network_uuids` for new configurations.
+- Prefer `for_each` with stable keys for batch resources.
+- Keep credentials, AccessKey secrets, license text, webhook tokens, private keys, and passwords out of committed files and normal outputs.
+- Do not claim an example is production-ready unless remote backend, state access control, variables, permissions, naming, tagging, and approval workflow are addressed.
+- Before delivering repository changes, run `make quality`; run `make docs` when docs or navigation changed.
+
+## Runnable Example Families
+
+- Provider and discovery: `examples/common/01-provider`, `examples/common/02-query-existing-resources`
+- VM lifecycle: `examples/common/03-create-vm`, `examples/common/04-create-10-vms`, `examples/common/13-vm-init-scripts`
+- Networking: `examples/common/05-eip`, `examples/common/06-security-group`, `examples/common/07-vpc`, `examples/common/11-load-balancer-web`, `examples/common/12-vpc-routing`
+- Storage and image: `examples/common/08-volume`, `examples/common/09-image-query-management`
+- Import and metadata: `examples/common/10-import-existing-vm`, `examples/common/14-tags`
+- Admin and platform: `examples/common/15-iam-access-key`, `examples/common/16-monitoring-notification`, `examples/common/17-scheduler`, `examples/common/18-global-config`, `examples/common/19-license`
+- Backup and advanced networking: `examples/common/20-backup-cdp`, `examples/common/21-network-observability`, `examples/common/22-advanced-network`
+- Production references: `examples/production/three-tier-web`, `examples/production/k8s-reference`, `examples/production/import-vm-fleet`, `examples/production/automation-iam`

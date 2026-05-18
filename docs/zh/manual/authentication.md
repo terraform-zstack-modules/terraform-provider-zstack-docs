@@ -17,17 +17,17 @@ terraform {
 }
 ```
 
-ZStack 应用市场或内网 Registry 场景，按平台配置替换 source，例如：
+Provider 开发环境如果需要调试本地构建或开发 Registry，可以按开发环境配置替换 source，例如：
 
 ```hcl
 source = "zstack.io/terraform-provider-zstack/zstack"
 ```
 
-上面的内部 source 只是示例。客户环境应以 ZStack 平台、内网 Registry
-或 Terraform provider mirror 实际显示的 source 字符串为准；如果平台
-显示的字符串不同，不要复制文档示例。
+上面的 source 只用于 provider 开发或调试示例。客户交付文档和公开示例默认使用
+`ZStack-Robot/zstack`；离线环境应优先通过 Terraform provider mirror 提供同一
+provider source 和版本，而不是在示例中随意改 source。
 
-不要在同一个项目里混用 public/internal provider source。
+不要在同一个项目里混用公开发布 source 和开发调试 source。
 
 ## AccessKey 认证
 
@@ -78,8 +78,8 @@ provider "zstack" {
 }
 ```
 
-如果同时配置 AccessKey 和账号密码，容易造成认证意图不清晰。客户文档和 examples 默认使用 AccessKey。
+如果同时配置 AccessKey 和账号密码，容易造成认证意图不清晰。客户文档和示例默认使用 AccessKey。
 
-## 对应 Example
+## 对应示例
 
-见 `examples/common/01-provider`。
+见 [examples/common/01-provider](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/01-provider)。

@@ -3,15 +3,15 @@
 生产参考样例放在 `examples/production`。它们用于展示 Terraform 工程组织方式、
 资源边界和交付约束，不是开箱即用的生产模块。
 
-运行前先执行 `examples/common/02-query-existing-resources`，确认目标环境中的
+运行前先执行 [examples/common/02-query-existing-resources](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/02-query-existing-resources)，确认目标环境中的
 image、L3 network、offering、disk offering、public L3 等候选资源。
 
 | 样例 | 目录 | 说明 |
 |---|---|---|
-| 三层 Web 应用基础设施 | `examples/production/three-tier-web` | 创建 web/app VM、数据盘、安全组、VIP/LB 和标准 tag |
-| Kubernetes 基础设施参考 | `examples/production/k8s-reference` | 创建 control-plane/worker VM、API LB 和节点安全组，不安装 Kubernetes |
-| 存量 VM 批量纳管 | `examples/production/import-vm-fleet` | 使用 import block 分批纳管已有 VM，强调 plan 收敛到 no-op |
-| 自动化 IAM | `examples/production/automation-iam` | 创建自动化 account、IAM2 project、virtual ID 和 AccessKey |
+| 三层 Web 应用基础设施 | [examples/production/three-tier-web](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/production/three-tier-web) | 创建 web/app VM、数据盘、安全组、VIP/LB 和标准 tag |
+| Kubernetes 基础设施参考 | [examples/production/k8s-reference](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/production/k8s-reference) | 创建 control-plane/worker VM、API LB 和节点安全组，不安装 Kubernetes |
+| 存量 VM 批量纳管 | [examples/production/import-vm-fleet](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/production/import-vm-fleet) | 使用 import block 分批纳管已有 VM，强调 plan 收敛到 no-op |
+| 自动化 IAM | [examples/production/automation-iam](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/production/automation-iam) | 创建自动化 account、IAM2 project、virtual ID 和 AccessKey |
 
 ## 使用边界
 

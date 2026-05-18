@@ -8,7 +8,7 @@ Avoid:
 - Committing `terraform.tfvars`, state, plan files, or secrets.
 - Using broad `name_pattern` in production examples without reviewing results.
 - Claiming an example is runnable when required UUIDs or resource names are missing.
-- Mixing public Registry provider source with private/internal source in the same example.
+- Mixing public Registry provider source with development provider source in the same customer-facing example.
 - Using `count` for long-lived batches where stable identity matters.
 - Generating fake metric namespaces, route targets, or webhook payload formats without checking the customer environment.
 - Printing AccessKey secrets or generated passwords in non-sensitive outputs.

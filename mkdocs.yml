@@ -25,40 +25,55 @@ markdown_extensions:
 nav:
   - Home: index.md
   - 中文:
-      - Overview: zh/index.md
+      - 概览: zh/index.md
       - 客户使用手册:
-          - Overview: zh/manual/index.md
-          - Getting Started: zh/manual/getting-started.md
-          - Authentication: zh/manual/authentication.md
-          - Query Existing Resources: zh/manual/query-existing-resources.md
-          - Create VM: zh/manual/create-vm.md
-          - Networking: zh/manual/networking.md
-          - Storage: zh/manual/storage.md
-          - Image: zh/manual/image.md
+          - 概览: zh/manual/index.md
+          - 安装与环境准备: zh/manual/install-environment.md
+          - 快速开始: zh/manual/getting-started.md
+          - Provider 初始化与离线 Mirror: zh/manual/provider-init-mirror.md
+          - 认证与 Provider 配置: zh/manual/authentication.md
+          - Terraform 运行流程: zh/manual/terraform-workflow.md
+          - 概念映射: zh/manual/concepts.md
+          - 工作原理: zh/manual/how-it-works.md
+          - HCL 编写规范: zh/manual/hcl-style.md
+          - 查询已有资源: zh/manual/query-existing-resources.md
+          - 创建云主机: zh/manual/create-vm.md
+          - 网络: zh/manual/networking.md
+          - 存储: zh/manual/storage.md
+          - 镜像: zh/manual/image.md
           - IAM: zh/manual/iam.md
-          - Load Balancer: zh/manual/load-balancer.md
-          - Monitoring & Notification: zh/manual/monitoring-notification.md
-          - Admin Operations: zh/manual/admin-operations.md
-          - Backup & CDP: zh/manual/backup-cdp.md
-          - Network Observability: zh/manual/network-observability.md
-          - Advanced Network: zh/manual/advanced-network.md
-          - Specialized Resources: zh/manual/specialized-resources.md
-      - 场景化 Examples:
-          - Common Examples: zh/scenarios/index.md
-          - Production Examples: zh/scenarios/production-examples.md
+          - 负载均衡: zh/manual/load-balancer.md
+          - 监控与通知: zh/manual/monitoring-notification.md
+          - 管理员运维: zh/manual/admin-operations.md
+          - 备份与 CDP: zh/manual/backup-cdp.md
+          - 网络观测: zh/manual/network-observability.md
+          - 高级网络: zh/manual/advanced-network.md
+          - 专项资源: zh/manual/specialized-resources.md
+          - 调试与诊断: zh/manual/debugging-diagnostics.md
+          - 生产化指南: zh/manual/production-guide.md
+      - 场景化示例:
+          - 常用示例: zh/scenarios/index.md
+          - 实践教程: zh/scenarios/practice-tutorials.md
+          - 生产参考样例: zh/scenarios/production-examples.md
       - 最佳实践: zh/best-practices/index.md
-      - Troubleshooting: zh/troubleshooting/index.md
-      - FAQ: zh/faq/index.md
-      - Migration Guide:
-          - Overview: zh/migration/index.md
-          - Import Existing Resources: zh/migration/import-existing-resources.md
+      - 故障排查: zh/troubleshooting/index.md
+      - 常见问题: zh/faq/index.md
+      - 迁移指南:
+          - 概览: zh/migration/index.md
+          - 导入已有资源: zh/migration/import-existing-resources.md
       - 截图与架构图: zh/diagrams/index.md
   - English:
       - Overview: en/index.md
       - User Manual:
           - Overview: en/manual/index.md
+          - Installation And Environment: en/manual/install-environment.md
           - Getting Started: en/manual/getting-started.md
+          - Provider Initialization And Offline Mirrors: en/manual/provider-init-mirror.md
           - Authentication: en/manual/authentication.md
+          - Terraform Workflow: en/manual/terraform-workflow.md
+          - Concepts: en/manual/concepts.md
+          - How It Works: en/manual/how-it-works.md
+          - HCL Style Guide: en/manual/hcl-style.md
           - Query Existing Resources: en/manual/query-existing-resources.md
           - Create VM: en/manual/create-vm.md
           - Networking: en/manual/networking.md
@@ -72,8 +87,11 @@ nav:
           - Network Observability: en/manual/network-observability.md
           - Advanced Network: en/manual/advanced-network.md
           - Specialized Resources: en/manual/specialized-resources.md
+          - Debugging And Diagnostics: en/manual/debugging-diagnostics.md
+          - Production Guide: en/manual/production-guide.md
       - Scenario Examples:
           - Common Examples: en/scenarios/index.md
+          - Practice Tutorials: en/scenarios/practice-tutorials.md
           - Production Examples: en/scenarios/production-examples.md
       - Best Practices: en/best-practices/index.md
       - Troubleshooting: en/troubleshooting/index.md

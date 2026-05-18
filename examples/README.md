@@ -8,8 +8,9 @@ Localized documentation should explain these examples from `docs/zh` and `docs/e
 ## Provider Version Policy
 
 Public examples use `ZStack-Robot/zstack` and currently pin provider version
-`1.1.3`. Private-registry examples must use the exact source string shown by the
-customer's ZStack platform or provider mirror.
+`1.1.3`. Provider development examples may use a development registry source or
+Terraform CLI development overrides, but customer-facing examples should not mix
+development sources with the public baseline.
 
 When upgrading examples, update the provider constraint consistently, run
 `terraform init -upgrade`, and verify `terraform plan` for every scenario that

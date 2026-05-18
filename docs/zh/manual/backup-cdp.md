@@ -1,14 +1,16 @@
-# Backup & CDP
+# 备份与 CDP
 
-P2 备份和 CDP 场景用于数据保护、恢复点管理和平台备份。此类资源对容量和性能有影响，生产使用前必须确认备份窗口、保留策略和存储类型。
+备份和 CDP 场景用于数据保护、恢复点管理和平台备份。此类资源对容量和性能有影响，生产使用前必须确认备份窗口、保留策略和存储类型。
 
 ## 常用资源
 
-- `zstack_cdp_policy`
-- `zstack_cdp_task`
-- `zstack_volume_backup`
-- `zstack_database_backup`
-- `zstack_zbox_backup`
+| Terraform 对象 | 类型 | 用途 |
+|---|---|---|
+| `zstack_cdp_policy` | resource | 创建 CDP 策略，定义恢复点频率、保留时间和全量备份周期。 |
+| `zstack_cdp_task` | resource | 创建 CDP 任务，把 CDP 策略应用到指定资源 UUID 列表。 |
+| `zstack_volume_backup` | resource | 创建云盘备份，需要 volume UUID 和兼容的 backup storage UUID。 |
+| `zstack_database_backup` | resource | 创建平台数据库备份，用于平台级恢复场景。 |
+| `zstack_zbox_backup` | resource | 创建 ZBox 备份，适用于有 ZBox 组件的特定环境。 |
 
 ## CDP Policy
 
@@ -51,4 +53,4 @@ resource "zstack_cdp_task" "resources" {
 - 对 production 资源先做小范围测试。
 - 对 CDP task 使用明确资源 UUID，不要用模糊选择自动套到大批资源。
 
-对应 example：`examples/common/20-backup-cdp`。
+对应示例：[examples/common/20-backup-cdp](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/20-backup-cdp)。

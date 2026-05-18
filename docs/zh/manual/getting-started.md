@@ -29,9 +29,9 @@ terraform plan
 terraform apply
 ```
 
-## Examples
+## 示例
 
-从 `examples/common/01-provider` 开始。每个 example 都包含：
+从 [examples/common/01-provider](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/01-provider) 开始。每个示例都包含：
 
 - `main.tf`
 - `variables.tf`

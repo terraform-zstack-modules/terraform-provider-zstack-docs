@@ -15,6 +15,7 @@ terraform validate
 terraform plan
 ```
 
-For private registry or ZStack application-market environments, replace the
-provider source in `main.tf` with the internal source configured by your
-platform.
+For provider development, use a development registry source or Terraform CLI
+development overrides while testing a local provider build. Customer-facing
+examples should keep the public source unless the task explicitly targets
+provider development.

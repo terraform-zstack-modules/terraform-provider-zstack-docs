@@ -1,0 +1,518 @@
+version: 1
+provider_baseline:
+  source: ZStack-Robot/zstack
+  version: 1.1.3
+  terraform_required_version: ">= 1.5"
+lookup_policy:
+  preferred_for_automation: uuid
+  acceptable_for_human_examples: exact_name_when_unique
+  exploratory_only: name_pattern
+  name_pattern_rule: Output and review matched candidates before using them in create/update flows.
+generation_guardrails:
+  - Do not invent resource names, data source names, attributes, enum values, job types, metric names, endpoint formats, route targets, or cryptographic settings.
+  - Use provider docs, examples, tests, and this repository as source of truth.
+  - Use placeholders or variables when environment-specific UUIDs, names, credentials, addresses, or payload formats are unknown.
+  - Mark credentials, AccessKey secrets, generated passwords, license text, webhook tokens, and private keys as sensitive.
+  - Run make quality before delivering repository changes. Run make docs when docs or navigation changed.
+resource_groups:
+  - id: provider_auth
+    priority: foundation
+    purpose: Configure the ZStack Terraform provider.
+    provider_blocks:
+      - provider.zstack
+    preferred_auth: access_key
+    environment_variables:
+      - ZSTACK_HOST
+      - ZSTACK_PORT
+      - ZSTACK_ACCESS_KEY_ID
+      - ZSTACK_ACCESS_KEY_SECRET
+      - ZSTACK_ACCOUNT_NAME
+      - ZSTACK_ACCOUNT_PASSWORD
+    examples:
+      - examples/common/01-provider
+      - skills/zstack-terraform-usage/examples/provider-accesskey.tf
+    docs:
+      - docs/en/manual/authentication.md
+      - docs/zh/manual/authentication.md
+    warnings:
+      - Do not mix public and development provider sources in one example set.
+      - Account/password authentication exists but AccessKey is preferred for automation.
+  - id: discovery
+    priority: foundation
+    purpose: Query existing resources before creating dependent resources. Human docs list all provider 1.1.3 data sources with priority and frequency.
+    data_sources:
+      - zstack_accounts
+      - zstack_affinity_groups
+      - zstack_auto_scaling_groups
+      - zstack_backup_storages
+      - zstack_clusters
+      - zstack_disk_offerings
+      - zstack_disks
+      - zstack_eips
+      - zstack_global_configs
+      - zstack_gpu_devices
+      - zstack_hook_scripts
+      - zstack_hosts
+      - zstack_iam2_projects
+      - zstack_images
+      - zstack_instance_guest_tools
+      - zstack_instance_offerings
+      - zstack_instance_scripts
+      - zstack_instances
+      - zstack_l2networks
+      - zstack_l2vlan_networks
+      - zstack_l3networks
+      - zstack_license_authorized_capacity
+      - zstack_license_authorized_nodes
+      - zstack_load_balancer_listeners
+      - zstack_load_balancers
+      - zstack_mn_nodes
+      - zstack_networking_secgroup_rules
+      - zstack_networking_secgroups
+      - zstack_port_forwarding_rules
+      - zstack_primary_storages
+      - zstack_reserved_ips
+      - zstack_sdn_controllers
+      - zstack_ssh_key_pairs
+      - zstack_subnet_ip_ranges
+      - zstack_tags
+      - zstack_user_tags
+      - zstack_vips
+      - zstack_virtual_router_images
+      - zstack_virtual_router_offerings
+      - zstack_virtual_routers
+      - zstack_volume_snapshots
+      - zstack_volumes
+      - zstack_zone
+    lookup_tiers:
+      foundation_first:
+        - zstack_images
+        - zstack_l3networks
+        - zstack_instance_offerings
+        - zstack_disk_offerings
+        - zstack_zone
+        - zstack_clusters
+        - zstack_hosts
+      common_extension:
+        - zstack_instances
+        - zstack_l2networks
+        - zstack_virtual_routers
+        - zstack_vips
+        - zstack_eips
+        - zstack_primary_storages
+        - zstack_backup_storages
+        - zstack_volumes
+        - zstack_volume_snapshots
+        - zstack_networking_secgroups
+        - zstack_networking_secgroup_rules
+        - zstack_tags
+        - zstack_user_tags
+        - zstack_ssh_key_pairs
+        - zstack_instance_scripts
+      scenario_specific:
+        - zstack_accounts
+        - zstack_iam2_projects
+        - zstack_affinity_groups
+        - zstack_auto_scaling_groups
+        - zstack_disks
+        - zstack_l2vlan_networks
+        - zstack_reserved_ips
+        - zstack_subnet_ip_ranges
+        - zstack_load_balancers
+        - zstack_load_balancer_listeners
+        - zstack_port_forwarding_rules
+        - zstack_virtual_router_images
+        - zstack_virtual_router_offerings
+      admin_specialized:
+        - zstack_global_configs
+        - zstack_license_authorized_capacity
+        - zstack_license_authorized_nodes
+        - zstack_mn_nodes
+        - zstack_sdn_controllers
+        - zstack_gpu_devices
+        - zstack_hook_scripts
+        - zstack_instance_guest_tools
+    examples:
+      - examples/common/02-query-existing-resources
+    docs:
+      - docs/en/manual/query-existing-resources.md
+      - docs/zh/manual/query-existing-resources.md
+    outputs:
+      - Candidate resource lists for review.
+    warnings:
+      - Broad name_pattern values are only for discovery.
+  - id: vm
+    priority: core
+    purpose: Create and manage VM instances.
+    data_sources:
+      - zstack_images
+      - zstack_l3networks
+      - zstack_instance_offerings
+    resources:
+      - zstack_instance
+    preferred_patterns:
+      - Use network_interfaces for VM NICs.
+      - l3_network_uuid is required inside each network interface.
+      - default_l3 is optional; use it when a default NIC must be explicit.
+      - static_ip is optional; omit it unless a fixed address is required.
+      - When static_ip is passed through a variable, use a null default so Terraform treats the argument as unset and ZStack can allocate the address.
+      - Use for_each with stable keys for VM batches.
+      - Output VM UUID, name, and NIC/IP information.
+    examples:
+      - examples/common/03-create-vm
+      - examples/common/04-create-10-vms
+      - skills/zstack-terraform-usage/examples/create-vm.tf
+    docs:
+      - docs/en/manual/create-vm.md
+      - docs/zh/manual/create-vm.md
+    warnings:
+      - Do not recommend l3_network_uuids for new configurations.
+      - Confirm image, network, offering, and static IP availability before apply.
+  - id: vm_initialization
+    priority: core
+    purpose: Run day-1 scripts after VM creation.
+    resources:
+      - zstack_ssh_key_pair
+      - zstack_instance_scripts
+      - zstack_instance_scripts_execution
+    examples:
+      - examples/common/13-vm-init-scripts
+    docs:
+      - docs/en/manual/create-vm.md
+      - docs/zh/manual/create-vm.md
+    warnings:
+      - Do not embed long-lived secrets in script content.
+      - Confirm VM state, script type, encoding type, and timeout.
+  - id: security_group
+    priority: core
+    purpose: Control VM network traffic.
+    resources:
+      - zstack_networking_secgroup
+      - zstack_networking_secgroup_rule
+      - zstack_networking_secgroup_attachment
+    examples:
+      - examples/common/06-security-group
+    docs:
+      - docs/en/manual/networking.md
+      - docs/zh/manual/networking.md
+    warnings:
+      - Make direction, protocol, ports, CIDR, priority, and state explicit.
+      - Do not use 0.0.0.0/0 as an ingress CIDR in customer-facing examples unless the user explicitly requests public ingress and the rule is reviewed.
+  - id: vip_eip
+    priority: networking
+    purpose: Expose VM NICs through VIP and EIP.
+    data_sources:
+      - zstack_l3networks
+      - zstack_instances
+    resources:
+      - zstack_vip
+      - zstack_eip
+    examples:
+      - examples/common/05-eip
+    docs:
+      - docs/en/manual/networking.md
+      - docs/zh/manual/networking.md
+    warnings:
+      - Confirm public L3 network and target VM NIC before apply.
+  - id: network_foundation
+    priority: networking
+    purpose: Query or manage L2/L3 network foundations before VM, VIP/EIP, VPC, or routing workflows.
+    data_sources:
+      - zstack_l2networks
+      - zstack_l3networks
+      - zstack_virtual_routers
+    resources:
+      - zstack_l2vlan_network
+      - zstack_l3network
+      - zstack_subnet_ip_range
+      - zstack_reserved_ip
+      - zstack_vpc
+    examples:
+      - examples/common/02-query-existing-resources
+      - examples/common/07-vpc
+      - examples/common/12-vpc-routing
+    docs:
+      - docs/en/manual/networking.md
+      - docs/zh/manual/networking.md
+    warnings:
+      - Prefer querying existing L3 networks for VM examples unless the task explicitly asks Terraform to manage network infrastructure.
+      - Confirm physical network, VLAN ID, L2/L3 design, CIDR, gateway, DNS, and allocation ranges before creating network resources.
+  - id: load_balancer
+    priority: networking
+    purpose: Create service entry resources for load-balanced traffic.
+    data_sources:
+      - zstack_l3networks
+    resources:
+      - zstack_vip
+      - zstack_load_balancer
+      - zstack_load_balancer_listener
+      - zstack_lb_server_group
+    examples:
+      - examples/common/11-load-balancer-web
+      - examples/production/three-tier-web
+    docs:
+      - docs/en/manual/load-balancer.md
+      - docs/zh/manual/load-balancer.md
+    warnings:
+      - Backend membership varies by environment and provider support.
+      - Output VIP, LB, listener, and server group UUIDs.
+  - id: vpc_routing
+    priority: networking
+    purpose: Model VPC networks and route entries.
+    data_sources:
+      - zstack_l2networks
+      - zstack_virtual_routers
+    resources:
+      - zstack_vpc
+      - zstack_vrouter_route_table
+      - zstack_vrouter_route_entry
+    examples:
+      - examples/common/07-vpc
+      - examples/common/12-vpc-routing
+    docs:
+      - docs/en/manual/networking.md
+      - docs/zh/manual/networking.md
+    warnings:
+      - Confirm L2, virtual router, CIDR, route table association, destination CIDR, and route target.
+  - id: storage
+    priority: core
+    purpose: Manage data volumes, snapshots, and storage lookups.
+    data_sources:
+      - zstack_disk_offerings
+      - zstack_primary_storages
+      - zstack_backup_storages
+    resources:
+      - zstack_volume
+      - zstack_volume_snapshot
+    examples:
+      - examples/common/08-volume
+    docs:
+      - docs/en/manual/storage.md
+      - docs/zh/manual/storage.md
+    preferred_patterns:
+      - Use zstack_volume when a data disk needs independent lifecycle.
+    warnings:
+      - Confirm data can be deleted before destroy.
+  - id: image
+    priority: core
+    purpose: Query existing images and optionally manage images.
+    data_sources:
+      - zstack_images
+    resources:
+      - zstack_image
+      - zstack_virtual_router_image
+      - zstack_image_store_backup_storage
+    examples:
+      - examples/common/09-image-query-management
+    docs:
+      - docs/en/manual/image.md
+      - docs/zh/manual/image.md
+    warnings:
+      - Prefer querying existing images for first-time VM examples.
+      - Creating images requires URL, backup storage UUID, format, platform, guest OS, architecture, and boot mode review.
+  - id: import
+    priority: migration
+    purpose: Bring existing resources under Terraform state.
+    terraform_features:
+      - terraform import
+      - import blocks in Terraform 1.5+
+    examples:
+      - examples/common/10-import-existing-vm
+      - examples/production/import-vm-fleet
+    docs:
+      - docs/en/migration/import-existing-resources.md
+      - docs/zh/migration/import-existing-resources.md
+    warnings:
+      - Import does not generate complete HCL.
+      - Iterate terraform plan until no unintended replacement remains.
+      - Do not apply while replacement is unexpected.
+  - id: tags
+    priority: metadata
+    purpose: Attach standard metadata to resources.
+    resources:
+      - zstack_tag
+      - zstack_tag_attachment
+    examples:
+      - examples/common/14-tags
+      - examples/production/three-tier-web
+    docs:
+      - docs/en/best-practices/index.md
+      - docs/zh/best-practices/index.md
+    preferred_tags:
+      - environment
+      - owner
+      - application
+      - cost-center
+  - id: iam_access_key
+    priority: admin
+    purpose: Create automation identities and AccessKeys.
+    resources:
+      - zstack_account
+      - zstack_access_key
+      - zstack_user
+      - zstack_role
+      - zstack_policy
+      - zstack_iam2_project
+      - zstack_iam2_virtual_id
+      - zstack_iam2_organization
+    examples:
+      - examples/common/15-iam-access-key
+      - examples/production/automation-iam
+    docs:
+      - docs/en/manual/iam.md
+      - docs/zh/manual/iam.md
+    provider_notes:
+      - Provider 1.1.3 requires user_uuid when creating zstack_access_key.
+    warnings:
+      - Save generated secrets immediately.
+      - Keep AccessKey outputs sensitive.
+      - Confirm permission boundaries before apply.
+  - id: monitoring_notification
+    priority: admin
+    purpose: Create alarm and notification primitives.
+    resources:
+      - zstack_alarm
+      - zstack_monitor_template
+      - zstack_monitor_group
+      - zstack_sns_topic
+      - zstack_sns_email_endpoint
+      - zstack_sns_http_endpoint
+      - zstack_webhook
+    examples:
+      - examples/common/16-monitoring-notification
+    docs:
+      - docs/en/manual/monitoring-notification.md
+      - docs/zh/manual/monitoring-notification.md
+    provider_notes:
+      - Provider 1.1.3 requires platform_uuid when creating SNS email endpoints.
+    warnings:
+      - Metric namespace and metric name must come from the real environment.
+      - Webhook URLs and opaque payloads may contain secrets.
+  - id: scheduler
+    priority: admin
+    purpose: Schedule actions against ZStack resources.
+    resources:
+      - zstack_scheduler_job
+      - zstack_scheduler_trigger
+    examples:
+      - examples/common/17-scheduler
+    docs:
+      - docs/en/manual/admin-operations.md
+      - docs/zh/manual/admin-operations.md
+    warnings:
+      - Do not invent job types.
+      - Confirm target resource UUID and trigger semantics.
+  - id: global_config
+    priority: admin
+    purpose: Query and optionally manage platform-level configuration.
+    data_sources:
+      - zstack_global_configs
+    resources:
+      - zstack_global_config
+    examples:
+      - examples/common/18-global-config
+    docs:
+      - docs/en/manual/admin-operations.md
+      - docs/zh/manual/admin-operations.md
+    warnings:
+      - Query current and default values before managing.
+      - Apply only through an approved change process.
+  - id: license
+    priority: admin
+    purpose: Query license state and optionally upload a license.
+    data_sources:
+      - zstack_license_authorized_capacity
+      - zstack_license_authorized_nodes
+    resources:
+      - zstack_license
+    examples:
+      - examples/common/19-license
+    docs:
+      - docs/en/manual/admin-operations.md
+      - docs/zh/manual/admin-operations.md
+    provider_notes:
+      - Provider 1.1.3 does not support name_pattern on authorized nodes.
+    warnings:
+      - License text is sensitive.
+      - Do not upload or replace production license without rollback approval.
+  - id: backup_cdp
+    priority: admin
+    purpose: Create CDP and backup resources.
+    resources:
+      - zstack_cdp_policy
+      - zstack_cdp_task
+      - zstack_volume_backup
+      - zstack_database_backup
+      - zstack_zbox_backup
+    examples:
+      - examples/common/20-backup-cdp
+    docs:
+      - docs/en/manual/backup-cdp.md
+      - docs/zh/manual/backup-cdp.md
+    warnings:
+      - Confirm backup storage type, retention, capacity, bandwidth, and resource UUIDs.
+      - Do not create CDP tasks from fuzzy-matched resource lists.
+      - Volume backup requires compatible backup storage.
+  - id: network_observability
+    priority: advanced
+    purpose: Collect flow and mirrored traffic for troubleshooting.
+    resources:
+      - zstack_flow_meter
+      - zstack_flow_collector
+      - zstack_port_mirror
+      - zstack_port_mirror_session
+    examples:
+      - examples/common/21-network-observability
+    docs:
+      - docs/en/manual/network-observability.md
+      - docs/zh/manual/network-observability.md
+    warnings:
+      - Confirm collector address, ports, mirror network UUID, and endpoint formats.
+  - id: advanced_network
+    priority: advanced
+    purpose: Configure IPsec and policy routing.
+    resources:
+      - zstack_ipsec_connection
+      - zstack_policy_route_rule_set
+      - zstack_policy_route_rule
+    examples:
+      - examples/common/22-advanced-network
+    docs:
+      - docs/en/manual/advanced-network.md
+      - docs/zh/manual/advanced-network.md
+    warnings:
+      - Confirm peer address, authentication key, route table, destination CIDR, protocol, rule number, and crypto settings.
+  - id: specialized_resources
+    priority: specialized
+    purpose: Index resources that require hardware, external systems, or industry-specific context.
+    resources:
+      - zstack_baremetal_chassis
+      - zstack_baremetal_instance
+      - zstack_baremetal_pxe_server
+      - zstack_vcenter
+      - zstack_aliyun_proxy_vpc
+      - zstack_aliyun_proxy_vswitch
+      - zstack_aliyun_nas_access_group
+      - zstack_jit_security_machine
+      - zstack_san_sec_security_machine
+      - zstack_info_sec_security_machine
+      - zstack_fi_sec_security_machine
+      - zstack_flk_sec_security_machine
+      - zstack_iscsi_server
+      - zstack_nvme_server
+      - zstack_ceph_pool
+      - zstack_ceph_primary_storage
+      - zstack_ceph_backup_storage
+      - zstack_directory
+      - zstack_dataset
+      - zstack_price_table
+      - zstack_email_media
+      - zstack_log_server
+      - zstack_snmp_agent
+      - zstack_container_management_endpoint
+    docs:
+      - docs/en/manual/specialized-resources.md
+      - docs/zh/manual/specialized-resources.md
+    warnings:
+      - Do not generate runnable examples without a concrete environment and required hardware or external system details.
+      - Use placeholders when UUIDs, device addresses, credentials, or external system details are missing.

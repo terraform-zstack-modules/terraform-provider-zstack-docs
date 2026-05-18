@@ -20,8 +20,8 @@ terraform apply
 terraform destroy
 ```
 
-Start with `examples/common/01-provider`, then query existing resources with
-`examples/common/02-query-existing-resources`. After the required resource names
+Start with [examples/common/01-provider](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/01-provider), then query existing resources with
+[examples/common/02-query-existing-resources](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/02-query-existing-resources). After the required resource names
 or UUIDs are confirmed, move to VM and networking examples.
 
 ## Example Workflow

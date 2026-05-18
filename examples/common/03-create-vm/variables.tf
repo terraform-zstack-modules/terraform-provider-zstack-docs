@@ -42,7 +42,7 @@ variable "instance_offering_name" {
 
 variable "static_ip" {
   type        = string
-  description = "Optional static IP for the VM NIC. Set to null to let ZStack allocate one."
+  description = "Optional static IP for the VM NIC. Leave null to omit the argument and let ZStack allocate one."
   default     = null
 }
 

@@ -41,4 +41,4 @@ import {
 - If replacement is shown, inspect immutable fields before applying.
 - If a resource does not support import, query it with a data source first.
 
-See `examples/common/10-import-existing-vm`.
+See [examples/common/10-import-existing-vm](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/10-import-existing-vm).

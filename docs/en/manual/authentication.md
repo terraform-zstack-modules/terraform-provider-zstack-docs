@@ -18,16 +18,18 @@ terraform {
 }
 ```
 
-In ZStack application-market or private registry environments, use the source
-string shown by the platform, for example:
+In provider development environments, you may use a development registry source
+or Terraform CLI development overrides while testing a local provider build, for
+example:
 
 ```hcl
 source = "zstack.io/terraform-provider-zstack/zstack"
 ```
 
-The private source above is only an example. Do not copy it if the customer
-platform shows a different source. Do not mix public and private provider
-sources in the same example set.
+The development source above is only an example. Customer-facing documentation
+and public examples should default to `ZStack-Robot/zstack`. Offline customer
+environments should prefer a Terraform provider mirror that serves the same
+provider source and version instead of changing the source in examples.
 
 ## AccessKey Authentication
 

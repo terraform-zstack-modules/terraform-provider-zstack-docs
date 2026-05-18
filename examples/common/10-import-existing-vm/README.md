@@ -27,3 +27,22 @@ There are two import styles:
 
 After import, adjust the resource block until `terraform plan` does not show an
 unwanted replacement.
+
+## Inputs
+
+Set the existing VM UUID, expected image, L3 network, instance offering, and NIC
+arguments in `terraform.tfvars`. These values should describe the current remote
+VM closely enough for the plan to converge.
+
+## Review
+
+```bash
+cp terraform.tfvars.example terraform.tfvars
+terraform init
+terraform validate
+terraform plan
+terraform output
+```
+
+Do not run `terraform apply` until the plan is no-op or contains only reviewed,
+accepted changes.

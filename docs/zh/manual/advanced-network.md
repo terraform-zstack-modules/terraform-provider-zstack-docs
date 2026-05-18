@@ -1,12 +1,14 @@
-# Advanced Network
+# 高级网络
 
-P2 高级网络场景覆盖站点互联和策略路由。此类配置强依赖网络规划，不能由 agent 猜测 peer 地址、密钥、路由表或策略值。
+高级网络场景覆盖站点互联和策略路由。此类配置强依赖网络规划，不能凭空填写 peer 地址、密钥、路由表或策略值。
 
 ## 常用资源
 
-- `zstack_ipsec_connection`
-- `zstack_policy_route_rule_set`
-- `zstack_policy_route_rule`
+| Terraform 对象 | 类型 | 用途 |
+|---|---|---|
+| `zstack_ipsec_connection` | resource | 创建 IPsec 站点互联连接，配置 VIP、对端地址和认证密钥。 |
+| `zstack_policy_route_rule_set` | resource | 创建策略路由规则集，用于组织一组策略路由规则。 |
+| `zstack_policy_route_rule` | resource | 创建策略路由规则，按源/目的地址、协议等条件匹配并关联路由表。 |
 
 ## IPsec
 
@@ -37,4 +39,4 @@ resource "zstack_policy_route_rule" "main" {
 如果设置 `protocol`，使用 provider schema 接受的大写值：`TCP`、`UDP` 或
 `ICMP`。
 
-对应 example：`examples/common/22-advanced-network`。
+对应示例：[examples/common/22-advanced-network](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/22-advanced-network)。

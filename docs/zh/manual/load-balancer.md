@@ -1,13 +1,15 @@
-# Load Balancer
+# 负载均衡
 
-Load Balancer 是 P1 生产场景的核心入口能力，通常和 VIP、listener、server group、后端 VM 一起使用。
+Load Balancer 是生产服务入口的核心能力，通常和 VIP、listener、server group、后端 VM 一起使用。
 
 ## 常用资源
 
-- `zstack_vip`
-- `zstack_load_balancer`
-- `zstack_load_balancer_listener`
-- `zstack_lb_server_group`
+| Terraform 对象 | 类型 | 用途 |
+|---|---|---|
+| `zstack_vip` | resource | 创建入口 VIP，作为负载均衡器的访问地址。 |
+| `zstack_load_balancer` | resource | 创建负载均衡器实例，绑定 VIP 并承载监听器。 |
+| `zstack_load_balancer_listener` | resource | 创建监听器，定义前端协议/端口和后端端口。 |
+| `zstack_lb_server_group` | resource | 创建后端服务器组，用于组织后端 VM/NIC 成员。 |
 
 ## 基础模型
 
@@ -39,9 +41,9 @@ resource "zstack_load_balancer_listener" "http" {
 
 - VIP 所在 L3 网络应明确区分公网/入口网络。
 - listener 端口和后端端口使用变量管理。
-- 输出 VIP、LB、listener、server group UUID，方便后续接入后端成员。
+- 输出 VIP、LB、listener、server group UUID，方便按环境接入后端成员。
 - 如果一个 LB 服务多个应用，优先按 listener/server group 拆分模块。
 
-## 对应 Example
+## 对应示例
 
-见 `examples/common/11-load-balancer-web`。
+见 [examples/common/11-load-balancer-web](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/11-load-balancer-web)。
