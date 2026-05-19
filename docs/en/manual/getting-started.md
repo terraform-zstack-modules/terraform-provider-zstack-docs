@@ -1,37 +1,44 @@
 # Getting Started
 
-This guide uses ZStack provider `1.1.3` and Terraform 1.5 or later.
+Terraform Provider ZStack is used to declare ZStack cloud resources as code and
+manage changes through `plan/apply`.
 
 ## Prerequisites
 
-- Terraform CLI installed.
-- Network access from the Terraform runner to the ZStack management node.
-- ZStack management node host and API port.
-- AccessKey ID and AccessKey Secret, or account/password credentials.
-- Existing image, L3 network, and instance offering for VM examples.
+- Terraform 1.5 or later.
+- Reachable ZStack management node.
+- AccessKey ID and AccessKey Secret.
+- Existing base resources: image, L3 network, instance offering, and disk
+  offering.
 
-## Basic Workflow
+## Recommended Learning Order
+
+1. Configure provider and authentication.
+2. Query existing resources.
+3. Create a single VM.
+4. Create multiple VMs.
+5. Add static IP, security group, and data disk to VM.
+6. Bind VIP/EIP or connect to Load Balancer.
+7. Import existing resources.
+
+## Basic Commands
 
 ```bash
 terraform init
+terraform fmt
 terraform validate
 terraform plan
 terraform apply
-terraform destroy
 ```
 
-Start with [examples/common/01-provider](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/01-provider), then query existing resources with
-[examples/common/02-query-existing-resources](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/02-query-existing-resources). After the required resource names
-or UUIDs are confirmed, move to VM and networking examples.
+## Examples
 
-## Example Workflow
+Start from [examples/common/01-provider](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/01-provider). Each example contains:
 
-```bash
-cd examples/common/03-create-vm
-cp terraform.tfvars.example terraform.tfvars
-terraform init
-terraform plan
-```
+- `main.tf`
+- `variables.tf`
+- `terraform.tfvars.example`
+- `README.md`
 
-Edit `terraform.tfvars` before applying. Do not commit real `terraform.tfvars`,
-state files, plan files, or credentials.
+Copy `terraform.tfvars.example` to `terraform.tfvars`, then fill in real values.
+Do not commit real `terraform.tfvars`.

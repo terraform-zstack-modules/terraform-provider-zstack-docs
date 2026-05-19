@@ -1,32 +1,40 @@
 # Storage
 
-Storage examples cover data volume, volume attachment, snapshots, disk offering,
-and storage lookup patterns.
+The storage chapter prioritizes VM data volumes, snapshots, and storage
+lookups.
 
 ## Common Resources
 
 | Terraform object | Type | Purpose |
 |---|---|---|
-| `zstack_disk_offerings` | data source | Query disk offerings for data volume sizing. |
-| `zstack_primary_storages` | data source | Query primary storage, which stores VM root and data volumes. |
-| `zstack_backup_storages` | data source | Query image/backup storage used by image, image import, and some backup/CDP workflows. |
-| `zstack_volume` | resource | Create and manage a data volume that can be attached to a VM. |
-| `zstack_volume_snapshot` | resource | Create and manage volume snapshots for backup or recovery points. |
+| `zstack_disk_offerings` | data source | Query disk offerings for creating data volumes or confirming disk size profiles. |
+| `zstack_primary_storages` | data source | Query primary storage, which carries VM root volumes and data volumes. |
+| `zstack_backup_storages` | data source | Query image/backup storage, commonly used by image, image import, and some backup/CDP workflows. |
+| `zstack_volume` | resource | Create and manage a data volume that can be attached to a VM independently. |
+| `zstack_volume_snapshot` | resource | Create and manage data volume snapshots for backup or recovery points. |
 
-## Data Volume
+## Data Volume Modeling
 
-Use `zstack_volume` when a data disk has its own lifecycle. Attach it to a VM
-after the VM is created.
+There are two common patterns:
+
+1. Use `data_disks` inside `zstack_instance`, suitable when data disks follow the
+   VM lifecycle.
+2. Use `zstack_volume` independently and set `vm_instance_uuid`, suitable when
+   data disks have an independent lifecycle.
+
+This manual prioritizes the second pattern because it is more explicit and
+easier to import, resize, and back up separately.
+
+## Example
+
+```hcl
+resource "zstack_volume" "data" {
+  name               = var.data_volume_name
+  disk_offering_uuid = data.zstack_disk_offerings.data.disk_offers[0].uuid
+  vm_instance_uuid   = zstack_instance.vm.uuid
+}
+```
+
+## Related Example
 
 See [examples/common/08-volume](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/08-volume).
-
-## Disk Offering
-
-Use `zstack_disk_offerings` to query an existing disk offering by name or UUID.
-Avoid hard-coding environment-specific UUIDs in reusable examples.
-
-## Backup Storage And Primary Storage
-
-Use storage data sources to inspect existing storage resources before image,
-backup, or CDP workflows. Storage availability and type are environment-specific
-and should be confirmed by a customer administrator.
