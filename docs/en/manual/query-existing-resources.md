@@ -66,12 +66,136 @@ Priority guide:
 
 ## Lookup Strategy
 
+Most list-style data sources support these inputs. A few administrator or
+platform-state data sources have custom parameters or no input parameters, so
+check the provider reference page before using them.
+
 | Method | Use case | Guidance |
 |---|---|---|
-| `uuid` | Automation, CI/CD, known resource UUID | Most stable; prefer it when known |
-| `name` | Human-authored examples, unique names | Common in customer examples |
-| `name_pattern` | Fuzzy lookup and environment discovery | Use carefully and always review matched results |
-| `filter` | Narrow by state, type, architecture, or similar fields | Useful for reducing candidate sets |
+| `uuid` | Automation, CI/CD, known resource UUID | Most stable; usually returns 0 or 1 item; mutually exclusive with `name` / `name_pattern` |
+| `name` | Human-authored examples, unique names | Common in customer examples; output and review results if names may repeat |
+| `name_pattern` | Fuzzy lookup and environment discovery | Similar to SQL `LIKE`; `%` matches multiple characters and `_` matches one character; discovery only |
+| `filter` | Narrow by state, type, architecture, ownership, or similar fields | Useful for reducing candidates after name/name_pattern or broad list queries |
+
+A common execution order is: first use `uuid`, `name`, or `name_pattern` to
+limit the ZStack API query, then let the provider apply `filter` to returned
+items. If neither UUID nor unique name is known, run discovery first, output the
+candidates, and do not feed the first returned item directly into resource
+creation.
+
+## Data Source Shape
+
+A typical data source has three parts:
+
+1. **Selectors**: `uuid`, `name`, `name_pattern`, or custom parameters such as
+   `category`.
+2. **Filters**: one or more `filter` blocks.
+3. **Result list**: read-only attributes such as `images`, `l3networks`, or
+   `vminstances`.
+
+Example:
+
+```hcl
+data "zstack_images" "ready_linux" {
+  name_pattern = var.image_name_pattern
+
+  filter {
+    name   = "state"
+    values = ["Enabled"]
+  }
+
+  filter {
+    name   = "status"
+    values = ["Ready"]
+  }
+
+  filter {
+    name   = "architecture"
+    values = ["x86_64", "aarch64"]
+  }
+}
+
+output "candidate_images" {
+  description = "Image candidates after name pattern and filters."
+  value       = data.zstack_images.ready_linux.images
+}
+```
+
+This example first uses `name_pattern`, then keeps only images whose `state` is
+`Enabled`, `status` is `Ready`, and architecture is either `x86_64` or
+`aarch64`.
+
+## Filter Rules
+
+`filter` uses this shape:
+
+```hcl
+filter {
+  name   = "field_name"
+  values = ["value1", "value2"]
+}
+```
+
+Rules:
+
+- `name` is a field on the returned item, such as `state`, `status`,
+  `architecture`, `category`, or `zone_uuid`.
+- `values` is a set of strings. Prefer strings even for numeric or boolean
+  fields, for example `values = ["1"]` or `values = ["true"]`.
+- Multiple `values` inside one `filter` block are OR: the field can equal any
+  listed value.
+- Multiple `filter` blocks are AND: every block must match.
+- `filter` is exact matching, not fuzzy matching. Use `name_pattern` for fuzzy
+  name discovery.
+- Prefer top-level scalar fields from the returned item. Do not use nested list
+  fields, such as VM NIC lists, as filter keys unless the provider reference or
+  tests explicitly show support.
+- Field names must come from the corresponding data source schema. Do not guess
+  Terraform field names from raw ZStack API names.
+
+Common filter examples:
+
+```hcl
+data "zstack_l3networks" "private" {
+  filter {
+    name   = "category"
+    values = ["Private"]
+  }
+}
+
+data "zstack_instances" "running_kvm" {
+  filter {
+    name   = "state"
+    values = ["Running"]
+  }
+
+  filter {
+    name   = "hypervisor_type"
+    values = ["KVM"]
+  }
+}
+```
+
+If the filter key is wrong, the provider returns an invalid-field error. If
+values are too broad, the result can contain many candidates. Production
+configuration should expose candidates for human review or pipeline policy
+checks.
+
+## Output And Review
+
+The goal of discovery is not to automatically select the first item. It is to
+produce a reviewable candidate set. Prefer these fields in outputs:
+
+- `uuid`
+- `name`
+- `state` / `status`
+- `category` / `type`
+- Ownership fields such as `zone_uuid`, `cluster_uuid`, `host_uuid`, or
+  `l3_network_uuid`
+
+After review, pass an explicit `uuid` or unique `name` to create examples. Do
+not let production resources depend on implicit ordering from broad
+`name_pattern` results.
 
 ## Example
 

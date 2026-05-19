@@ -58,6 +58,22 @@ and clear outputs.
   review before using them in managed resources.
 - Do not invent data source filters or attributes.
 
+## Data Source Filters
+
+- Check the data source schema before adding filters. Do not guess filter field
+  names from raw API names.
+- Prefer top-level scalar fields from the returned item, such as `state`,
+  `status`, `category`, `type`, `architecture`, `zone_uuid`, `cluster_uuid`, or
+  `host_uuid`.
+- Avoid nested list fields as filter keys unless provider docs or tests show
+  support.
+- Treat multiple `values` in one filter block as OR and multiple filter blocks
+  as AND.
+- Write values as strings, including numeric and boolean fields, for example
+  `values = ["1"]` or `values = ["true"]`.
+- Use `filter` to reduce candidate sets, not to hide ambiguity. Output the
+  remaining candidates when the result can contain more than one item.
+
 ## VM And Networking
 
 - Use `network_interfaces` for new VM resources.

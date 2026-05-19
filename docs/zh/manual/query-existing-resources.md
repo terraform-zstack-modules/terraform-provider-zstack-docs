@@ -59,12 +59,112 @@ Terraform 创建 VM、数据盘、安全组绑定、VIP/EIP、LB、VPC 或管理
 
 ## 查询方式选择
 
+多数资源列表型 data source 支持这几类输入。少数管理员型或平台状态型 data source 只有专用参数或无输入参数，使用前以对应 provider 参考页为准。
+
 | 方式 | 适用场景 | 建议 |
 |---|---|---|
-| `uuid` | 自动化脚本、CI/CD、资源 UUID 已知 | 最稳定，优先使用 |
-| `name` | 人工编写、名称唯一 | 常用于客户示例 |
-| `name_pattern` | 模糊查找、探索环境 | 谨慎使用，必须检查结果 |
-| `filter` | 按状态、类型、架构等字段筛选 | 适合缩小候选集 |
+| `uuid` | 自动化脚本、CI/CD、资源 UUID 已知 | 最稳定，通常返回 0 或 1 条；与 `name` / `name_pattern` 互斥 |
+| `name` | 人工编写、名称唯一 | 适合客户示例；如果名称可能重复，必须输出结果并确认 |
+| `name_pattern` | 模糊查找、探索环境 | 类似 SQL `LIKE`，`%` 匹配多个字符，`_` 匹配单个字符；只用于发现 |
+| `filter` | 按状态、类型、架构、所属资源等字段筛选 | 适合在 name/name_pattern/全量结果上继续缩小候选集 |
+
+常见执行顺序是：先用 `uuid`、`name` 或 `name_pattern` 让 ZStack API 缩小范围，再由 provider 在返回结果上应用 `filter`。如果既没有唯一名称，也没有 UUID，先做发现查询，输出候选列表，不要直接把第一条结果用于创建资源。
+
+## Data Source 结构
+
+典型 data source 由三部分组成：
+
+1. **选择条件**：`uuid`、`name`、`name_pattern` 或专用参数，例如 `category`。
+2. **过滤条件**：一个或多个 `filter` block。
+3. **结果列表**：只读属性列表，例如 `images`、`l3networks`、`vminstances`。
+
+示例：
+
+```hcl
+data "zstack_images" "ready_linux" {
+  name_pattern = var.image_name_pattern
+
+  filter {
+    name   = "state"
+    values = ["Enabled"]
+  }
+
+  filter {
+    name   = "status"
+    values = ["Ready"]
+  }
+
+  filter {
+    name   = "architecture"
+    values = ["x86_64", "aarch64"]
+  }
+}
+
+output "candidate_images" {
+  description = "Image candidates after name pattern and filters."
+  value       = data.zstack_images.ready_linux.images
+}
+```
+
+这个例子表示：镜像名称先按 `name_pattern` 做模糊匹配，再保留 `state` 为 `Enabled`、`status` 为 `Ready`、并且架构为 `x86_64` 或 `aarch64` 的镜像。
+
+## Filter 规则
+
+`filter` 的结构是：
+
+```hcl
+filter {
+  name   = "field_name"
+  values = ["value1", "value2"]
+}
+```
+
+规则：
+
+- `name` 填 data source 返回项里的字段名，例如 `state`、`status`、`architecture`、`category`、`zone_uuid`。
+- `values` 是字符串集合；数字和布尔值也建议写成字符串，例如 `values = ["1"]`、`values = ["true"]`。
+- 同一个 `filter` block 内多个 `values` 是 OR：字段值等于任意一个值即可。
+- 多个 `filter` block 之间是 AND：每个 block 都要匹配。
+- `filter` 是精确匹配，不是模糊匹配；需要模糊名称时使用 `name_pattern`。
+- 优先过滤返回项的顶层标量字段。嵌套列表字段，例如 VM 的网卡列表，除非 provider 参考页或测试明确支持，否则不要直接作为 filter key。
+- 字段名必须来自对应 data source 的 schema。不要凭 ZStack API 字段名猜测 Terraform 字段名。
+
+常用 filter 示例：
+
+```hcl
+data "zstack_l3networks" "private" {
+  filter {
+    name   = "category"
+    values = ["Private"]
+  }
+}
+
+data "zstack_instances" "running_kvm" {
+  filter {
+    name   = "state"
+    values = ["Running"]
+  }
+
+  filter {
+    name   = "hypervisor_type"
+    values = ["KVM"]
+  }
+}
+```
+
+如果 filter key 写错，provider 会返回无效字段错误；如果 values 过宽，可能返回大量候选资源。生产配置应把候选输出给人工或流水线策略确认。
+
+## 输出与确认
+
+发现查询的目标不是“自动选中第一条”，而是得到可审查的候选集。输出时优先包含这些字段：
+
+- `uuid`
+- `name`
+- `state` / `status`
+- `category` / `type`
+- 所属关系，例如 `zone_uuid`、`cluster_uuid`、`host_uuid`、`l3_network_uuid`
+
+确认候选后，再把明确的 `uuid` 或唯一 `name` 传给创建资源的示例。不要让生产资源依赖宽泛 `name_pattern` 的隐式结果顺序。
 
 ## 示例
 

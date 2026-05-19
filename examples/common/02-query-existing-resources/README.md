@@ -23,6 +23,11 @@ The default patterns are broad so the example can run with only authentication
 variables. Narrow the `*_name_pattern` variables when the result list is too
 large. Prefer exact `name` or `uuid` in create examples after discovery.
 
+Most provider data sources also support `filter` blocks for narrowing returned
+candidates by schema fields such as `state`, `status`, `category`, or
+`architecture`. Multiple values inside one filter are OR; multiple filter blocks
+are AND. Keep filter values as strings for predictable behavior.
+
 ## Run
 
 ```bash
