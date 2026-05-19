@@ -1,0 +1,614 @@
+{
+  "schema_version": "1.1",
+  "site": {
+    "name": "Terraform Provider ZStack Docs",
+    "description": "Guides and examples for managing ZStack resources with Terraform.",
+    "type": "static_mkdocs_documentation"
+  },
+  "provider_baseline": {
+    "source": "ZStack-Robot/zstack",
+    "version": "1.1.3",
+    "terraform_required_version": ">= 1.5",
+    "registry_url": "https://registry.terraform.io/providers/ZStack-Robot/zstack/1.1.3",
+    "repository_url": "https://github.com/ZStack-Robot/terraform-provider-zstack"
+  },
+  "rules_baseline": {
+    "docs_ai_schema_version": "1.1",
+    "rules_effective_date": "2026-05-19",
+    "applies_to_provider_version": "1.1.3",
+    "re_evaluate_when": [
+      "provider version changes",
+      "Terraform resource or data source schemas change",
+      "examples are regenerated from a different provider build",
+      "ZStack product API behavior changes"
+    ]
+  },
+  "core_rules": [
+    "Do not invent ZStack resource names, data source names, attributes, metric names, scheduler job types, route targets, endpoint formats, or cryptographic settings.",
+    "Prefer AccessKey authentication for automation.",
+    "Prefer UUID lookup when UUIDs are known.",
+    "Use exact names only when the target environment guarantees uniqueness.",
+    "Use `name_pattern` only for discovery and output matched candidates for review.",
+    "Use `network_interfaces` for new VM examples. Do not recommend `l3_network_uuids` for new configurations.",
+    "Prefer `for_each` with stable keys for batch resources.",
+    "Keep credentials, AccessKey secrets, license text, webhook tokens, private keys, and passwords out of committed files and normal outputs.",
+    "Do not claim an example is production-ready unless remote backend, state access control, variables, permissions, naming, tagging, and approval workflow are addressed."
+  ],
+  "machine_readable_endpoints": {
+    "llms": "/llms.txt",
+    "llms_medium": "/llms-medium.txt",
+    "llms_manual": "/llms-manual.txt",
+    "llms_scenarios": "/llms-scenarios.txt",
+    "llms_english": "/llms-en.txt",
+    "llms_chinese": "/llms-zh.txt",
+    "llms_full": "/llms-full.txt",
+    "robots": "/robots.txt",
+    "mcp_manifest": "/.well-known/mcp.json",
+    "openapi": "/openapi.json",
+    "catalog": "/api/catalog.json"
+  },
+  "context_files": [
+    {
+      "path": "/llms.txt",
+      "scope": "concise_index",
+      "language": "neutral",
+      "description": "Concise LLM-oriented site index and core rules.",
+      "recommended_when": "Always read first."
+    },
+    {
+      "path": "/llms-medium.txt",
+      "scope": "curated_context",
+      "language": "multi",
+      "description": "Curated high-signal context for agents with limited context windows.",
+      "recommended_when": "Read after llms.txt when full-site context is too large."
+    },
+    {
+      "path": "/llms-manual.txt",
+      "scope": "manual_pages",
+      "language": "multi",
+      "description": "All manual pages from the MkDocs navigation.",
+      "recommended_when": "Use for provider configuration, resource usage, and operational guidance."
+    },
+    {
+      "path": "/llms-scenarios.txt",
+      "scope": "scenario_and_example_pages",
+      "language": "multi",
+      "description": "Scenario pages and example catalog context.",
+      "recommended_when": "Use before generating runnable Terraform examples."
+    },
+    {
+      "path": "/llms-en.txt",
+      "scope": "english_pages",
+      "language": "en",
+      "description": "English documentation pages from the MkDocs navigation.",
+      "recommended_when": "Use for English-only retrieval or answer generation."
+    },
+    {
+      "path": "/llms-zh.txt",
+      "scope": "chinese_pages",
+      "language": "zh",
+      "description": "Chinese documentation pages from the MkDocs navigation.",
+      "recommended_when": "Use for Chinese-only retrieval or answer generation."
+    },
+    {
+      "path": "/llms-full.txt",
+      "scope": "full_navigation_context",
+      "language": "multi",
+      "description": "Full Markdown aggregation from the MkDocs navigation.",
+      "recommended_when": "Use only when full context is required."
+    }
+  ],
+  "pages": [
+    {
+      "title": "Home",
+      "path": "index.md",
+      "url": "/",
+      "language": "neutral",
+      "section": ""
+    },
+    {
+      "title": "Machine-Readable API",
+      "path": "api/index.md",
+      "url": "/api/",
+      "language": "neutral",
+      "section": ""
+    },
+    {
+      "title": "概览",
+      "path": "zh/index.md",
+      "url": "/zh/",
+      "language": "zh",
+      "section": "中文"
+    },
+    {
+      "title": "AI 原生入口",
+      "path": "zh/ai-native-site.md",
+      "url": "/zh/ai-native-site/",
+      "language": "zh",
+      "section": "中文"
+    },
+    {
+      "title": "概览",
+      "path": "zh/manual/index.md",
+      "url": "/zh/manual/",
+      "language": "zh",
+      "section": "中文 / 客户使用手册"
+    },
+    {
+      "title": "安装与环境准备",
+      "path": "zh/manual/install-environment.md",
+      "url": "/zh/manual/install-environment/",
+      "language": "zh",
+      "section": "中文 / 客户使用手册"
+    },
+    {
+      "title": "快速开始",
+      "path": "zh/manual/getting-started.md",
+      "url": "/zh/manual/getting-started/",
+      "language": "zh",
+      "section": "中文 / 客户使用手册"
+    },
+    {
+      "title": "Provider 初始化与离线 Mirror",
+      "path": "zh/manual/provider-init-mirror.md",
+      "url": "/zh/manual/provider-init-mirror/",
+      "language": "zh",
+      "section": "中文 / 客户使用手册"
+    },
+    {
+      "title": "认证与 Provider 配置",
+      "path": "zh/manual/authentication.md",
+      "url": "/zh/manual/authentication/",
+      "language": "zh",
+      "section": "中文 / 客户使用手册"
+    },
+    {
+      "title": "Terraform 运行流程",
+      "path": "zh/manual/terraform-workflow.md",
+      "url": "/zh/manual/terraform-workflow/",
+      "language": "zh",
+      "section": "中文 / 客户使用手册"
+    },
+    {
+      "title": "概念映射",
+      "path": "zh/manual/concepts.md",
+      "url": "/zh/manual/concepts/",
+      "language": "zh",
+      "section": "中文 / 客户使用手册"
+    },
+    {
+      "title": "工作原理",
+      "path": "zh/manual/how-it-works.md",
+      "url": "/zh/manual/how-it-works/",
+      "language": "zh",
+      "section": "中文 / 客户使用手册"
+    },
+    {
+      "title": "HCL 编写规范",
+      "path": "zh/manual/hcl-style.md",
+      "url": "/zh/manual/hcl-style/",
+      "language": "zh",
+      "section": "中文 / 客户使用手册"
+    },
+    {
+      "title": "查询已有资源",
+      "path": "zh/manual/query-existing-resources.md",
+      "url": "/zh/manual/query-existing-resources/",
+      "language": "zh",
+      "section": "中文 / 客户使用手册"
+    },
+    {
+      "title": "创建云主机",
+      "path": "zh/manual/create-vm.md",
+      "url": "/zh/manual/create-vm/",
+      "language": "zh",
+      "section": "中文 / 客户使用手册"
+    },
+    {
+      "title": "网络",
+      "path": "zh/manual/networking.md",
+      "url": "/zh/manual/networking/",
+      "language": "zh",
+      "section": "中文 / 客户使用手册"
+    },
+    {
+      "title": "存储",
+      "path": "zh/manual/storage.md",
+      "url": "/zh/manual/storage/",
+      "language": "zh",
+      "section": "中文 / 客户使用手册"
+    },
+    {
+      "title": "镜像",
+      "path": "zh/manual/image.md",
+      "url": "/zh/manual/image/",
+      "language": "zh",
+      "section": "中文 / 客户使用手册"
+    },
+    {
+      "title": "IAM",
+      "path": "zh/manual/iam.md",
+      "url": "/zh/manual/iam/",
+      "language": "zh",
+      "section": "中文 / 客户使用手册"
+    },
+    {
+      "title": "负载均衡",
+      "path": "zh/manual/load-balancer.md",
+      "url": "/zh/manual/load-balancer/",
+      "language": "zh",
+      "section": "中文 / 客户使用手册"
+    },
+    {
+      "title": "监控与通知",
+      "path": "zh/manual/monitoring-notification.md",
+      "url": "/zh/manual/monitoring-notification/",
+      "language": "zh",
+      "section": "中文 / 客户使用手册"
+    },
+    {
+      "title": "管理员运维",
+      "path": "zh/manual/admin-operations.md",
+      "url": "/zh/manual/admin-operations/",
+      "language": "zh",
+      "section": "中文 / 客户使用手册"
+    },
+    {
+      "title": "备份与 CDP",
+      "path": "zh/manual/backup-cdp.md",
+      "url": "/zh/manual/backup-cdp/",
+      "language": "zh",
+      "section": "中文 / 客户使用手册"
+    },
+    {
+      "title": "网络观测",
+      "path": "zh/manual/network-observability.md",
+      "url": "/zh/manual/network-observability/",
+      "language": "zh",
+      "section": "中文 / 客户使用手册"
+    },
+    {
+      "title": "高级网络",
+      "path": "zh/manual/advanced-network.md",
+      "url": "/zh/manual/advanced-network/",
+      "language": "zh",
+      "section": "中文 / 客户使用手册"
+    },
+    {
+      "title": "专项资源",
+      "path": "zh/manual/specialized-resources.md",
+      "url": "/zh/manual/specialized-resources/",
+      "language": "zh",
+      "section": "中文 / 客户使用手册"
+    },
+    {
+      "title": "调试与诊断",
+      "path": "zh/manual/debugging-diagnostics.md",
+      "url": "/zh/manual/debugging-diagnostics/",
+      "language": "zh",
+      "section": "中文 / 客户使用手册"
+    },
+    {
+      "title": "生产化指南",
+      "path": "zh/manual/production-guide.md",
+      "url": "/zh/manual/production-guide/",
+      "language": "zh",
+      "section": "中文 / 客户使用手册"
+    },
+    {
+      "title": "常用示例",
+      "path": "zh/scenarios/index.md",
+      "url": "/zh/scenarios/",
+      "language": "zh",
+      "section": "中文 / 场景化示例"
+    },
+    {
+      "title": "实践教程",
+      "path": "zh/scenarios/practice-tutorials.md",
+      "url": "/zh/scenarios/practice-tutorials/",
+      "language": "zh",
+      "section": "中文 / 场景化示例"
+    },
+    {
+      "title": "生产参考样例",
+      "path": "zh/scenarios/production-examples.md",
+      "url": "/zh/scenarios/production-examples/",
+      "language": "zh",
+      "section": "中文 / 场景化示例"
+    },
+    {
+      "title": "最佳实践",
+      "path": "zh/best-practices/index.md",
+      "url": "/zh/best-practices/",
+      "language": "zh",
+      "section": "中文"
+    },
+    {
+      "title": "故障排查",
+      "path": "zh/troubleshooting/index.md",
+      "url": "/zh/troubleshooting/",
+      "language": "zh",
+      "section": "中文"
+    },
+    {
+      "title": "常见问题",
+      "path": "zh/faq/index.md",
+      "url": "/zh/faq/",
+      "language": "zh",
+      "section": "中文"
+    },
+    {
+      "title": "概览",
+      "path": "zh/migration/index.md",
+      "url": "/zh/migration/",
+      "language": "zh",
+      "section": "中文 / 迁移指南"
+    },
+    {
+      "title": "导入已有资源",
+      "path": "zh/migration/import-existing-resources.md",
+      "url": "/zh/migration/import-existing-resources/",
+      "language": "zh",
+      "section": "中文 / 迁移指南"
+    },
+    {
+      "title": "截图与架构图",
+      "path": "zh/diagrams/index.md",
+      "url": "/zh/diagrams/",
+      "language": "zh",
+      "section": "中文"
+    },
+    {
+      "title": "Overview",
+      "path": "en/index.md",
+      "url": "/en/",
+      "language": "en",
+      "section": "English"
+    },
+    {
+      "title": "AI Native Entry Points",
+      "path": "en/ai-native-site.md",
+      "url": "/en/ai-native-site/",
+      "language": "en",
+      "section": "English"
+    },
+    {
+      "title": "Overview",
+      "path": "en/manual/index.md",
+      "url": "/en/manual/",
+      "language": "en",
+      "section": "English / User Manual"
+    },
+    {
+      "title": "Installation And Environment",
+      "path": "en/manual/install-environment.md",
+      "url": "/en/manual/install-environment/",
+      "language": "en",
+      "section": "English / User Manual"
+    },
+    {
+      "title": "Getting Started",
+      "path": "en/manual/getting-started.md",
+      "url": "/en/manual/getting-started/",
+      "language": "en",
+      "section": "English / User Manual"
+    },
+    {
+      "title": "Provider Initialization And Offline Mirrors",
+      "path": "en/manual/provider-init-mirror.md",
+      "url": "/en/manual/provider-init-mirror/",
+      "language": "en",
+      "section": "English / User Manual"
+    },
+    {
+      "title": "Authentication",
+      "path": "en/manual/authentication.md",
+      "url": "/en/manual/authentication/",
+      "language": "en",
+      "section": "English / User Manual"
+    },
+    {
+      "title": "Terraform Workflow",
+      "path": "en/manual/terraform-workflow.md",
+      "url": "/en/manual/terraform-workflow/",
+      "language": "en",
+      "section": "English / User Manual"
+    },
+    {
+      "title": "Concepts",
+      "path": "en/manual/concepts.md",
+      "url": "/en/manual/concepts/",
+      "language": "en",
+      "section": "English / User Manual"
+    },
+    {
+      "title": "How It Works",
+      "path": "en/manual/how-it-works.md",
+      "url": "/en/manual/how-it-works/",
+      "language": "en",
+      "section": "English / User Manual"
+    },
+    {
+      "title": "HCL Style Guide",
+      "path": "en/manual/hcl-style.md",
+      "url": "/en/manual/hcl-style/",
+      "language": "en",
+      "section": "English / User Manual"
+    },
+    {
+      "title": "Query Existing Resources",
+      "path": "en/manual/query-existing-resources.md",
+      "url": "/en/manual/query-existing-resources/",
+      "language": "en",
+      "section": "English / User Manual"
+    },
+    {
+      "title": "Create VM",
+      "path": "en/manual/create-vm.md",
+      "url": "/en/manual/create-vm/",
+      "language": "en",
+      "section": "English / User Manual"
+    },
+    {
+      "title": "Networking",
+      "path": "en/manual/networking.md",
+      "url": "/en/manual/networking/",
+      "language": "en",
+      "section": "English / User Manual"
+    },
+    {
+      "title": "Storage",
+      "path": "en/manual/storage.md",
+      "url": "/en/manual/storage/",
+      "language": "en",
+      "section": "English / User Manual"
+    },
+    {
+      "title": "Image",
+      "path": "en/manual/image.md",
+      "url": "/en/manual/image/",
+      "language": "en",
+      "section": "English / User Manual"
+    },
+    {
+      "title": "IAM",
+      "path": "en/manual/iam.md",
+      "url": "/en/manual/iam/",
+      "language": "en",
+      "section": "English / User Manual"
+    },
+    {
+      "title": "Load Balancer",
+      "path": "en/manual/load-balancer.md",
+      "url": "/en/manual/load-balancer/",
+      "language": "en",
+      "section": "English / User Manual"
+    },
+    {
+      "title": "Monitoring & Notification",
+      "path": "en/manual/monitoring-notification.md",
+      "url": "/en/manual/monitoring-notification/",
+      "language": "en",
+      "section": "English / User Manual"
+    },
+    {
+      "title": "Admin Operations",
+      "path": "en/manual/admin-operations.md",
+      "url": "/en/manual/admin-operations/",
+      "language": "en",
+      "section": "English / User Manual"
+    },
+    {
+      "title": "Backup & CDP",
+      "path": "en/manual/backup-cdp.md",
+      "url": "/en/manual/backup-cdp/",
+      "language": "en",
+      "section": "English / User Manual"
+    },
+    {
+      "title": "Network Observability",
+      "path": "en/manual/network-observability.md",
+      "url": "/en/manual/network-observability/",
+      "language": "en",
+      "section": "English / User Manual"
+    },
+    {
+      "title": "Advanced Network",
+      "path": "en/manual/advanced-network.md",
+      "url": "/en/manual/advanced-network/",
+      "language": "en",
+      "section": "English / User Manual"
+    },
+    {
+      "title": "Specialized Resources",
+      "path": "en/manual/specialized-resources.md",
+      "url": "/en/manual/specialized-resources/",
+      "language": "en",
+      "section": "English / User Manual"
+    },
+    {
+      "title": "Debugging And Diagnostics",
+      "path": "en/manual/debugging-diagnostics.md",
+      "url": "/en/manual/debugging-diagnostics/",
+      "language": "en",
+      "section": "English / User Manual"
+    },
+    {
+      "title": "Production Guide",
+      "path": "en/manual/production-guide.md",
+      "url": "/en/manual/production-guide/",
+      "language": "en",
+      "section": "English / User Manual"
+    },
+    {
+      "title": "Common Examples",
+      "path": "en/scenarios/index.md",
+      "url": "/en/scenarios/",
+      "language": "en",
+      "section": "English / Scenario Examples"
+    },
+    {
+      "title": "Practice Tutorials",
+      "path": "en/scenarios/practice-tutorials.md",
+      "url": "/en/scenarios/practice-tutorials/",
+      "language": "en",
+      "section": "English / Scenario Examples"
+    },
+    {
+      "title": "Production Examples",
+      "path": "en/scenarios/production-examples.md",
+      "url": "/en/scenarios/production-examples/",
+      "language": "en",
+      "section": "English / Scenario Examples"
+    },
+    {
+      "title": "Best Practices",
+      "path": "en/best-practices/index.md",
+      "url": "/en/best-practices/",
+      "language": "en",
+      "section": "English"
+    },
+    {
+      "title": "Troubleshooting",
+      "path": "en/troubleshooting/index.md",
+      "url": "/en/troubleshooting/",
+      "language": "en",
+      "section": "English"
+    },
+    {
+      "title": "FAQ",
+      "path": "en/faq/index.md",
+      "url": "/en/faq/",
+      "language": "en",
+      "section": "English"
+    },
+    {
+      "title": "Overview",
+      "path": "en/migration/index.md",
+      "url": "/en/migration/",
+      "language": "en",
+      "section": "English / Migration Guide"
+    },
+    {
+      "title": "Import Existing Resources",
+      "path": "en/migration/import-existing-resources.md",
+      "url": "/en/migration/import-existing-resources/",
+      "language": "en",
+      "section": "English / Migration Guide"
+    },
+    {
+      "title": "Screenshots & Diagrams",
+      "path": "en/diagrams/index.md",
+      "url": "/en/diagrams/",
+      "language": "en",
+      "section": "English"
+    },
+    {
+      "title": "Overview",
+      "path": "examples/index.md",
+      "url": "/examples/",
+      "language": "neutral",
+      "section": "Examples"
+    }
+  ]
+}

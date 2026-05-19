@@ -1,0 +1,16 @@
+User-agent: *
+Allow: /
+
+Sitemap: /sitemap.xml
+
+# Non-standard AI discovery hints. The same resources are also exposed through
+# HTML <head> links and /api/catalog.json.
+LLMs: /llms.txt
+LLMs-Full: /llms-full.txt
+LLMs-Medium: /llms-medium.txt
+LLMs-Manual: /llms-manual.txt
+LLMs-Scenarios: /llms-scenarios.txt
+LLMs-English: /llms-en.txt
+LLMs-Chinese: /llms-zh.txt
+API-Catalog: /api/catalog.json
+OpenAPI: /openapi.json

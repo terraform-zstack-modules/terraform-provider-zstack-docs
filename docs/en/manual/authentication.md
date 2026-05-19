@@ -79,3 +79,7 @@ provider "zstack" {
 ```
 
 Customer examples default to AccessKey authentication.
+
+## Related Example
+
+See [examples/common/01-provider](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/01-provider).

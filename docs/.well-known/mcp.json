@@ -1,0 +1,19 @@
+{
+  "schema_version": "0.1",
+  "name": "Terraform Provider ZStack Docs",
+  "description": "Static documentation discovery manifest for the ZStack Terraform provider docs site.",
+  "status": "static_docs_only",
+  "mcp_servers": [],
+  "note": "This static documentation site does not expose a live MCP server. Use llms.txt, llms-medium.txt, llms-full.txt, and api/catalog.json for machine-readable discovery.",
+  "resources": {
+    "llms": "/llms.txt",
+    "llms_medium": "/llms-medium.txt",
+    "llms_manual": "/llms-manual.txt",
+    "llms_scenarios": "/llms-scenarios.txt",
+    "llms_english": "/llms-en.txt",
+    "llms_chinese": "/llms-zh.txt",
+    "llms_full": "/llms-full.txt",
+    "catalog": "/api/catalog.json",
+    "openapi": "/openapi.json"
+  }
+}

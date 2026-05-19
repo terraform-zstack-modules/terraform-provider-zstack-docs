@@ -3,6 +3,8 @@ site_description: Guides and examples for managing ZStack resources with Terrafo
 repo_name: terraform-provider-zstack-docs
 docs_dir: docs
 site_dir: site
+hooks:
+  - scripts/mkdocs_ai_hooks.py
 exclude_docs: |
   ../internal/**
   ../skills/**
@@ -11,6 +13,7 @@ exclude_docs: |
   ../.claude/**
 theme:
   name: material
+  custom_dir: overrides
   language: en
   features:
     - navigation.sections
@@ -21,11 +24,20 @@ markdown_extensions:
   - toc:
       permalink: true
   - pymdownx.highlight
-  - pymdownx.superfences
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+extra_javascript:
+  - https://unpkg.com/mermaid@10.9.3/dist/mermaid.min.js
+  - javascripts/mermaid.js
 nav:
   - Home: index.md
+  - Machine-Readable API: api/index.md
   - 中文:
       - 概览: zh/index.md
+      - AI 原生入口: zh/ai-native-site.md
       - 客户使用手册:
           - 概览: zh/manual/index.md
           - 安装与环境准备: zh/manual/install-environment.md
@@ -64,6 +76,7 @@ nav:
       - 截图与架构图: zh/diagrams/index.md
   - English:
       - Overview: en/index.md
+      - AI Native Entry Points: en/ai-native-site.md
       - User Manual:
           - Overview: en/manual/index.md
           - Installation And Environment: en/manual/install-environment.md

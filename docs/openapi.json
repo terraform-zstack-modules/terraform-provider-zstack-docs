@@ -1,0 +1,455 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Terraform Provider ZStack Documentation Discovery",
+    "version": "1.1.0",
+    "description": "Machine-readable discovery endpoints for the static ZStack Terraform provider documentation site. This is not the ZStack runtime API."
+  },
+  "paths": {
+    "/llms.txt": {
+      "get": {
+        "summary": "Concise LLM index",
+        "responses": {
+          "200": {
+            "description": "Text index for AI agents.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/llms-medium.txt": {
+      "get": {
+        "summary": "Curated medium-size LLM context",
+        "responses": {
+          "200": {
+            "description": "Curated high-signal Markdown context for AI agents.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/llms-manual.txt": {
+      "get": {
+        "summary": "Manual-only LLM context",
+        "responses": {
+          "200": {
+            "description": "Markdown aggregation of manual pages.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/llms-scenarios.txt": {
+      "get": {
+        "summary": "Scenario and example LLM context",
+        "responses": {
+          "200": {
+            "description": "Markdown aggregation of scenario pages and example catalog.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/llms-en.txt": {
+      "get": {
+        "summary": "English LLM context",
+        "responses": {
+          "200": {
+            "description": "Markdown aggregation of English documentation pages.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/llms-zh.txt": {
+      "get": {
+        "summary": "Chinese LLM context",
+        "responses": {
+          "200": {
+            "description": "Markdown aggregation of Chinese documentation pages.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/llms-full.txt": {
+      "get": {
+        "summary": "Full Markdown aggregation",
+        "responses": {
+          "200": {
+            "description": "Aggregated Markdown content from the documentation navigation.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/catalog.json": {
+      "get": {
+        "summary": "Structured documentation catalog",
+        "responses": {
+          "200": {
+            "description": "Structured catalog of documentation pages and machine-readable endpoints.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Catalog"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/.well-known/mcp.json": {
+      "get": {
+        "summary": "MCP discovery manifest",
+        "responses": {
+          "200": {
+            "description": "Static manifest explaining MCP availability and alternate machine-readable resources.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/McpManifest"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/robots.txt": {
+      "get": {
+        "summary": "Robots and AI discovery policy",
+        "responses": {
+          "200": {
+            "description": "Robots policy with machine-readable endpoint hints.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Catalog": {
+        "type": "object",
+        "required": [
+          "schema_version",
+          "site",
+          "provider_baseline",
+          "rules_baseline",
+          "machine_readable_endpoints",
+          "context_files",
+          "pages"
+        ],
+        "properties": {
+          "schema_version": {
+            "type": "string",
+            "example": "1.1"
+          },
+          "site": {
+            "$ref": "#/components/schemas/SiteInfo"
+          },
+          "provider_baseline": {
+            "$ref": "#/components/schemas/ProviderBaseline"
+          },
+          "rules_baseline": {
+            "$ref": "#/components/schemas/RulesBaseline"
+          },
+          "core_rules": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "machine_readable_endpoints": {
+            "$ref": "#/components/schemas/MachineReadableEndpoints"
+          },
+          "context_files": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ContextFile"
+            }
+          },
+          "pages": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Page"
+            }
+          }
+        }
+      },
+      "SiteInfo": {
+        "type": "object",
+        "required": [
+          "name",
+          "description",
+          "type"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "static_mkdocs_documentation"
+            ]
+          }
+        }
+      },
+      "ProviderBaseline": {
+        "type": "object",
+        "required": [
+          "source",
+          "version",
+          "terraform_required_version",
+          "registry_url",
+          "repository_url"
+        ],
+        "properties": {
+          "source": {
+            "type": "string"
+          },
+          "version": {
+            "type": "string"
+          },
+          "terraform_required_version": {
+            "type": "string"
+          },
+          "registry_url": {
+            "type": "string",
+            "format": "uri"
+          },
+          "repository_url": {
+            "type": "string",
+            "format": "uri"
+          }
+        }
+      },
+      "RulesBaseline": {
+        "type": "object",
+        "required": [
+          "docs_ai_schema_version",
+          "rules_effective_date",
+          "applies_to_provider_version",
+          "re_evaluate_when"
+        ],
+        "properties": {
+          "docs_ai_schema_version": {
+            "type": "string"
+          },
+          "rules_effective_date": {
+            "type": "string",
+            "format": "date"
+          },
+          "applies_to_provider_version": {
+            "type": "string"
+          },
+          "re_evaluate_when": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "MachineReadableEndpoints": {
+        "type": "object",
+        "additionalProperties": {
+          "type": "string"
+        },
+        "properties": {
+          "llms": {
+            "type": "string"
+          },
+          "llms_medium": {
+            "type": "string"
+          },
+          "llms_manual": {
+            "type": "string"
+          },
+          "llms_scenarios": {
+            "type": "string"
+          },
+          "llms_english": {
+            "type": "string"
+          },
+          "llms_chinese": {
+            "type": "string"
+          },
+          "llms_full": {
+            "type": "string"
+          },
+          "robots": {
+            "type": "string"
+          },
+          "mcp_manifest": {
+            "type": "string"
+          },
+          "openapi": {
+            "type": "string"
+          },
+          "catalog": {
+            "type": "string"
+          }
+        }
+      },
+      "ContextFile": {
+        "type": "object",
+        "required": [
+          "path",
+          "scope",
+          "language",
+          "description",
+          "recommended_when"
+        ],
+        "properties": {
+          "path": {
+            "type": "string"
+          },
+          "scope": {
+            "type": "string"
+          },
+          "language": {
+            "type": "string",
+            "enum": [
+              "neutral",
+              "multi",
+              "en",
+              "zh"
+            ]
+          },
+          "description": {
+            "type": "string"
+          },
+          "recommended_when": {
+            "type": "string"
+          }
+        }
+      },
+      "Page": {
+        "type": "object",
+        "required": [
+          "title",
+          "path",
+          "url",
+          "language",
+          "section"
+        ],
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "path": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string"
+          },
+          "language": {
+            "type": "string",
+            "enum": [
+              "neutral",
+              "en",
+              "zh"
+            ]
+          },
+          "section": {
+            "type": "string"
+          }
+        }
+      },
+      "McpManifest": {
+        "type": "object",
+        "required": [
+          "schema_version",
+          "name",
+          "status",
+          "mcp_servers",
+          "resources"
+        ],
+        "properties": {
+          "schema_version": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "mcp_servers": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            }
+          },
+          "note": {
+            "type": "string"
+          },
+          "resources": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    }
+  }
+}

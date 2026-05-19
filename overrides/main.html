@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% block extrahead %}
+  {{ super() }}
+  {% set article_title = config.site_name %}
+  {% set article_language = config.theme.language or "en" %}
+  {% if page and page.title %}
+    {% set article_title = page.title %}
+  {% endif %}
+  {% if page and page.meta and page.meta.language %}
+    {% set article_language = page.meta.language %}
+  {% endif %}
+  <meta name="ai-content" content="technical documentation">
+  <meta name="ai-provider" content="ZStack Terraform provider">
+  <meta name="ai-provider-source" content="ZStack-Robot/zstack">
+  <meta name="ai-provider-version" content="1.1.3">
+  <meta name="llms-txt" content="{{ base_url }}/llms.txt">
+  <meta name="llms-medium-txt" content="{{ base_url }}/llms-medium.txt">
+  <meta name="llms-full-txt" content="{{ base_url }}/llms-full.txt">
+  <meta name="machine-readable-catalog" content="{{ base_url }}/api/catalog.json">
+  <link rel="llms" type="text/plain" title="LLMs index" href="{{ base_url }}/llms.txt">
+  <link rel="llms-medium" type="text/plain" title="LLMs medium context" href="{{ base_url }}/llms-medium.txt">
+  <link rel="llms-full" type="text/plain" title="LLMs full context" href="{{ base_url }}/llms-full.txt">
+  <link rel="llms-manual" type="text/plain" title="LLMs manual context" href="{{ base_url }}/llms-manual.txt">
+  <link rel="llms-scenarios" type="text/plain" title="LLMs scenario context" href="{{ base_url }}/llms-scenarios.txt">
+  <link rel="alternate" type="text/plain" title="LLMs index" href="{{ base_url }}/llms.txt">
+  <link rel="alternate" type="text/plain" title="LLMs medium context" href="{{ base_url }}/llms-medium.txt">
+  <link rel="alternate" type="text/plain" title="LLMs manual context" href="{{ base_url }}/llms-manual.txt">
+  <link rel="alternate" type="text/plain" title="LLMs scenario context" href="{{ base_url }}/llms-scenarios.txt">
+  <link rel="alternate" type="text/plain" title="LLMs English context" href="{{ base_url }}/llms-en.txt">
+  <link rel="alternate" type="text/plain" title="LLMs Chinese context" href="{{ base_url }}/llms-zh.txt">
+  <link rel="alternate" type="text/plain" title="LLMs full context" href="{{ base_url }}/llms-full.txt">
+  <link rel="alternate" type="application/json" title="Machine-readable catalog" href="{{ base_url }}/api/catalog.json">
+  <link rel="alternate" type="application/json" title="Documentation OpenAPI" href="{{ base_url }}/openapi.json">
+  <link rel="alternate" type="application/json" title="MCP discovery manifest" href="{{ base_url }}/.well-known/mcp.json">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "TechArticle",
+    "headline": {{ article_title | tojson }},
+    "name": {{ article_title | tojson }},
+    "description": {{ config.site_description | tojson }},
+    "inLanguage": {{ article_language | tojson }},
+    "isPartOf": {
+      "@type": "WebSite",
+      "name": {{ config.site_name | tojson }},
+      "description": {{ config.site_description | tojson }}
+    },
+    "about": [
+      "Terraform",
+      "ZStack",
+      "Terraform Provider",
+      "Infrastructure as Code"
+    ],
+    "programmingLanguage": "HCL",
+    "softwareRequirements": [
+      "Terraform >= 1.5",
+      "ZStack Terraform provider 1.1.3"
+    ],
+    "potentialAction": {
+      "@type": "ReadAction",
+      "target": [
+        "{{ base_url }}/llms.txt",
+        "{{ base_url }}/llms-medium.txt",
+        "{{ base_url }}/llms-manual.txt",
+        "{{ base_url }}/llms-scenarios.txt",
+        "{{ base_url }}/llms-full.txt",
+        "{{ base_url }}/api/catalog.json"
+      ]
+    }
+  }
+  </script>
+{% endblock %}

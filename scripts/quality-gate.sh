@@ -72,7 +72,10 @@ except ImportError:
     sys.exit(1)
 
 with open("mkdocs.yml", encoding="utf-8") as fh:
-    nav = yaml.safe_load(fh).get("nav", [])
+    # MkDocs configuration can contain Python object tags used by markdown
+    # extensions. The nav check only needs plain mappings/lists/strings, so use
+    # BaseLoader to avoid executing or resolving extension-specific tags.
+    nav = yaml.load(fh, Loader=yaml.BaseLoader).get("nav", [])
 
 def walk(node):
     if isinstance(node, dict):

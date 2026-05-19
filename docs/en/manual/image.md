@@ -1,29 +1,51 @@
 # Image
 
-Images are required for VM creation. Query existing images first, then create or
-upload managed images only when the environment and backup storage are known.
+Images are the foundation for VM creation. Query existing images first, then
+create or manage images only when needed.
 
 ## Common Resources
 
 | Terraform object | Type | Purpose |
 |---|---|---|
 | `zstack_images` | data source | Query existing images and select `image_uuid` for VM creation or image workflows. |
-| `zstack_image` | resource | Create and manage an image with image URL, format, platform metadata, and backup storage UUIDs. |
+| `zstack_image` | resource | Create and manage an image with image URL, format, platform metadata, and backup storage UUID. |
 
-## Query Image
+## Query Existing Images
 
-Use `zstack_images` with exact name or UUID. Confirm image status before using it
-for VM creation.
+```hcl
+data "zstack_images" "ubuntu" {
+  name = var.image_name
 
-## Managed Image
+  filter {
+    name   = "status"
+    values = ["Ready"]
+  }
+}
+```
 
-`zstack_image` can be used to create a managed image when the image URL, format,
-platform, architecture, boot mode, and backup storage are confirmed.
+Use versioned, recognizable image names such as `Ubuntu-24.04-2026-04`. Avoid
+overly broad names such as `Ubuntu`.
+
+## Create Image
+
+Creating images is an administrator workflow. It usually requires:
+
+- Image URL.
+- Format: `qcow2`, `raw`, `vmdk`, and similar.
+- Backup storage UUID.
+- Platform, guest OS, architecture, and boot mode.
+
+```hcl
+resource "zstack_image" "managed" {
+  name                 = var.new_image_name
+  url                  = var.new_image_url
+  format               = "qcow2"
+  platform             = "Linux"
+  guest_os_type        = "Linux"
+  backup_storage_uuids = [var.backup_storage_uuid]
+}
+```
+
+## Related Example
 
 See [examples/common/09-image-query-management](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/09-image-query-management).
-
-## Best Practices
-
-- Prefer querying existing images in customer examples.
-- Do not invent image URLs or backup storage UUIDs.
-- Make image creation optional when the scenario can use an existing image.
