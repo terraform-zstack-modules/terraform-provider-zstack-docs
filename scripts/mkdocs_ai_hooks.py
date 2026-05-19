@@ -35,3 +35,11 @@ def on_files(files: Files, *, config) -> Files:
             )
         )
     return files
+
+
+def on_post_build(*, config) -> None:
+    if not MCP_MANIFEST_PATH.exists():
+        return
+    target = Path(config.site_dir) / ".well-known" / "mcp.json"
+    target.parent.mkdir(parents=True, exist_ok=True)
+    target.write_text(MCP_MANIFEST_PATH.read_text(encoding="utf-8"), encoding="utf-8")

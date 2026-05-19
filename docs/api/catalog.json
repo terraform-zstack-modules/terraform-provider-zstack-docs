@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.0",
+  "schema_version": "1.1",
   "site": {
     "name": "Terraform Provider ZStack Docs",
     "description": "Guides and examples for managing ZStack resources with Terraform.",
@@ -12,14 +12,92 @@
     "registry_url": "https://registry.terraform.io/providers/ZStack-Robot/zstack/1.1.3",
     "repository_url": "https://github.com/ZStack-Robot/terraform-provider-zstack"
   },
+  "rules_baseline": {
+    "docs_ai_schema_version": "1.1",
+    "rules_effective_date": "2026-05-19",
+    "applies_to_provider_version": "1.1.3",
+    "re_evaluate_when": [
+      "provider version changes",
+      "Terraform resource or data source schemas change",
+      "examples are regenerated from a different provider build",
+      "ZStack product API behavior changes"
+    ]
+  },
+  "core_rules": [
+    "Do not invent ZStack resource names, data source names, attributes, metric names, scheduler job types, route targets, endpoint formats, or cryptographic settings.",
+    "Prefer AccessKey authentication for automation.",
+    "Prefer UUID lookup when UUIDs are known.",
+    "Use exact names only when the target environment guarantees uniqueness.",
+    "Use `name_pattern` only for discovery and output matched candidates for review.",
+    "Use `network_interfaces` for new VM examples. Do not recommend `l3_network_uuids` for new configurations.",
+    "Prefer `for_each` with stable keys for batch resources.",
+    "Keep credentials, AccessKey secrets, license text, webhook tokens, private keys, and passwords out of committed files and normal outputs.",
+    "Do not claim an example is production-ready unless remote backend, state access control, variables, permissions, naming, tagging, and approval workflow are addressed."
+  ],
   "machine_readable_endpoints": {
     "llms": "/llms.txt",
+    "llms_medium": "/llms-medium.txt",
+    "llms_manual": "/llms-manual.txt",
+    "llms_scenarios": "/llms-scenarios.txt",
+    "llms_english": "/llms-en.txt",
+    "llms_chinese": "/llms-zh.txt",
     "llms_full": "/llms-full.txt",
     "robots": "/robots.txt",
     "mcp_manifest": "/.well-known/mcp.json",
     "openapi": "/openapi.json",
     "catalog": "/api/catalog.json"
   },
+  "context_files": [
+    {
+      "path": "/llms.txt",
+      "scope": "concise_index",
+      "language": "neutral",
+      "description": "Concise LLM-oriented site index and core rules.",
+      "recommended_when": "Always read first."
+    },
+    {
+      "path": "/llms-medium.txt",
+      "scope": "curated_context",
+      "language": "multi",
+      "description": "Curated high-signal context for agents with limited context windows.",
+      "recommended_when": "Read after llms.txt when full-site context is too large."
+    },
+    {
+      "path": "/llms-manual.txt",
+      "scope": "manual_pages",
+      "language": "multi",
+      "description": "All manual pages from the MkDocs navigation.",
+      "recommended_when": "Use for provider configuration, resource usage, and operational guidance."
+    },
+    {
+      "path": "/llms-scenarios.txt",
+      "scope": "scenario_and_example_pages",
+      "language": "multi",
+      "description": "Scenario pages and example catalog context.",
+      "recommended_when": "Use before generating runnable Terraform examples."
+    },
+    {
+      "path": "/llms-en.txt",
+      "scope": "english_pages",
+      "language": "en",
+      "description": "English documentation pages from the MkDocs navigation.",
+      "recommended_when": "Use for English-only retrieval or answer generation."
+    },
+    {
+      "path": "/llms-zh.txt",
+      "scope": "chinese_pages",
+      "language": "zh",
+      "description": "Chinese documentation pages from the MkDocs navigation.",
+      "recommended_when": "Use for Chinese-only retrieval or answer generation."
+    },
+    {
+      "path": "/llms-full.txt",
+      "scope": "full_navigation_context",
+      "language": "multi",
+      "description": "Full Markdown aggregation from the MkDocs navigation.",
+      "recommended_when": "Use only when full context is required."
+    }
+  ],
   "pages": [
     {
       "title": "Home",

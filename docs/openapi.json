@@ -2,7 +2,7 @@
   "openapi": "3.1.0",
   "info": {
     "title": "Terraform Provider ZStack Documentation Discovery",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "description": "Machine-readable discovery endpoints for the static ZStack Terraform provider documentation site. This is not the ZStack runtime API."
   },
   "paths": {
@@ -12,6 +12,91 @@
         "responses": {
           "200": {
             "description": "Text index for AI agents.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/llms-medium.txt": {
+      "get": {
+        "summary": "Curated medium-size LLM context",
+        "responses": {
+          "200": {
+            "description": "Curated high-signal Markdown context for AI agents.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/llms-manual.txt": {
+      "get": {
+        "summary": "Manual-only LLM context",
+        "responses": {
+          "200": {
+            "description": "Markdown aggregation of manual pages.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/llms-scenarios.txt": {
+      "get": {
+        "summary": "Scenario and example LLM context",
+        "responses": {
+          "200": {
+            "description": "Markdown aggregation of scenario pages and example catalog.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/llms-en.txt": {
+      "get": {
+        "summary": "English LLM context",
+        "responses": {
+          "200": {
+            "description": "Markdown aggregation of English documentation pages.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/llms-zh.txt": {
+      "get": {
+        "summary": "Chinese LLM context",
+        "responses": {
+          "200": {
+            "description": "Markdown aggregation of Chinese documentation pages.",
             "content": {
               "text/plain": {
                 "schema": {
@@ -49,7 +134,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object"
+                  "$ref": "#/components/schemas/Catalog"
                 }
               }
             }
@@ -66,7 +151,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object"
+                  "$ref": "#/components/schemas/McpManifest"
                 }
               }
             }
@@ -86,6 +171,281 @@
                   "type": "string"
                 }
               }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Catalog": {
+        "type": "object",
+        "required": [
+          "schema_version",
+          "site",
+          "provider_baseline",
+          "rules_baseline",
+          "machine_readable_endpoints",
+          "context_files",
+          "pages"
+        ],
+        "properties": {
+          "schema_version": {
+            "type": "string",
+            "example": "1.1"
+          },
+          "site": {
+            "$ref": "#/components/schemas/SiteInfo"
+          },
+          "provider_baseline": {
+            "$ref": "#/components/schemas/ProviderBaseline"
+          },
+          "rules_baseline": {
+            "$ref": "#/components/schemas/RulesBaseline"
+          },
+          "core_rules": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "machine_readable_endpoints": {
+            "$ref": "#/components/schemas/MachineReadableEndpoints"
+          },
+          "context_files": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ContextFile"
+            }
+          },
+          "pages": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Page"
+            }
+          }
+        }
+      },
+      "SiteInfo": {
+        "type": "object",
+        "required": [
+          "name",
+          "description",
+          "type"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "static_mkdocs_documentation"
+            ]
+          }
+        }
+      },
+      "ProviderBaseline": {
+        "type": "object",
+        "required": [
+          "source",
+          "version",
+          "terraform_required_version",
+          "registry_url",
+          "repository_url"
+        ],
+        "properties": {
+          "source": {
+            "type": "string"
+          },
+          "version": {
+            "type": "string"
+          },
+          "terraform_required_version": {
+            "type": "string"
+          },
+          "registry_url": {
+            "type": "string",
+            "format": "uri"
+          },
+          "repository_url": {
+            "type": "string",
+            "format": "uri"
+          }
+        }
+      },
+      "RulesBaseline": {
+        "type": "object",
+        "required": [
+          "docs_ai_schema_version",
+          "rules_effective_date",
+          "applies_to_provider_version",
+          "re_evaluate_when"
+        ],
+        "properties": {
+          "docs_ai_schema_version": {
+            "type": "string"
+          },
+          "rules_effective_date": {
+            "type": "string",
+            "format": "date"
+          },
+          "applies_to_provider_version": {
+            "type": "string"
+          },
+          "re_evaluate_when": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "MachineReadableEndpoints": {
+        "type": "object",
+        "additionalProperties": {
+          "type": "string"
+        },
+        "properties": {
+          "llms": {
+            "type": "string"
+          },
+          "llms_medium": {
+            "type": "string"
+          },
+          "llms_manual": {
+            "type": "string"
+          },
+          "llms_scenarios": {
+            "type": "string"
+          },
+          "llms_english": {
+            "type": "string"
+          },
+          "llms_chinese": {
+            "type": "string"
+          },
+          "llms_full": {
+            "type": "string"
+          },
+          "robots": {
+            "type": "string"
+          },
+          "mcp_manifest": {
+            "type": "string"
+          },
+          "openapi": {
+            "type": "string"
+          },
+          "catalog": {
+            "type": "string"
+          }
+        }
+      },
+      "ContextFile": {
+        "type": "object",
+        "required": [
+          "path",
+          "scope",
+          "language",
+          "description",
+          "recommended_when"
+        ],
+        "properties": {
+          "path": {
+            "type": "string"
+          },
+          "scope": {
+            "type": "string"
+          },
+          "language": {
+            "type": "string",
+            "enum": [
+              "neutral",
+              "multi",
+              "en",
+              "zh"
+            ]
+          },
+          "description": {
+            "type": "string"
+          },
+          "recommended_when": {
+            "type": "string"
+          }
+        }
+      },
+      "Page": {
+        "type": "object",
+        "required": [
+          "title",
+          "path",
+          "url",
+          "language",
+          "section"
+        ],
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "path": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string"
+          },
+          "language": {
+            "type": "string",
+            "enum": [
+              "neutral",
+              "en",
+              "zh"
+            ]
+          },
+          "section": {
+            "type": "string"
+          }
+        }
+      },
+      "McpManifest": {
+        "type": "object",
+        "required": [
+          "schema_version",
+          "name",
+          "status",
+          "mcp_servers",
+          "resources"
+        ],
+        "properties": {
+          "schema_version": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "mcp_servers": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            }
+          },
+          "note": {
+            "type": "string"
+          },
+          "resources": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
             }
           }
         }
