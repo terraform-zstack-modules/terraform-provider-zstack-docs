@@ -1,0 +1,5583 @@
+# Terraform Provider ZStack Docs - Full LLM Context
+
+This file aggregates the Markdown pages published by the documentation site navigation.
+Use `/llms.txt` for the concise index and `/api/catalog.json` for structured page metadata.
+
+## Provider Baseline
+
+- source: ZStack-Robot/zstack
+- version: 1.1.3
+- terraform_required_version: >= 1.5
+- registry_url: https://registry.terraform.io/providers/ZStack-Robot/zstack/1.1.3
+- repository_url: https://github.com/ZStack-Robot/terraform-provider-zstack
+
+## Pages
+
+---
+title: Home
+url: /
+path: docs/index.md
+language: neutral
+section: 
+---
+
+# Terraform Provider ZStack Docs
+
+This site contains customer-facing documentation and scenario examples for the
+ZStack Terraform provider.
+
+## Quick Start
+
+Install Terraform, configure ZStack API credentials, then run one of the
+repository examples:
+
+```bash
+cd examples/common/03-create-vm
+cp terraform.tfvars.example terraform.tfvars
+terraform init
+terraform plan
+```
+
+Most examples use placeholders such as image names, L3 network names, and
+offering names. Replace them with values from your ZStack environment before
+running `terraform apply`.
+
+## Provider
+
+Public Terraform Registry source:
+
+```hcl
+source  = "ZStack-Robot/zstack"
+version = "1.1.3"
+```
+
+Provider documentation baseline:
+
+- <https://registry.terraform.io/providers/ZStack-Robot/zstack/1.1.3>
+
+---
+title: Machine-Readable API
+url: /api/
+path: docs/api/index.md
+language: neutral
+section: 
+---
+
+# Machine-Readable API
+
+This static documentation site exposes machine-readable discovery files for AI
+agents and retrieval systems. These endpoints describe the documentation site,
+not the ZStack runtime API.
+
+| Endpoint | Purpose |
+|---|---|
+| [`/llms.txt`](/llms.txt) | Concise LLM-oriented site index. |
+| [`/llms-full.txt`](/llms-full.txt) | Full Markdown aggregation generated from MkDocs navigation. |
+| [`/api/catalog.json`](/api/catalog.json) | Structured JSON catalog of site pages and AI discovery endpoints. |
+| [`/openapi.json`](/openapi.json) | OpenAPI description for documentation discovery endpoints. |
+| [`/.well-known/mcp.json`](/.well-known/mcp.json) | Static MCP discovery manifest. |
+| [`/robots.txt`](/robots.txt) | Crawler and AI discovery hints. |
+
+For human-readable documentation, start from the [English manual](../en/manual/index.md)
+or [Chinese manual](../zh/manual/index.md).
+
+---
+title: 概览
+url: /zh/
+path: docs/zh/index.md
+language: zh
+section: 中文
+---
+
+# Terraform Provider ZStack 文档
+
+本中文文档面向需要用 Terraform 管理 ZStack 环境的交付、运维和平台团队。
+
+文档覆盖 provider 认证、已有资源查询、虚拟机创建、网络、安全组、存储、镜像、IAM、负载均衡、监控通知、备份 CDP 和高级网络等常见场景。
+
+所有可运行示例统一放在仓库根目录的 `examples/common/` 下，站点中的示例目录会链接到 GitHub 上的对应文件。
+
+公开示例默认使用 provider source `ZStack-Robot/zstack`，当前文档基线版本为 provider `1.1.3`。
+
+生产环境建议优先使用 AccessKey 认证，并通过 CI/CD secret store 或环境变量传递敏感信息。
+
+新建 VM 示例统一使用 `network_interfaces`，不再把旧的 `l3_network_uuids` 作为推荐写法。
+
+批量资源建议使用 `for_each` 和稳定 key，避免用 `count` 导致资源地址漂移。
+
+迁移已有资源时，应先导入 state，再反复执行 `terraform plan`，确认不会出现非预期 replacement。
+
+管理员类资源，例如全局配置、License、IAM、备份和网络高级能力，在执行 `apply` 前必须确认权限边界和变更窗口。
+
+Provider `1.1.3` 中，资源编排功能及编排模板不再作为当前文档和示例的交付范围。
+
+如果需要排查认证、下载 provider、资源查询、VM 创建、网络绑定或 state 迁移问题，请优先查看 Troubleshooting 和 FAQ。
+
+## 建议入口
+
+- [安装与环境准备](manual/install-environment.md)：确认 Terraform CLI、网络和凭证传递方式。
+- [Provider 初始化与离线 Mirror](manual/provider-init-mirror.md)：配置公开 Registry、离线 mirror 或 provider 开发 source。
+- [Terraform 运行流程](manual/terraform-workflow.md)：理解 `init`、`plan`、`apply`、`import` 和 CI/CD 流程。
+- [实践教程](scenarios/practice-tutorials.md)：按 VM、网络入口、存储镜像、平台治理和生产参考路径学习。
+- [生产化指南](manual/production-guide.md)：把示例改造成真实环境可评审的 Terraform 项目。
+
+---
+title: AI 原生入口
+url: /zh/ai-native-site/
+path: docs/zh/ai-native-site.md
+language: zh
+section: 中文
+---
+
+# AI 原生入口
+
+本文档站同时发布面向人类和面向 AI agent 的入口。仓库中的
+`AGENTS.md`、skills 和示例适合本地开发工具读取；站点发布后，AI
+agent 应优先从以下稳定 URL 获取上下文。
+
+| 入口 | 用途 |
+|---|---|
+| [`/llms.txt`](/llms.txt) | 精简索引，适合作为第一次读取入口。 |
+| [`/llms-full.txt`](/llms-full.txt) | 按 MkDocs 导航聚合的全文 Markdown 上下文。 |
+| [`/api/catalog.json`](/api/catalog.json) | 结构化页面目录、语言、路径和 AI 发现入口。 |
+| [`/openapi.json`](/openapi.json) | 仅描述文档发现端点的 OpenAPI 规范，不是 ZStack 运行时 API。 |
+| [`/.well-known/mcp.json`](/.well-known/mcp.json) | 静态 MCP 发现清单，说明当前站点未暴露实时 MCP server。 |
+| [`/robots.txt`](/robots.txt) | 爬虫规则和 AI 发现提示。 |
+| [`/sitemap.xml`](/sitemap.xml) | 传统 SEO 和页面发现入口。 |
+
+推荐读取顺序：
+
+1. 先读 `/llms.txt` 判断站点范围、provider 版本和关键约束。
+2. 再读 `/api/catalog.json` 获取结构化页面目录。
+3. 需要完整上下文时读取 `/llms-full.txt`，避免逐页抓取遗漏导航内页面。
+4. 生成 Terraform 代码前，优先查阅对应中文或英文手册章节和可运行示例。
+
+这些端点描述的是 Terraform Provider ZStack 文档站，不代表 ZStack
+管理节点的业务 API。若要调用 ZStack API，请以 ZStack 产品 API 文档和
+provider 实现为准。
+
+---
+title: 概览
+url: /zh/manual/
+path: docs/zh/manual/index.md
+language: zh
+section: 中文 / 客户使用手册
+---
+
+# 客户使用手册
+
+本手册说明 ZStack provider `1.1.3` 面向客户的使用流程，不是 provider 资源参考的复制版，重点在于如何在真实交付场景中安全使用各类资源。
+
+推荐阅读顺序：
+
+1. 安装 Terraform，确认 runner 可以访问 ZStack 管理节点。
+2. 初始化 provider，按环境选择公开 Registry、离线 mirror 或 provider 开发配置。
+3. 理解 Terraform 运行流程、概念映射和 provider 工作原理。
+4. 配置认证，并通过 data source 查询已有资源。
+5. 创建 VM 并配置网络、安全组、磁盘和镜像。
+6. 加入生产场景能力，例如 EIP、Load Balancer、VPC、初始化脚本、IAM 与监控通知。
+7. 在将已有资源纳入 Terraform 管理前，先阅读导入与迁移指引。
+8. 生产 apply 前阅读 HCL 编写规范、调试诊断和生产化指南。
+
+---
+title: 安装与环境准备
+url: /zh/manual/install-environment/
+path: docs/zh/manual/install-environment.md
+language: zh
+section: 中文 / 客户使用手册
+---
+
+# 安装与环境准备
+
+本页说明运行 ZStack Terraform 示例前需要准备的本地或 CI 环境。后续章节默认这些条件已经满足。
+
+## 基础要求
+
+| 项目 | 要求 |
+|---|---|
+| Terraform CLI | `1.5` 或更高版本 |
+| ZStack 管理节点 | Terraform runner 能访问管理节点地址和 API 端口 |
+| 凭证 | 推荐使用 AccessKey ID 和 AccessKey Secret |
+| Provider | 当前文档基于 `ZStack-Robot/zstack` provider `1.1.3` |
+| 基础资源 | VM 示例通常需要已有 image、L3 network、instance offering、disk offering |
+| 版本控制 | 不提交 `terraform.tfvars`、state、plan、日志和凭证文件 |
+
+## 安装检查
+
+```bash
+terraform version
+terraform -help
+```
+
+如果 `terraform version` 不能执行，先安装 Terraform CLI，并确认它在 `PATH` 中。
+
+## 网络检查
+
+Terraform runner 需要访问 ZStack 管理节点。按环境选择合适命令检查连通性：
+
+```bash
+curl -I http://zstack.example.com:8080
+```
+
+管理节点地址、端口和访问策略由目标环境决定。不要把示例中的 `zstack.example.com` 当作真实地址。
+
+## 凭证传递
+
+本地调试可以使用未提交的 `terraform.tfvars`。团队自动化建议使用 CI/CD secret store 或环境变量：
+
+```bash
+export ZSTACK_HOST="zstack.example.com"
+export ZSTACK_PORT="8080"
+export ZSTACK_ACCESS_KEY_ID="replace-me"
+export ZSTACK_ACCESS_KEY_SECRET="replace-me"
+```
+
+PowerShell 示例：
+
+```powershell
+$env:ZSTACK_HOST = "zstack.example.com"
+$env:ZSTACK_PORT = "8080"
+$env:ZSTACK_ACCESS_KEY_ID = "replace-me"
+$env:ZSTACK_ACCESS_KEY_SECRET = "replace-me"
+```
+
+不要把真实 AccessKey、账号密码、license 文本、私钥或 token 写入 Git。
+
+## 本地工作目录
+
+建议每个示例或交付项目使用独立目录：
+
+```text
+terraform-project/
+  main.tf
+  variables.tf
+  outputs.tf
+  terraform.tfvars
+```
+
+`terraform.tfvars` 只放在本地或 CI secret 注入的临时环境中。团队协作时使用 remote backend，不要共享本地 state 文件。
+
+## 下一步
+
+1. 阅读 [Provider 初始化与离线 Mirror](provider-init-mirror.md)。
+2. 阅读 [认证与 Provider 配置](authentication.md)。
+3. 使用 [查询已有资源](query-existing-resources.md) 确认 image、L3 network 和 offering。
+
+---
+title: 快速开始
+url: /zh/manual/getting-started/
+path: docs/zh/manual/getting-started.md
+language: zh
+section: 中文 / 客户使用手册
+---
+
+# 快速开始
+
+Terraform Provider ZStack 用于把 ZStack 云资源声明为代码，并通过 `plan/apply` 管理变更。
+
+## 前置条件
+
+- Terraform 1.5 或更高版本。
+- 可访问的 ZStack 管理节点。
+- AccessKey ID 和 AccessKey Secret。
+- 已存在的基础资源：镜像、L3 网络、计算规格、磁盘规格。
+
+## 推荐学习顺序
+
+1. 配置 provider 和认证。
+2. 查询已有资源。
+3. 创建单台 VM。
+4. 批量创建 VM。
+5. 为 VM 增加静态 IP、安全组和数据盘。
+6. 绑定 VIP/EIP 或接入 Load Balancer。
+7. 导入已有资源。
+
+## 基础命令
+
+```bash
+terraform init
+terraform fmt
+terraform validate
+terraform plan
+terraform apply
+```
+
+## 示例
+
+从 [examples/common/01-provider](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/01-provider) 开始。每个示例都包含：
+
+- `main.tf`
+- `variables.tf`
+- `terraform.tfvars.example`
+- `README.md`
+
+复制 `terraform.tfvars.example` 为 `terraform.tfvars` 后填入真实值。不要提交真实 `terraform.tfvars`。
+
+---
+title: Provider 初始化与离线 Mirror
+url: /zh/manual/provider-init-mirror/
+path: docs/zh/manual/provider-init-mirror.md
+language: zh
+section: 中文 / 客户使用手册
+---
+
+# Provider 初始化与离线 Mirror
+
+本页说明如何初始化 ZStack provider，以及离线环境如何保持公开示例的 provider source 不变。
+
+## 标准配置
+
+客户文档和公开示例默认使用公开 Terraform Registry source：
+
+```hcl
+terraform {
+  required_version = ">= 1.5"
+
+  required_providers {
+    zstack = {
+      source  = "ZStack-Robot/zstack"
+      version = "1.1.3"
+    }
+  }
+}
+```
+
+初始化：
+
+```bash
+terraform init
+```
+
+升级已验证的新版本时，统一修改 version 约束后再执行：
+
+```bash
+terraform init -upgrade
+terraform plan
+```
+
+未完成 plan 验证前，不要把 provider 版本升级直接推到生产 apply 流程。
+
+## 离线环境推荐方式
+
+离线客户环境应优先使用 Terraform provider mirror 提供同一 provider source 和版本，而不是把示例中的 source 改成内部名称。
+
+准备 mirror 的联网环境可以在 Terraform 项目目录中执行：
+
+```bash
+terraform providers mirror /opt/terraform-provider-mirror
+```
+
+离线 runner 使用 Terraform CLI 配置文件，例如 `~/.terraformrc` 或通过 `TF_CLI_CONFIG_FILE` 指定的文件：
+
+```hcl
+provider_installation {
+  filesystem_mirror {
+    path    = "/opt/terraform-provider-mirror"
+    include = ["registry.terraform.io/ZStack-Robot/zstack"]
+  }
+
+  direct {
+    exclude = ["registry.terraform.io/ZStack-Robot/zstack"]
+  }
+}
+```
+
+这样 Terraform 配置仍然写：
+
+```hcl
+source = "ZStack-Robot/zstack"
+```
+
+这能减少公开示例、离线交付和升级验证之间的差异。
+
+## Provider 开发环境
+
+如果是在开发 Terraform provider 本身，可以使用开发 Registry source 或 Terraform CLI dev override 调试本地构建，例如：
+
+```hcl
+source = "zstack.io/terraform-provider-zstack/zstack"
+```
+
+这只适用于 provider 开发或调试环境。客户交付示例不要混入开发 source。
+
+## 初始化失败排查
+
+| 现象 | 检查项 |
+|---|---|
+| provider 下载失败 | 检查 `source`、`version`、网络代理和 mirror 路径 |
+| 离线环境仍访问公网 | 检查 CLI 配置文件是否被 `TF_CLI_CONFIG_FILE` 正确加载 |
+| 版本不一致 | 检查 `.terraform.lock.hcl`、mirror 内容和 `required_providers` 约束 |
+| 本地开发构建未生效 | 检查 dev override 路径、二进制命名和平台架构 |
+
+更多问题见 [故障排查](../troubleshooting/index.md)。
+
+---
+title: 认证与 Provider 配置
+url: /zh/manual/authentication/
+path: docs/zh/manual/authentication.md
+language: zh
+section: 中文 / 客户使用手册
+---
+
+# 认证与 Provider 配置
+
+ZStack provider 需要管理节点地址和 API 凭证。推荐使用 AccessKey 认证；账号密码认证只作为兼容方式使用。
+
+## Provider Source
+
+公网 Terraform Registry 场景：
+
+```hcl
+terraform {
+  required_providers {
+    zstack = {
+      source  = "ZStack-Robot/zstack"
+      version = "1.1.3"
+    }
+  }
+}
+```
+
+Provider 开发环境如果需要调试本地构建或开发 Registry，可以按开发环境配置替换 source，例如：
+
+```hcl
+source = "zstack.io/terraform-provider-zstack/zstack"
+```
+
+上面的 source 只用于 provider 开发或调试示例。客户交付文档和公开示例默认使用
+`ZStack-Robot/zstack`；离线环境应优先通过 Terraform provider mirror 提供同一
+provider source 和版本，而不是在示例中随意改 source。
+
+不要在同一个项目里混用公开发布 source 和开发调试 source。
+
+## AccessKey 认证
+
+推荐写法：
+
+```hcl
+provider "zstack" {
+  host              = var.zstack_host
+  port              = var.zstack_port
+  access_key_id     = var.zstack_access_key_id
+  access_key_secret = var.zstack_access_key_secret
+}
+```
+
+变量示例：
+
+```hcl
+variable "zstack_access_key_secret" {
+  description = "ZStack AccessKey Secret."
+  type        = string
+  sensitive   = true
+}
+```
+
+## 环境变量
+
+Provider 支持从环境变量读取配置：
+
+- `ZSTACK_HOST`
+- `ZSTACK_PORT`
+- `ZSTACK_ACCESS_KEY_ID`
+- `ZSTACK_ACCESS_KEY_SECRET`
+- `ZSTACK_ACCOUNT_NAME`
+- `ZSTACK_ACCOUNT_PASSWORD`
+
+CI/CD 中优先使用环境变量或平台 secret store。不要提交真实 `terraform.tfvars`。
+
+## 账号密码认证
+
+账号密码认证可用于特殊场景：
+
+```hcl
+provider "zstack" {
+  host             = var.zstack_host
+  port             = var.zstack_port
+  account_name     = var.zstack_account_name
+  account_password = var.zstack_account_password
+}
+```
+
+如果同时配置 AccessKey 和账号密码，容易造成认证意图不清晰。客户文档和示例默认使用 AccessKey。
+
+## 对应示例
+
+见 [examples/common/01-provider](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/01-provider)。
+
+---
+title: Terraform 运行流程
+url: /zh/manual/terraform-workflow/
+path: docs/zh/manual/terraform-workflow.md
+language: zh
+section: 中文 / 客户使用手册
+---
+
+# Terraform 运行流程
+
+本页给出从初始化到清理的标准命令顺序，以及在团队环境中如何控制变更。
+
+## 推荐目录结构
+
+```text
+project/
+  versions.tf
+  providers.tf
+  variables.tf
+  main.tf
+  outputs.tf
+  terraform.tfvars
+```
+
+小示例可以合并到 `main.tf`，但生产项目建议拆分 provider、变量、资源和输出。
+
+## 基础命令顺序
+
+```bash
+terraform init
+terraform fmt
+terraform validate
+terraform plan
+terraform apply
+```
+
+对示例资源做清理：
+
+```bash
+terraform destroy
+```
+
+在共享环境中，不要跳过 `plan` 直接 `apply`。如果 plan 中出现 replacement、删除或高风险管理员资源，先停止评审。
+
+## 受控 Apply
+
+生产环境建议保存 plan 文件，并让 apply 使用已评审的 plan：
+
+```bash
+terraform plan -out=tfplan
+terraform apply tfplan
+```
+
+plan 文件可能包含敏感值，应按敏感文件处理，不要提交到 Git。
+
+## 变量文件
+
+本地示例通常从模板开始：
+
+```bash
+cp terraform.tfvars.example terraform.tfvars
+```
+
+`terraform.tfvars` 中只能放目标环境值。真实凭证优先通过环境变量或 secret store 注入。
+
+## Import 流程
+
+纳管已有资源时，推荐顺序：
+
+1. 写出最小 resource block。
+2. 执行 `terraform import` 或使用 import block。
+3. 执行 `terraform plan`。
+4. 按 plan 补齐 HCL，直到 no-op 或只剩明确接受的差异。
+5. 再进入 apply 流程。
+
+不要把 import 后的首次 replacement 直接当成正常变更。
+
+## CI/CD 流程
+
+CI 至少执行：
+
+```bash
+terraform fmt -check
+terraform validate
+terraform plan
+```
+
+生产 apply 应加审批、变更窗口、state 访问控制和凭证隔离。普通 pull request 流程不应自动 apply 到真实 ZStack 环境。
+
+---
+title: 概念映射
+url: /zh/manual/concepts/
+path: docs/zh/manual/concepts.md
+language: zh
+section: 中文 / 客户使用手册
+---
+
+# Terraform 与 ZStack 概念映射
+
+本页解释 Terraform 术语和 ZStack 资源之间的关系，帮助读者理解后续示例为什么先查询已有资源，再创建依赖资源。
+
+## Terraform 概念
+
+| 概念 | 说明 |
+|---|---|
+| Provider | Terraform 调用 ZStack API 的插件，本手册使用 `ZStack-Robot/zstack` |
+| Resource | 由 Terraform 创建、更新或删除的 ZStack 对象，例如 VM、volume、security group |
+| Data source | 查询已经存在的 ZStack 对象，不直接创建资源 |
+| State | Terraform 保存的实际资源映射，包含 Terraform 地址和 ZStack UUID |
+| Plan | Terraform 对比 HCL、state 和远端对象后生成的变更预览 |
+| Variable | 外部输入，例如管理节点地址、镜像名称、网络 UUID |
+| Output | 暴露给后续流程或人工检查的值，例如 VM UUID、NIC UUID、VIP 地址 |
+| Import | 把已有 ZStack 资源绑定到 Terraform state |
+
+## ZStack 资源映射
+
+| ZStack 对象 | Terraform 中常见用途 |
+|---|---|
+| Zone、Cluster、Host | 通常作为 data source 查询，用于定位已有计算资源 |
+| Image | VM 创建输入；镜像管理章节可创建或查询 image |
+| Backup Storage | 镜像存储/备份存储，用于 image、镜像导入和部分备份/CDP 流程 |
+| Instance Offering | VM 规格；也可以改用 `cpu_num` 和 `memory_size` |
+| Disk Offering | 数据盘规格 |
+| L2 Network | 二层网络基础对象，通常由平台管理员预置 |
+| L3 Network | VM 网卡、VIP、EIP、VPC 网络的三层网络基础 |
+| VPC / Virtual Router | VPC 网络和路由能力的承载对象 |
+| VIP / EIP | 对外入口地址和公网访问绑定 |
+| Security Group | VM NIC 的访问控制规则集合 |
+| Volume | 数据盘；需要独立生命周期时单独建模 |
+| Account、User、IAM2、AccessKey | 自动化身份和权限边界 |
+| Global Config、License、Scheduler | 管理员级资源，生产 apply 前需要变更评审 |
+
+## 身份字段选择
+
+- 自动化和 CI/CD 优先使用 `uuid`。
+- 人工示例可使用唯一 `name`。
+- `name_pattern` 只适合探索查询，必须输出匹配结果并人工确认。
+- 不要在示例中编造 UUID、metric name、job type、route target 或外部系统地址。
+
+## 资源依赖
+
+Terraform 会根据表达式引用建立依赖，例如 VM 引用 image UUID、L3 network UUID 和 offering UUID。对于无法由引用表达的顺序，可以使用显式依赖，但应先确认是否真有必要。
+
+常见顺序：
+
+1. 查询 image、network、offering。
+2. 创建 VM。
+3. 创建并绑定 security group、volume、VIP/EIP 或 LB。
+4. 输出 UUID 和地址用于排障或后续集成。
+
+---
+title: 工作原理
+url: /zh/manual/how-it-works/
+path: docs/zh/manual/how-it-works.md
+language: zh
+section: 中文 / 客户使用手册
+---
+
+# 工作原理
+
+Terraform Provider ZStack 把 HCL 中声明的目标状态转换为 ZStack API 调用，并用 state 记录 Terraform 地址和 ZStack UUID 的关系。
+
+## 执行模型
+
+1. Terraform 读取 `.tf` 文件、变量和 provider 约束。
+2. `terraform init` 下载或从 mirror 加载 ZStack provider。
+3. `terraform plan` 调用 data source 和资源读取接口，生成变更预览。
+4. `terraform apply` 按依赖顺序调用 ZStack API 创建、更新或删除资源。
+5. Terraform 把结果写入 state。
+
+## Data Source
+
+Data source 用于读取已有 ZStack 对象，例如 image、L3 network、offering、zone、cluster。它们不会创建资源，但会影响 plan 结果。
+
+如果 data source 使用 `name_pattern` 匹配过宽，后续资源可能引用错误对象。生产配置应优先使用 `uuid` 或唯一 `name`。
+
+## Resource
+
+Resource 由 Terraform 管理生命周期。创建后，state 中会保存对应 ZStack UUID。后续 plan 会比较：
+
+- HCL 中声明的期望值。
+- state 中保存的已知值。
+- ZStack API 读取到的当前值。
+
+如果某个字段在 provider 或 ZStack API 中不可原地更新，Terraform 可能显示 replacement。看到 replacement 时先评审原因，再决定是否 apply。
+
+## State 与漂移
+
+State 是 Terraform 判断资源归属的核心文件。不要手工编辑 state，除非有明确的恢复流程。
+
+如果有人绕过 Terraform 在 ZStack 控制台修改资源，下一次 plan 可能看到 drift。处理 drift 时先判断控制台修改是否应该保留，再决定更新 HCL、回滚控制台修改或接受 Terraform 变更。
+
+## Import
+
+Import 只把已有资源写入 state，不会自动生成完整 HCL。导入后必须运行 `terraform plan`，并补齐 resource block，直到 plan 收敛。
+
+## 敏感值
+
+Terraform state 和 plan 可能包含敏感值。即使变量或 output 标记为 `sensitive`，也不能把 state、plan 或调试日志当作普通文件共享。
+
+## 能力边界
+
+Provider 负责调用 ZStack API，不替代变更审批、容量评估、命名规范、权限设计、网络安全评审或备份策略。生产落地需要把这些流程纳入 Terraform 项目之外的交付规范。
+
+---
+title: HCL 编写规范
+url: /zh/manual/hcl-style/
+path: docs/zh/manual/hcl-style.md
+language: zh
+section: 中文 / 客户使用手册
+---
+
+# HCL 编写规范
+
+本页给出 Terraform HCL 编写规范，用于让示例和交付项目保持可读、可审查、可复用。
+
+## 文件组织
+
+| 文件 | 内容 |
+|---|---|
+| `versions.tf` | `required_version` 和 `required_providers` |
+| `providers.tf` | `provider "zstack"` 配置 |
+| `variables.tf` | 所有外部输入和校验 |
+| `main.tf` | 主要资源和 data source |
+| `outputs.tf` | 需要暴露的 UUID、地址和排障信息 |
+| `terraform.tfvars.example` | 可提交的变量模板，不包含真实秘密 |
+
+小型示例可以减少文件数量，但变量说明、敏感标记和输出边界不能省略。
+
+## 命名
+
+- Terraform 变量、local、output 使用 `lower_snake_case`。
+- 资源名使用稳定语义，例如 `web`, `app`, `database_volume`。
+- 批量资源使用 `for_each` 和稳定 key，不用易漂移的数字下标。
+- 环境、业务、owner、cost center 等信息优先通过 tag 或变量表达。
+
+## 变量
+
+每个变量都应有 `description`。敏感变量必须标记：
+
+```hcl
+variable "zstack_access_key_secret" {
+  description = "ZStack AccessKey Secret."
+  type        = string
+  sensitive   = true
+}
+```
+
+对 CIDR、端口、开关类变量增加 `validation`。安全组入口 CIDR 不应默认放开到不受控网段。
+
+## ZStack 约定
+
+- 新 VM 使用 `network_interfaces`，不要推荐旧的 `l3_network_uuids`。
+- `network_interfaces` 中 `l3_network_uuid` 必填，`default_l3` 和 `static_ip` 可选。
+- 不需要固定 IP 时省略 `static_ip`；如果通过变量传入，`default = null` 可以让 Terraform 视为未设置。
+- 自动化优先使用 UUID；名称只在确定唯一时使用。
+- `name_pattern` 只用于探索查询，并输出匹配结果供确认。
+- 不要编造 metric name、scheduler job type、route target、IPsec 算法或外部端点格式。
+
+## 输出
+
+输出用于排障和后续集成，优先暴露 UUID 和关键地址：
+
+```hcl
+output "vm_uuid" {
+  description = "Created VM UUID."
+  value       = zstack_instance.web.uuid
+}
+```
+
+AccessKey secret、密码、license 文本、token、私钥和 webhook secret 必须使用 `sensitive = true`，并避免进入普通 CI 日志。
+
+## 格式化与校验
+
+提交前运行：
+
+```bash
+terraform fmt
+terraform validate
+terraform plan
+```
+
+文档仓库内的示例还需要通过仓库质量检查。
+
+---
+title: 查询已有资源
+url: /zh/manual/query-existing-resources/
+path: docs/zh/manual/query-existing-resources.md
+language: zh
+section: 中文 / 客户使用手册
+---
+
+# 查询已有资源
+
+Terraform 创建 VM、数据盘、安全组绑定、VIP/EIP、LB、VPC 或管理员资源前，通常需要先查询 ZStack 中已有对象。本页列出 provider `1.1.3` 注册的全部 data source，并标出建议优先级和常用程度。
+
+优先级说明：
+
+- **基础优先**：第一次接入环境时优先掌握，VM 和多数示例都会依赖。
+- **常用扩展**：网络、存储、安全组、脚本、标签等常见交付场景经常使用。
+- **场景化**：只在对应功能场景中使用，例如 LB、端口转发、亲和组、自动伸缩。
+- **管理员/专项**：平台管理员或专项能力使用，通常需要额外权限和变更评审。
+
+## 全量 Data Source 索引
+
+| Data source | 优先级 | 常用程度 | 用途 |
+|---|---|---|---|
+| `zstack_images` | 基础优先 | 高频 | 查询镜像，给 VM 创建或镜像管理流程选择 `image_uuid`。 |
+| `zstack_l3networks` | 基础优先 | 高频 | 查询 L3 网络，给 VM 网卡、VIP/EIP、VPC 等网络资源选择网络 UUID。 |
+| `zstack_instance_offerings` | 基础优先 | 高频 | 查询云主机计算规格，给 VM 选择 CPU/内存规格。 |
+| `zstack_disk_offerings` | 基础优先 | 常用 | 查询云盘规格，给数据盘、镜像或备份相关流程选择磁盘规格。 |
+| `zstack_zone` | 基础优先 | 常用 | 查询区域，确认资源所在的 ZStack zone。 |
+| `zstack_clusters` | 基础优先 | 常用 | 查询集群，给放置策略或主机范围选择 cluster。 |
+| `zstack_hosts` | 基础优先 | 常用 | 查询物理主机，给 host 放置或排障确认目标 host。 |
+| `zstack_instances` | 常用扩展 | 常用 | 查询已有云主机，给 EIP 绑定、安全组附件、导入或排障选择 VM/NIC。 |
+| `zstack_l2networks` | 常用扩展 | 常用 | 查询 L2 网络，给 L3、VPC 或高级网络场景选择底层网络。 |
+| `zstack_virtual_routers` | 常用扩展 | 常用 | 查询虚拟路由器，给 VPC、路由表和路由条目选择路由器上下文。 |
+| `zstack_vips` | 常用扩展 | 常用 | 查询 VIP，给 EIP、LB、端口转发或公网入口排障使用。 |
+| `zstack_eips` | 常用扩展 | 常用 | 查询已有 EIP，给公网访问绑定、迁移或排障使用。 |
+| `zstack_primary_storages` | 常用扩展 | 常用 | 查询主存储，确认容量、类型或资源放置上下文。 |
+| `zstack_backup_storages` | 常用扩展 | 常用 | 查询镜像存储/备份存储，给 image、镜像导入、备份/CDP 流程使用。 |
+| `zstack_volumes` | 常用扩展 | 常用 | 查询已有数据盘，给挂载、导入、快照或备份流程使用。 |
+| `zstack_volume_snapshots` | 常用扩展 | 常用 | 查询云盘快照，给恢复、审计或快照管理流程使用。 |
+| `zstack_networking_secgroups` | 常用扩展 | 常用 | 查询安全组，给 VM NIC 绑定或安全组治理使用。 |
+| `zstack_networking_secgroup_rules` | 常用扩展 | 常用 | 查询安全组规则，给规则审计、迁移或冲突排查使用。 |
+| `zstack_tags` | 常用扩展 | 常用 | 查询标签，给资源治理、成本归属或迁移校验使用。 |
+| `zstack_user_tags` | 常用扩展 | 常用 | 查询用户标签，给业务元数据治理或迁移校验使用。 |
+| `zstack_ssh_key_pairs` | 常用扩展 | 常用 | 查询 SSH key pair，给 VM 初始化或登录访问流程使用。 |
+| `zstack_instance_scripts` | 常用扩展 | 常用 | 查询 VM 初始化/执行脚本，给 day-1 初始化和脚本执行排障使用。 |
+| `zstack_accounts` | 场景化 | 按需 | 查询账号，给 IAM、权限边界或自动化账号治理使用。 |
+| `zstack_iam2_projects` | 场景化 | 按需 | 查询 IAM2 project，给项目级权限和自动化身份场景使用。 |
+| `zstack_affinity_groups` | 场景化 | 按需 | 查询亲和组，给 VM 放置策略或高可用部署使用。 |
+| `zstack_auto_scaling_groups` | 场景化 | 按需 | 查询自动伸缩组，给弹性伸缩治理或排障使用。 |
+| `zstack_disks` | 场景化 | 按需 | 查询磁盘对象，给存量磁盘审计或底层磁盘排查使用。 |
+| `zstack_l2vlan_networks` | 场景化 | 按需 | 查询 VLAN L2 网络，给 VLAN 网络和 L3 网络建设使用。 |
+| `zstack_reserved_ips` | 场景化 | 按需 | 查询保留 IP，给网络地址规划或冲突排查使用。 |
+| `zstack_subnet_ip_ranges` | 场景化 | 按需 | 查询子网 IP 段，给 L3 网络地址池确认和规划使用。 |
+| `zstack_load_balancers` | 场景化 | 按需 | 查询负载均衡实例，给 LB 迁移、绑定或排障使用。 |
+| `zstack_load_balancer_listeners` | 场景化 | 按需 | 查询 LB listener，给端口监听、后端绑定或排障使用。 |
+| `zstack_port_forwarding_rules` | 场景化 | 按需 | 查询端口转发规则，给公网入口迁移或冲突排查使用。 |
+| `zstack_virtual_router_images` | 场景化 | 按需 | 查询虚拟路由器镜像，给 VPC/VR 基础资源建设使用。 |
+| `zstack_virtual_router_offerings` | 场景化 | 按需 | 查询虚拟路由器规格，给 VPC/VR 资源建设使用。 |
+| `zstack_global_configs` | 管理员/专项 | 受控 | 查询全局配置当前值和默认值，给受控管理员变更使用。 |
+| `zstack_license_authorized_capacity` | 管理员/专项 | 受控 | 查询 license 授权容量，给容量审计或 license 运维使用。 |
+| `zstack_license_authorized_nodes` | 管理员/专项 | 受控 | 查询 license 授权节点，给节点授权审计或 license 运维使用。 |
+| `zstack_mn_nodes` | 管理员/专项 | 受控 | 查询管理节点，给平台运维、license 或高可用排障使用。 |
+| `zstack_sdn_controllers` | 管理员/专项 | 受控 | 查询 SDN 控制器，给 SDN 网络专项能力使用。 |
+| `zstack_gpu_devices` | 管理员/专项 | 受控 | 查询 GPU 设备，给 GPU 资源池、调度或硬件排障使用。 |
+| `zstack_hook_scripts` | 管理员/专项 | 受控 | 查询 hook script，给平台脚本或兼容场景排查使用。 |
+| `zstack_instance_guest_tools` | 管理员/专项 | 受控 | 查询 VM guest tools 状态，给脚本执行、Guest 能力或排障使用。 |
+
+## 查询方式选择
+
+多数资源列表型 data source 支持这几类输入。少数管理员型或平台状态型 data source 只有专用参数或无输入参数，使用前以对应 provider 参考页为准。
+
+| 方式 | 适用场景 | 建议 |
+|---|---|---|
+| `uuid` | 自动化脚本、CI/CD、资源 UUID 已知 | 最稳定，通常返回 0 或 1 条；与 `name` / `name_pattern` 互斥 |
+| `name` | 人工编写、名称唯一 | 适合客户示例；如果名称可能重复，必须输出结果并确认 |
+| `name_pattern` | 模糊查找、探索环境 | 类似 SQL `LIKE`，`%` 匹配多个字符，`_` 匹配单个字符；只用于发现 |
+| `filter` | 按状态、类型、架构、所属资源等字段筛选 | 适合在 name/name_pattern/全量结果上继续缩小候选集 |
+
+常见执行顺序是：先用 `uuid`、`name` 或 `name_pattern` 让 ZStack API 缩小范围，再由 provider 在返回结果上应用 `filter`。如果既没有唯一名称，也没有 UUID，先做发现查询，输出候选列表，不要直接把第一条结果用于创建资源。
+
+## Data Source 结构
+
+典型 data source 由三部分组成：
+
+1. **选择条件**：`uuid`、`name`、`name_pattern` 或专用参数，例如 `category`。
+2. **过滤条件**：一个或多个 `filter` block。
+3. **结果列表**：只读属性列表，例如 `images`、`l3networks`、`vminstances`。
+
+示例：
+
+```hcl
+data "zstack_images" "ready_linux" {
+  name_pattern = var.image_name_pattern
+
+  filter {
+    name   = "state"
+    values = ["Enabled"]
+  }
+
+  filter {
+    name   = "status"
+    values = ["Ready"]
+  }
+
+  filter {
+    name   = "architecture"
+    values = ["x86_64", "aarch64"]
+  }
+}
+
+output "candidate_images" {
+  description = "Image candidates after name pattern and filters."
+  value       = data.zstack_images.ready_linux.images
+}
+```
+
+这个例子表示：镜像名称先按 `name_pattern` 做模糊匹配，再保留 `state` 为 `Enabled`、`status` 为 `Ready`、并且架构为 `x86_64` 或 `aarch64` 的镜像。
+
+## Filter 规则
+
+`filter` 的结构是：
+
+```hcl
+filter {
+  name   = "field_name"
+  values = ["value1", "value2"]
+}
+```
+
+规则：
+
+- `name` 填 data source 返回项里的字段名，例如 `state`、`status`、`architecture`、`category`、`zone_uuid`。
+- `values` 是字符串集合；数字和布尔值也建议写成字符串，例如 `values = ["1"]`、`values = ["true"]`。
+- 同一个 `filter` block 内多个 `values` 是 OR：字段值等于任意一个值即可。
+- 多个 `filter` block 之间是 AND：每个 block 都要匹配。
+- `filter` 是精确匹配，不是模糊匹配；需要模糊名称时使用 `name_pattern`。
+- 优先过滤返回项的顶层标量字段。嵌套列表字段，例如 VM 的网卡列表，除非 provider 参考页或测试明确支持，否则不要直接作为 filter key。
+- 字段名必须来自对应 data source 的 schema。不要凭 ZStack API 字段名猜测 Terraform 字段名。
+
+常用 filter 示例：
+
+```hcl
+data "zstack_l3networks" "private" {
+  filter {
+    name   = "category"
+    values = ["Private"]
+  }
+}
+
+data "zstack_instances" "running_kvm" {
+  filter {
+    name   = "state"
+    values = ["Running"]
+  }
+
+  filter {
+    name   = "hypervisor_type"
+    values = ["KVM"]
+  }
+}
+```
+
+如果 filter key 写错，provider 会返回无效字段错误；如果 values 过宽，可能返回大量候选资源。生产配置应把候选输出给人工或流水线策略确认。
+
+## 输出与确认
+
+发现查询的目标不是“自动选中第一条”，而是得到可审查的候选集。输出时优先包含这些字段：
+
+- `uuid`
+- `name`
+- `state` / `status`
+- `category` / `type`
+- 所属关系，例如 `zone_uuid`、`cluster_uuid`、`host_uuid`、`l3_network_uuid`
+
+确认候选后，再把明确的 `uuid` 或唯一 `name` 传给创建资源的示例。不要让生产资源依赖宽泛 `name_pattern` 的隐式结果顺序。
+
+## 示例
+
+首次验证环境时，可以只加载根目录 `.env` 中的鉴权变量，然后运行
+[examples/common/02-query-existing-resources](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/02-query-existing-resources)。该示例故意只查询基础优先项，避免第一次运行输出过大。它默认使用
+`name_pattern = "%"` 做发现查询，并输出候选资源列表。
+
+```hcl
+data "zstack_images" "ubuntu" {
+  name = var.image_name
+}
+
+data "zstack_l3networks" "default" {
+  name = var.l3_network_name
+}
+
+data "zstack_instance_offerings" "small" {
+  name = var.instance_offering_name
+}
+```
+
+## 自动化建议
+
+如果自动化脚本已经拿到 UUID，应直接使用：
+
+```hcl
+data "zstack_l3networks" "selected" {
+  uuid = var.l3_network_uuid
+}
+```
+
+避免在自动化配置中使用宽泛的 `name_pattern = "%Ubuntu%"`，这可能匹配多个镜像并导致不可预测的选择。
+
+## 对应示例
+
+见 [examples/common/02-query-existing-resources](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/02-query-existing-resources)。
+
+---
+title: 创建云主机
+url: /zh/manual/create-vm/
+path: docs/zh/manual/create-vm.md
+language: zh
+section: 中文 / 客户使用手册
+---
+
+# 创建云主机
+
+创建 VM 是最常见的入门场景。最小依赖包括：
+
+- 镜像 UUID。
+- L3 网络 UUID。
+- 计算规格 UUID，或直接指定 `cpu_num` + `memory_size`。
+- 可选：root disk、静态 IP、多网卡、host/cluster/zone 放置策略、user data。
+
+## 推荐流程
+
+1. 按名称或 UUID 查询镜像、L3 网络和计算规格。
+2. 在 `locals` 中整理 VM 输入参数。
+3. 使用 `zstack_instance` 创建单台 VM。
+4. 输出 VM UUID、名称和 IP 地址，便于后续排障。
+
+## 网络配置
+
+新配置应使用 `network_interfaces`：
+
+```hcl
+resource "zstack_instance" "vm" {
+  name                   = var.vm_name
+  image_uuid             = data.zstack_images.image.images[0].uuid
+  instance_offering_uuid = data.zstack_instance_offerings.offering.instance_offers[0].uuid
+
+  network_interfaces = [
+    {
+      l3_network_uuid = data.zstack_l3networks.network.l3networks[0].uuid
+      default_l3      = true
+      static_ip       = var.static_ip
+    }
+  ]
+}
+```
+
+`l3_network_uuid` 是网卡必须关联的 L3 网络。`default_l3` 和 `static_ip`
+都是可选字段：单网卡场景通常可以省略 `default_l3`；需要固定 IP 时再设置
+`static_ip`。省略 `static_ip` 时由 ZStack 自动分配地址；如果像示例一样通过
+变量透传，变量默认值设为 `null` 可以让 Terraform 按未设置处理。
+
+不要把旧的 `l3_network_uuids` 作为新示例的推荐写法。
+
+## 批量 VM
+
+批量创建优先使用 `for_each`，并用 VM 名称作为稳定 key。这样后续增加或删除单台 VM 时，不会因为索引变化导致无关 VM 被替换。
+
+## 初始化脚本
+
+进阶场景中，VM 创建后常需要执行初始化脚本。相关资源：
+
+| Terraform 对象 | 类型 | 用途 |
+|---|---|---|
+| `zstack_ssh_key_pair` | resource | 创建 SSH 密钥对，供 VM 登录或初始化脚本执行使用。 |
+| `zstack_instance_scripts` | resource | 创建实例脚本定义，保存要在 VM 内执行的脚本内容和类型。 |
+| `zstack_instance_scripts_execution` | resource | 创建脚本执行记录，把脚本应用到指定 VM。 |
+
+初始化脚本适合安装包、配置 guest agent、写入基础配置。脚本内容和超时时间应参数化，不要把敏感信息写进脚本文本。
+
+## 对应示例
+
+- [examples/common/03-create-vm](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/03-create-vm)
+- [examples/common/04-create-10-vms](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/04-create-10-vms)
+- [examples/common/13-vm-init-scripts](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/13-vm-init-scripts)
+
+---
+title: 网络
+url: /zh/manual/networking/
+path: docs/zh/manual/networking.md
+language: zh
+section: 中文 / 客户使用手册
+---
+
+# 网络
+
+网络章节优先覆盖创建 VM 时最常用的能力：L3 查询、VM NIC、静态 IP、安全组、VIP/EIP。
+
+## VM 网卡
+
+`zstack_instance` 使用 `network_interfaces` 配置 NIC：
+
+```hcl
+network_interfaces = [
+  {
+    l3_network_uuid = data.zstack_l3networks.network.l3networks[0].uuid
+    default_l3      = true
+    static_ip       = var.static_ip
+  }
+]
+```
+
+`l3_network_uuid` 是必填绑定。`default_l3` 和 `static_ip` 是可选字段：
+单网卡场景通常可以省略 `default_l3`；需要固定地址时再设置 `static_ip`，
+省略 `static_ip` 时由 ZStack 自动分配。通过变量透传时，可把变量默认值设为
+`null`，让 Terraform 按未设置处理。
+
+## 网络基础资源
+
+多数 VM 示例只查询已有 L3 网络。只有在需要由 Terraform 纳管网络基础设施时，
+才创建 L2、L3、IP range、VPC 或路由资源；这些值通常需要网络管理员提前确认。
+
+| Terraform 对象 | 类型 | 用途 |
+|---|---|---|
+| `zstack_l2networks` | data source | 查询已有 L2 网络，给 L3 网络、VPC 或高级网络资源选择底层网络。 |
+| `zstack_l3networks` | data source | 查询已有 L3 网络，给 VM 网卡、VIP/EIP、负载均衡等资源选择网络 UUID。 |
+| `zstack_virtual_routers` | data source | 查询虚拟路由器，给 VPC、路由表和路由条目选择路由器上下文。 |
+| `zstack_l2vlan_network` | resource | 创建 VLAN 类型 L2 网络，通常需要物理网络、VLAN ID 和二层规划。 |
+| `zstack_l3network` | resource | 创建 L3 网络，通常依赖 L2 网络和地址段规划。 |
+| `zstack_subnet_ip_range` | resource | 为网络配置子网/IP 地址段，定义可分配地址范围。 |
+| `zstack_reserved_ip` | resource | 预留指定 IP，避免被自动分配给 VM 或其他资源。 |
+| `zstack_vpc` | resource | 创建 VPC 网络，提供隔离的私有网络空间。 |
+
+## 安全组
+
+常用安全组资源：
+
+| Terraform 对象 | 类型 | 用途 |
+|---|---|---|
+| `zstack_networking_secgroup` | resource | 创建安全组容器，承载一组出入方向规则。 |
+| `zstack_networking_secgroup_rule` | resource | 创建安全组规则，定义方向、协议、端口、CIDR、优先级和动作。 |
+| `zstack_networking_secgroup_attachment` | resource | 把安全组绑定到 VM NIC，使规则对该网卡生效。 |
+
+安全组规则应显式写出方向、协议、端口、CIDR、优先级和状态。出于安全默认，
+示例不允许把入口 CIDR 配置为 IPv4 `0.0.0.0/0`。请使用明确的可信网段，
+例如堡垒机、办公网或业务网段；确需公网放通时，应单独走网络和安全审批后
+再调整规则。
+
+## VIP/EIP
+
+常用资源：
+
+| Terraform 对象 | 类型 | 用途 |
+|---|---|---|
+| `zstack_vip` | resource | 在指定 L3 网络上申请 VIP，作为 EIP 或负载均衡入口地址。 |
+| `zstack_eip` | resource | 将 VIP 绑定到 VM NIC，对外暴露该网卡服务。 |
+
+EIP 绑定需要 VIP UUID 和 VM NIC UUID。
+
+## VPC 与路由
+
+VPC 依赖 L2 网络、虚拟路由器和子网规划，环境依赖强。基础 VPC 场景通常包含 route table 和 route entry：
+
+| Terraform 对象 | 类型 | 用途 |
+|---|---|---|
+| `zstack_vpc` | resource | 创建 VPC 网络，提供隔离的私有网络空间。 |
+| `zstack_vrouter_route_table` | resource | 创建虚拟路由器路由表，用于承载自定义路由。 |
+| `zstack_vrouter_route_entry` | resource | 创建路由条目，定义目标 CIDR 和下一跳/目标。 |
+
+生产使用前需要确认 route table 与虚拟路由器/VPC 的关联方式。
+
+## 对应示例
+
+- [examples/common/03-create-vm](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/03-create-vm)
+- [examples/common/04-create-10-vms](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/04-create-10-vms)
+- [examples/common/05-eip](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/05-eip)
+- [examples/common/06-security-group](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/06-security-group)
+- [examples/common/07-vpc](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/07-vpc)
+- [examples/common/12-vpc-routing](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/12-vpc-routing)
+
+---
+title: 存储
+url: /zh/manual/storage/
+path: docs/zh/manual/storage.md
+language: zh
+section: 中文 / 客户使用手册
+---
+
+# 存储
+
+存储章节优先覆盖 VM 数据盘、快照和基础存储查询。
+
+## 常用资源
+
+| Terraform 对象 | 类型 | 用途 |
+|---|---|---|
+| `zstack_disk_offerings` | data source | 查询云盘规格，用于创建数据盘或确认磁盘容量规格。 |
+| `zstack_primary_storages` | data source | 查询主存储，主存储承载 VM root volume 和 data volume。 |
+| `zstack_backup_storages` | data source | 查询镜像存储/备份存储，常用于镜像、镜像导入和部分备份/CDP 流程。 |
+| `zstack_volume` | resource | 创建并管理数据盘，可单独挂载到 VM。 |
+| `zstack_volume_snapshot` | resource | 创建并管理数据盘快照，用于备份或恢复点。 |
+
+## 数据盘建模方式
+
+有两种常见方式：
+
+1. 在 `zstack_instance` 中使用 `data_disks`，适合数据盘跟随 VM 生命周期。
+2. 独立使用 `zstack_volume` 并设置 `vm_instance_uuid`，适合数据盘有独立生命周期。
+
+本手册优先展示第二种，因为它更直观，也便于单独导入、扩容和备份。
+
+## 示例
+
+```hcl
+resource "zstack_volume" "data" {
+  name               = var.data_volume_name
+  disk_offering_uuid = data.zstack_disk_offerings.data.disk_offers[0].uuid
+  vm_instance_uuid   = zstack_instance.vm.uuid
+}
+```
+
+## 对应示例
+
+见 [examples/common/08-volume](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/08-volume)。
+
+---
+title: 镜像
+url: /zh/manual/image/
+path: docs/zh/manual/image.md
+language: zh
+section: 中文 / 客户使用手册
+---
+
+# 镜像
+
+镜像是创建 VM 的基础。建议先查询已有镜像，再根据需要创建或管理镜像。
+
+## 常用资源
+
+| Terraform 对象 | 类型 | 用途 |
+|---|---|---|
+| `zstack_images` | data source | 查询已有镜像，给 VM 创建或镜像管理流程选择 `image_uuid`。 |
+| `zstack_image` | resource | 创建并管理镜像，需要镜像 URL、格式、平台信息和镜像存储 UUID。 |
+
+## 查询已有镜像
+
+```hcl
+data "zstack_images" "ubuntu" {
+  name = var.image_name
+
+  filter {
+    name   = "status"
+    values = ["Ready"]
+  }
+}
+```
+
+建议使用版本化、可识别的镜像名称，例如 `Ubuntu-24.04-2026-04`，避免过于宽泛的 `Ubuntu`。
+
+## 创建镜像
+
+创建镜像是管理员工作流，通常需要：
+
+- 镜像 URL。
+- 格式：`qcow2`、`raw`、`vmdk` 等。
+- backup storage UUID。
+- platform、guest OS、architecture、boot mode。
+
+```hcl
+resource "zstack_image" "managed" {
+  name                 = var.new_image_name
+  url                  = var.new_image_url
+  format               = "qcow2"
+  platform             = "Linux"
+  guest_os_type        = "Linux"
+  backup_storage_uuids = [var.backup_storage_uuid]
+}
+```
+
+## 对应示例
+
+见 [examples/common/09-image-query-management](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/09-image-query-management)。
+
+---
+title: IAM
+url: /zh/manual/iam/
+path: docs/zh/manual/iam.md
+language: zh
+section: 中文 / 客户使用手册
+---
+
+# IAM
+
+IAM 主要用于多租户、项目隔离和自动化凭证管理。
+
+## 常用资源
+
+| Terraform 对象 | 类型 | 用途 |
+|---|---|---|
+| `zstack_account` | resource | 创建 ZStack 账号，作为用户、AccessKey 或资源归属的权限边界。 |
+| `zstack_access_key` | resource | 创建 AccessKey，供 Terraform 或自动化系统调用 ZStack API。 |
+| `zstack_user` | resource | 创建账号下的用户，用于细分登录或 API 身份。 |
+| `zstack_role` | resource | 创建角色，承载一组权限策略。 |
+| `zstack_policy` | resource | 创建权限策略，定义允许或限制的操作范围。 |
+| `zstack_iam2_project` | resource | 创建 IAM2 项目，用于项目级资源和权限隔离。 |
+| `zstack_iam2_virtual_id` | resource | 创建 IAM2 虚拟身份，用于项目内自动化或服务身份。 |
+| `zstack_iam2_organization` | resource | 创建 IAM2 组织节点，用于组织结构和成员管理。 |
+
+## 建议
+
+- Terraform 自动化优先使用专用 AccessKey。
+- 不同环境使用不同账号或不同 AccessKey。
+- AccessKey secret 只在创建后可见，应立即写入 secret store。
+- Provider `1.1.3` 创建 `zstack_access_key` 时需要 `user_uuid`；
+  为新建 account 创建 AccessKey 时，可使用该 account UUID。
+- 账号、项目、角色、策略变更会影响权限边界，生产环境必须走审批。
+- 不要把新创建的 AccessKey 输出到普通日志；Terraform output 应标记 `sensitive`。
+
+## 对应示例
+
+见 [examples/common/15-iam-access-key](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/15-iam-access-key)。
+
+---
+title: 负载均衡
+url: /zh/manual/load-balancer/
+path: docs/zh/manual/load-balancer.md
+language: zh
+section: 中文 / 客户使用手册
+---
+
+# 负载均衡
+
+Load Balancer 是生产服务入口的核心能力，通常和 VIP、listener、server group、后端 VM 一起使用。
+
+## 常用资源
+
+| Terraform 对象 | 类型 | 用途 |
+|---|---|---|
+| `zstack_vip` | resource | 创建入口 VIP，作为负载均衡器的访问地址。 |
+| `zstack_load_balancer` | resource | 创建负载均衡器实例，绑定 VIP 并承载监听器。 |
+| `zstack_load_balancer_listener` | resource | 创建监听器，定义前端协议/端口和后端端口。 |
+| `zstack_lb_server_group` | resource | 创建后端服务器组，用于组织后端 VM/NIC 成员。 |
+
+## 基础模型
+
+```hcl
+data "zstack_l3networks" "public" {
+  name_pattern = var.public_l3_network_name_pattern
+}
+
+resource "zstack_vip" "web" {
+  name            = var.vip_name
+  l3_network_uuid = data.zstack_l3networks.public.l3networks[0].uuid
+}
+
+resource "zstack_load_balancer" "web" {
+  name     = var.load_balancer_name
+  vip_uuid = zstack_vip.web.uuid
+}
+
+resource "zstack_load_balancer_listener" "http" {
+  name               = var.listener_name
+  load_balancer_uuid = zstack_load_balancer.web.uuid
+  protocol           = "http"
+  load_balancer_port = 80
+  instance_port      = 8080
+}
+```
+
+## 建议
+
+- VIP 所在 L3 网络应明确区分公网/入口网络。
+- listener 端口和后端端口使用变量管理。
+- 输出 VIP、LB、listener、server group UUID，方便按环境接入后端成员。
+- 如果一个 LB 服务多个应用，优先按 listener/server group 拆分模块。
+
+## 对应示例
+
+见 [examples/common/11-load-balancer-web](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/11-load-balancer-web)。
+
+---
+title: 监控与通知
+url: /zh/manual/monitoring-notification/
+path: docs/zh/manual/monitoring-notification.md
+language: zh
+section: 中文 / 客户使用手册
+---
+
+# 监控与通知
+
+监控和通知用于把资源状态和业务事件连接到运维响应流程。
+
+## 常用资源
+
+| Terraform 对象 | 类型 | 用途 |
+|---|---|---|
+| `zstack_alarm` | resource | 创建告警规则，基于 metric namespace/name、阈值和比较条件触发告警。 |
+| `zstack_sns_topic` | resource | 创建通知主题，用于组织告警消息投递目标。 |
+| `zstack_sns_email_endpoint` | resource | 创建邮件通知端点，把告警发送到邮箱。 |
+| `zstack_sns_http_endpoint` | resource | 创建 HTTP 通知端点，把告警推送到 HTTP 服务。 |
+| `zstack_webhook` | resource | 创建 webhook，用于对接外部运维、告警或自动化系统。 |
+| `zstack_monitor_template` | resource | 创建监控模板，用于复用一组监控规则配置。 |
+| `zstack_monitor_group` | resource | 创建监控组，用于组织被监控资源或模板应用范围。 |
+
+## 基础模型
+
+```hcl
+resource "zstack_sns_topic" "ops" {
+  name = var.topic_name
+}
+
+resource "zstack_alarm" "cpu" {
+  name                = var.alarm_name
+  namespace           = var.metric_namespace
+  metric_name         = var.metric_name
+  comparison_operator = "GreaterThanOrEqualTo"
+  threshold           = 80
+}
+```
+
+## 建议
+
+- 先确认 ZStack 环境中的 metric namespace 和 metric name。
+- Provider `1.1.3` 创建 SNS email endpoint 时需要
+  `platform_uuid`；先在目标环境确认 SNS platform UUID。
+- 通知端点和告警规则应分开管理，避免修改告警时误删通知端点。
+- Webhook URL、opaque payload 中可能包含敏感信息，应作为敏感变量管理。
+- 当前示例只创建基础对象；告警和通知动作的绑定方式应按目标环境确认。
+
+## 对应示例
+
+见 [examples/common/16-monitoring-notification](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/16-monitoring-notification)。
+
+---
+title: 管理员运维
+url: /zh/manual/admin-operations/
+path: docs/zh/manual/admin-operations.md
+language: zh
+section: 中文 / 客户使用手册
+---
+
+# 管理员运维
+
+管理员运维场景覆盖 Scheduler、Global Config 和 License。这些资源通常影响平台行为或许可证状态，生产环境必须经过审批和回滚评估。
+
+## Scheduler
+
+常用资源：
+
+| Terraform 对象 | 类型 | 用途 |
+|---|---|---|
+| `zstack_scheduler_job` | resource | 创建计划任务的动作定义，指定任务类型和目标资源 UUID。 |
+| `zstack_scheduler_trigger` | resource | 创建计划任务触发器，定义一次性、周期性或 cron 触发时间。 |
+
+Scheduler job 指定要对哪个资源执行什么类型的任务，trigger 指定什么时候执行。
+
+```hcl
+resource "zstack_scheduler_job" "target" {
+  name                 = var.job_name
+  type                 = var.job_type
+  target_resource_uuid = var.target_resource_uuid
+}
+
+resource "zstack_scheduler_trigger" "schedule" {
+  name           = var.trigger_name
+  scheduler_type = "cron"
+  cron           = var.cron
+}
+```
+
+执行前需要确认：
+
+- `job_type` 是否被当前 ZStack 环境支持。
+- target resource UUID 是否正确。
+- trigger 是一次性、周期性还是 cron。
+- 执行结果是否会停止、删除或修改生产资源。
+
+对应示例：[examples/common/17-scheduler](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/17-scheduler)。
+
+## Global Config
+
+常用资源和 data source：
+
+| Terraform 对象 | 类型 | 用途 |
+|---|---|---|
+| `data.zstack_global_configs` | data source | 查询平台全局配置的当前值、默认值和说明。 |
+| `zstack_global_config` | resource | 纳管并修改指定全局配置项。 |
+
+Global Config 是平台级配置。建议先查询，再决定是否纳管：
+
+```hcl
+data "zstack_global_configs" "selected" {
+  category = var.global_config_category
+  name     = var.global_config_name
+}
+```
+
+只有确认 `category`、`name`、当前值、默认值和影响范围后，才设置 `manage_global_config = true`。
+
+对应示例：[examples/common/18-global-config](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/18-global-config)。
+
+## License
+
+常用资源和 data source：
+
+| Terraform 对象 | 类型 | 用途 |
+|---|---|---|
+| `data.zstack_license_authorized_capacity` | data source | 查询许可证授权容量，用于日常检查和容量确认。 |
+| `data.zstack_license_authorized_nodes` | data source | 查询许可证授权节点，用于确认授权节点范围。 |
+| `zstack_license` | resource | 上传并管理 license 文本。 |
+
+License 内容是敏感信息，不应提交到仓库。上传 license 前需要确认管理节点 UUID。
+
+```hcl
+resource "zstack_license" "uploaded" {
+  management_node_uuid = var.management_node_uuid
+  license              = var.license_text
+}
+```
+
+建议：
+
+- 查询授权容量和授权节点作为日常检查。
+- Provider `1.1.3` 的授权节点 data source 不支持 `name_pattern`；
+  如需缩小范围，使用 provider schema 支持的 `uuid` 或 `filter`。
+- 上传 license 只在审批流程中执行。
+- `license_text` 必须来自 secret store。
+
+对应示例：[examples/common/19-license](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/19-license)。
+
+---
+title: 备份与 CDP
+url: /zh/manual/backup-cdp/
+path: docs/zh/manual/backup-cdp.md
+language: zh
+section: 中文 / 客户使用手册
+---
+
+# 备份与 CDP
+
+备份和 CDP 场景用于数据保护、恢复点管理和平台备份。此类资源对容量和性能有影响，生产使用前必须确认备份窗口、保留策略和存储类型。
+
+## 常用资源
+
+| Terraform 对象 | 类型 | 用途 |
+|---|---|---|
+| `zstack_cdp_policy` | resource | 创建 CDP 策略，定义恢复点频率、保留时间和全量备份周期。 |
+| `zstack_cdp_task` | resource | 创建 CDP 任务，把 CDP 策略应用到指定资源 UUID 列表。 |
+| `zstack_volume_backup` | resource | 创建云盘备份，需要 volume UUID 和兼容的 backup storage UUID。 |
+| `zstack_database_backup` | resource | 创建平台数据库备份，用于平台级恢复场景。 |
+| `zstack_zbox_backup` | resource | 创建 ZBox 备份，适用于有 ZBox 组件的特定环境。 |
+
+## CDP Policy
+
+CDP policy 定义恢复点、保留时间和全量备份周期：
+
+```hcl
+resource "zstack_cdp_policy" "daily" {
+  name                      = var.cdp_policy_name
+  recovery_point_per_second = var.recovery_point_per_second
+  retention_time_per_day    = var.retention_time_per_day
+}
+```
+
+## CDP Task
+
+CDP task 把 policy 应用到资源列表：
+
+```hcl
+resource "zstack_cdp_task" "resources" {
+  name                = var.cdp_task_name
+  policy_uuid         = zstack_cdp_policy.daily.uuid
+  backup_storage_uuid = var.backup_storage_uuid
+  resource_uuids      = var.cdp_resource_uuids
+  task_type           = var.cdp_task_type
+}
+```
+
+## Volume Backup
+
+`zstack_volume_backup` 需要 volume UUID 和 backup storage UUID。Provider 文档说明 `backup_storage_uuid` 必须指向 ImageStoreBackupStorage，SftpBackupStorage 不支持 volume backup。
+
+## Database / ZBox Backup
+
+`zstack_database_backup` 适合平台数据库备份；`zstack_zbox_backup` 适合 ZBox 场景，环境依赖更强。
+
+## 建议
+
+- 先确认 backup storage 类型。
+- 评估备份容量和带宽影响。
+- 对 production 资源先做小范围测试。
+- 对 CDP task 使用明确资源 UUID，不要用模糊选择自动套到大批资源。
+
+对应示例：[examples/common/20-backup-cdp](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/20-backup-cdp)。
+
+---
+title: 网络观测
+url: /zh/manual/network-observability/
+path: docs/zh/manual/network-observability.md
+language: zh
+section: 中文 / 客户使用手册
+---
+
+# 网络观测
+
+网络观测场景用于流量采集、端口镜像和网络排障。此类配置对网络路径和采集系统有依赖，生产使用前必须确认采集器地址、端口、镜像网络和端点格式。
+
+## 常用资源
+
+| Terraform 对象 | 类型 | 用途 |
+|---|---|---|
+| `zstack_flow_meter` | resource | 创建流量计量/导出配置，定义采集类型、服务器、端口和版本。 |
+| `zstack_flow_collector` | resource | 创建流量采集器配置，把 flow meter 数据发送到采集服务。 |
+| `zstack_port_mirror` | resource | 创建端口镜像基础对象，用于复制指定网络流量。 |
+| `zstack_port_mirror_session` | resource | 创建端口镜像会话，定义源端点、目标端点和镜像关系。 |
+
+## Flow Meter / Collector
+
+```hcl
+resource "zstack_flow_meter" "netflow" {
+  type    = var.flow_meter_type
+  server  = var.flow_meter_server
+  port    = var.flow_meter_port
+  version = var.flow_meter_version
+}
+
+resource "zstack_flow_collector" "collector" {
+  flow_meter_uuid = zstack_flow_meter.netflow.uuid
+  server          = var.flow_collector_server
+  port            = var.flow_collector_port
+}
+```
+
+## Port Mirror
+
+Port mirror 需要 mirror network UUID，并通过 session 指定源端点和目标端点。
+
+对应示例：[examples/common/21-network-observability](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/21-network-observability)。
+
+---
+title: 高级网络
+url: /zh/manual/advanced-network/
+path: docs/zh/manual/advanced-network.md
+language: zh
+section: 中文 / 客户使用手册
+---
+
+# 高级网络
+
+高级网络场景覆盖站点互联和策略路由。此类配置强依赖网络规划，不能凭空填写 peer 地址、密钥、路由表或策略值。
+
+## 常用资源
+
+| Terraform 对象 | 类型 | 用途 |
+|---|---|---|
+| `zstack_ipsec_connection` | resource | 创建 IPsec 站点互联连接，配置 VIP、对端地址和认证密钥。 |
+| `zstack_policy_route_rule_set` | resource | 创建策略路由规则集，用于组织一组策略路由规则。 |
+| `zstack_policy_route_rule` | resource | 创建策略路由规则，按源/目的地址、协议等条件匹配并关联路由表。 |
+
+## IPsec
+
+```hcl
+resource "zstack_ipsec_connection" "site_to_site" {
+  name         = var.ipsec_name
+  vip_uuid     = var.vip_uuid
+  peer_address = var.peer_address
+  auth_key     = var.auth_key
+}
+```
+
+`auth_key` 是敏感信息，应使用 sensitive variable。
+
+## Policy Route
+
+策略路由由 rule set 和 rule 组成，rule 需要关联 route table：
+
+```hcl
+resource "zstack_policy_route_rule" "main" {
+  rule_set_uuid = zstack_policy_route_rule_set.main.uuid
+  table_uuid    = var.route_table_uuid
+  rule_number   = var.rule_number
+  dest_ip       = var.dest_ip
+}
+```
+
+如果设置 `protocol`，使用 provider schema 接受的大写值：`TCP`、`UDP` 或
+`ICMP`。
+
+对应示例：[examples/common/22-advanced-network](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/22-advanced-network)。
+
+---
+title: 专项资源
+url: /zh/manual/specialized-resources/
+path: docs/zh/manual/specialized-resources.md
+language: zh
+section: 中文 / 客户使用手册
+---
+
+# 专项资源
+
+专项资源面向行业、硬件或集成场景。它们通常依赖特定环境、外部系统或硬件设备，不适合作为通用入门示例直接套用。
+
+使用这些资源前，应先确认目标环境、资源依赖、创建顺序、清理方式和回滚策略。没有真实环境验证时，文档只提供资源索引和风险提示。
+
+## 裸金属
+
+适用场景：裸金属资源纳管、PXE 启动、裸金属实例交付。
+
+资源：
+
+| Terraform 对象 | 类型 | 用途 |
+|---|---|---|
+| `zstack_baremetal_chassis` | resource | 管理裸金属机箱或物理服务器接入对象。 |
+| `zstack_baremetal_instance` | resource | 管理裸金属实例生命周期。 |
+| `zstack_baremetal_pxe_server` | resource | 管理裸金属 PXE 启动服务。 |
+
+注意事项：
+
+- 需要真实裸金属环境和网络启动配置。
+- PXE、机箱、实例之间存在强依赖，不能凭空生成 UUID。
+- 建议先从只读查询和单资源导入开始。
+
+## 外部平台与混合云
+
+适用场景：外部虚拟化平台接入、混合云或阿里云代理资源。
+
+资源：
+
+| Terraform 对象 | 类型 | 用途 |
+|---|---|---|
+| `zstack_vcenter` | resource | 管理接入 ZStack 的 vCenter 资源。 |
+| `zstack_aliyun_proxy_vpc` | resource | 管理 ZStack 侧代理的阿里云 VPC 对象。 |
+| `zstack_aliyun_proxy_vswitch` | resource | 管理 ZStack 侧代理的阿里云 vSwitch 对象。 |
+| `zstack_aliyun_nas_access_group` | resource | 管理阿里云 NAS 访问组相关配置。 |
+
+注意事项：
+
+- 需要外部平台账号、网络连通性和授权。
+- Terraform 管理的是 ZStack 侧资源，外部云侧状态可能还需要外部工具验证。
+- 不应在通用示例中写真实云账号、AK/SK 或网络地址。
+
+## 安全设备
+
+适用场景：对接行业安全设备、加密机或专用安全能力。
+
+资源：
+
+| Terraform 对象 | 类型 | 用途 |
+|---|---|---|
+| `zstack_jit_security_machine` | resource | 管理 JIT 安全设备接入对象。 |
+| `zstack_san_sec_security_machine` | resource | 管理 SAN_SEC 安全设备接入对象。 |
+| `zstack_info_sec_security_machine` | resource | 管理信息安全设备接入对象。 |
+| `zstack_fi_sec_security_machine` | resource | 管理 FI_SEC 安全设备接入对象。 |
+| `zstack_flk_sec_security_machine` | resource | 管理 FLK_SEC 安全设备接入对象。 |
+
+注意事项：
+
+- 强依赖厂商设备、证书、网络和安全策略。
+- 变更前需要安全团队审批。
+- 示例应只使用占位变量，不应包含真实设备地址或凭证。
+
+## 存储硬件
+
+适用场景：接入和管理专项存储资源。
+
+资源：
+
+| Terraform 对象 | 类型 | 用途 |
+|---|---|---|
+| `zstack_iscsi_server` | resource | 管理 iSCSI 存储服务器接入对象。 |
+| `zstack_nvme_server` | resource | 管理 NVMe 存储服务器接入对象。 |
+| `zstack_ceph_pool` | resource | 管理 Ceph pool。 |
+| `zstack_ceph_primary_storage` | resource | 管理 Ceph 主存储，用于承载 VM root/data volume。 |
+| `zstack_ceph_backup_storage` | resource | 管理 Ceph 镜像存储/备份存储，用于镜像和备份类数据。 |
+
+注意事项：
+
+- 需要真实存储集群、网络和认证信息。
+- Ceph pool、primary storage、backup storage 的生命周期和容量影响较大。
+- 生产使用前必须确认是否已有业务数据。
+
+## 其他平台资源
+
+适用场景：平台辅助能力、日志、计费、数据集、容器端点等。
+
+资源：
+
+| Terraform 对象 | 类型 | 用途 |
+|---|---|---|
+| `zstack_directory` | resource | 管理平台目录类对象。 |
+| `zstack_dataset` | resource | 管理数据集对象，常见于数据或 AI 相关场景。 |
+| `zstack_price_table` | resource | 管理价格表，会影响计费模型。 |
+| `zstack_email_media` | resource | 管理邮件媒介配置，用于通知发送。 |
+| `zstack_log_server` | resource | 管理外部日志服务器接入。 |
+| `zstack_snmp_agent` | resource | 管理 SNMP agent 接入。 |
+| `zstack_container_management_endpoint` | resource | 管理容器平台接入端点。 |
+
+注意事项：
+
+- `zstack_price_table` 会影响计费模型，需审批。
+- `zstack_log_server`、`zstack_snmp_agent` 依赖外部运维系统。
+- `zstack_container_management_endpoint` 依赖容器平台连接信息。
+- `zstack_dataset` 适合 AI/数据类场景，需确认数据生命周期和权限。
+
+## 使用前检查
+
+在为专项资源编写可运行示例或纳入生产管理前，至少确认：
+
+- 有可用于验证的真实环境。
+- provider 文档、示例或测试已覆盖关键生命周期。
+- 能明确资源依赖、创建顺序、清理方式和回滚策略。
+- 缺少 UUID、设备地址、凭证或外部系统信息时，使用变量占位。
+- 未经过真实环境验证的示例，不应标注为可直接生产运行。
+
+---
+title: 调试与诊断
+url: /zh/manual/debugging-diagnostics/
+path: docs/zh/manual/debugging-diagnostics.md
+language: zh
+section: 中文 / 客户使用手册
+---
+
+# 调试与诊断
+
+本页用于排查 Terraform 与 ZStack provider 使用问题。先收集事实，再判断是配置、网络、权限、schema 还是远端资源状态问题。
+
+## 先收集信息
+
+排障前记录以下信息：
+
+- Terraform CLI 版本。
+- ZStack provider source 和版本。
+- 执行的命令和工作目录。
+- ZStack 管理节点地址和端口。
+- 认证方式，隐藏真实凭证。
+- 相关资源名称、UUID、状态。
+- 脱敏后的 plan、错误信息和 provider 日志。
+
+不要把 AccessKey Secret、账号密码、license 文本、私钥、token 或 state 文件原样发送给他人。
+
+## 初始化问题
+
+```bash
+terraform init
+terraform providers
+```
+
+重点检查：
+
+- `required_providers.zstack.source` 是否为预期值。
+- 离线环境是否正确加载 provider mirror 配置。
+- `.terraform.lock.hcl` 中的版本是否和文档或项目约束一致。
+
+## 认证问题
+
+检查环境变量：
+
+```bash
+env | grep '^ZSTACK_'
+```
+
+确认 runner 能访问管理节点，并且 AccessKey 权限覆盖目标资源。不要在同一个 provider 配置里混用 AccessKey 和账号密码，除非已有明确原因。
+
+## Data Source 问题
+
+如果查询不到资源：
+
+- 在 ZStack 控制台确认资源是否存在。
+- 优先改用 `uuid` 精确查询。
+- 如果使用 `name`，确认名称唯一。
+- 如果使用 `name_pattern`，输出匹配结果并人工确认。
+- 检查资源状态，例如镜像是否 `Ready` 或 `Enabled`。
+
+## Plan 问题
+
+`terraform plan` 是主要诊断入口。重点看：
+
+- 是否有 replacement。
+- 是否有非预期删除。
+- 是否出现管理员级资源变更。
+- import 后 HCL 是否还缺字段。
+- 控制台变更是否造成 drift。
+
+不清楚原因时不要 apply。
+
+## 调试日志
+
+需要 provider 详细日志时，可以临时开启：
+
+```bash
+TF_LOG=DEBUG TF_LOG_PATH=terraform.log terraform plan
+```
+
+日志可能包含请求参数、资源属性或敏感信息。共享前必须脱敏，并在排障后删除。
+
+## 何时升级为支持问题
+
+如果本地配置、权限和网络都确认无误，但仍出现 provider panic、schema 不一致、API 返回异常或远端状态无法收敛，提交问题时附带：
+
+- 最小可复现 HCL。
+- `terraform version`。
+- provider source 和版本。
+- 脱敏后的错误日志。
+- 相关 ZStack 资源 UUID 和状态。
+
+---
+title: 生产化指南
+url: /zh/manual/production-guide/
+path: docs/zh/manual/production-guide.md
+language: zh
+section: 中文 / 客户使用手册
+---
+
+# 生产化指南
+
+示例用于学习和验证 provider 行为，不等于生产模块。把 Terraform 用于真实 ZStack 环境前，至少补齐本页能力。
+
+## 生产准入清单
+
+| 项目 | 要求 |
+|---|---|
+| State | 使用 remote backend，限制读写权限，启用备份或版本保留 |
+| 凭证 | 通过 secret store 或 CI/CD secret 注入，不进入 Git 和普通日志 |
+| Provider | 固定版本，升级前逐场景 plan |
+| 变量 | 所有环境差异通过变量表达，增加必要 validation |
+| 命名和 Tag | 统一 environment、owner、application、cost-center 等标准 |
+| 审批 | plan 经人工或流水线策略评审后再 apply |
+| 变更窗口 | 删除、replacement、管理员资源变更必须进入变更窗口 |
+| 回滚 | 明确回滚方式、数据保护和不可逆操作边界 |
+
+## 环境隔离
+
+不同环境建议使用独立目录、workspace 或独立 backend。关键原则是 state 边界清晰，不在同一个 state 中混放无关环境。
+
+示例：
+
+```text
+envs/
+  dev/
+  test/
+  prod/
+modules/
+  vm/
+  network/
+```
+
+只有当模块边界稳定且团队已有评审流程时，才把示例抽象成复用模块。
+
+## 变更流程
+
+推荐流程：
+
+1. 修改 HCL 或变量。
+2. 运行格式化和校验。
+3. 生成 plan。
+4. 评审 replacement、删除、管理员资源和安全组规则。
+5. 在批准窗口执行 apply。
+6. 保存变更记录和关键 output。
+
+生产 apply 不应由普通 pull request 自动触发。
+
+## 高风险资源
+
+以下资源类型需要额外评审：
+
+- `zstack_global_config`
+- License 相关资源
+- IAM、account、AccessKey
+- Scheduler
+- Backup / CDP
+- IPsec、policy route、VPC route
+- 安全组入口规则和公网 VIP/EIP
+
+如果影响范围不清楚，先在测试环境或专用资源上 plan/apply 验证。
+
+## 存量资源纳管
+
+导入已有资源前先确定资源归属、命名、tag 和维护窗口。导入后必须反复 plan，直到 no-op 或只剩明确接受的差异。
+
+不要用 Terraform 接管仍由其他系统自动修改的资源，除非已经明确字段所有权。
+
+## 安全与审计
+
+- 输出只暴露排障必需的 UUID、地址和状态。
+- 敏感 output 设置 `sensitive = true`。
+- plan、state 和日志按敏感文件处理。
+- 安全组和公网入口要有可信 CIDR、业务 owner 和审批记录。
+- 管理员类变更保留操作者、时间、plan 摘要和回滚说明。
+
+---
+title: 常用示例
+url: /zh/scenarios/
+path: docs/zh/scenarios/index.md
+language: zh
+section: 中文 / 场景化示例
+---
+
+# 场景化示例
+
+本章节用于按真实客户场景解释 `examples/common` 中的可运行 Terraform 示例。
+更大的生产形态参考见 [生产参考样例](production-examples.md)。
+如果希望按学习路径逐步执行，见 [实践教程](practice-tutorials.md)。
+
+## 常用场景
+
+| 场景 | 示例 |
+|---|---|
+| Provider 认证 | [examples/common/01-provider](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/01-provider) |
+| 查询已有资源 | [examples/common/02-query-existing-resources](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/02-query-existing-resources) |
+| 创建单台 VM | [examples/common/03-create-vm](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/03-create-vm) |
+| 批量创建 VM | [examples/common/04-create-10-vms](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/04-create-10-vms) |
+| VIP/EIP | [examples/common/05-eip](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/05-eip) |
+| VM + 安全组 | [examples/common/06-security-group](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/06-security-group) |
+| VPC 基础网络 | [examples/common/07-vpc](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/07-vpc) |
+| VM + 数据盘 | [examples/common/08-volume](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/08-volume) |
+| 镜像查询/管理 | [examples/common/09-image-query-management](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/09-image-query-management) |
+| 导入已有 VM | [examples/common/10-import-existing-vm](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/10-import-existing-vm) |
+| Web 负载均衡 | [examples/common/11-load-balancer-web](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/11-load-balancer-web) |
+| VPC 路由 | [examples/common/12-vpc-routing](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/12-vpc-routing) |
+| VM 初始化脚本 | [examples/common/13-vm-init-scripts](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/13-vm-init-scripts) |
+| 标签管理 | [examples/common/14-tags](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/14-tags) |
+| IAM 和 AccessKey | [examples/common/15-iam-access-key](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/15-iam-access-key) |
+| 监控通知 | [examples/common/16-monitoring-notification](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/16-monitoring-notification) |
+| Scheduler | [examples/common/17-scheduler](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/17-scheduler) |
+| Global Config | [examples/common/18-global-config](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/18-global-config) |
+| License | [examples/common/19-license](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/19-license) |
+| Backup / CDP | [examples/common/20-backup-cdp](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/20-backup-cdp) |
+| Network Observability | [examples/common/21-network-observability](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/21-network-observability) |
+| Advanced Network | [examples/common/22-advanced-network](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/22-advanced-network) |
+
+每个示例目录包含 `main.tf`、`variables.tf`、`terraform.tfvars.example` 和 `README.md`。运行前先复制变量文件并替换为目标 ZStack 环境中的真实资源名称或 UUID。
+
+---
+title: 实践教程
+url: /zh/scenarios/practice-tutorials/
+path: docs/zh/scenarios/practice-tutorials.md
+language: zh
+section: 中文 / 场景化示例
+---
+
+# 实践教程
+
+本页把 `examples/common` 和 `examples/production` 组织成可执行的学习路径。每条路径都先确认已有资源，再创建依赖资源。
+
+## 入门路径：创建一台 VM
+
+| 步骤 | 示例 | 目标 |
+|---|---|---|
+| 1 | [01-provider](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/01-provider) | 验证认证和 provider 初始化 |
+| 2 | [02-query-existing-resources](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/02-query-existing-resources) | 找到 image、L3 network、offering |
+| 3 | [03-create-vm](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/03-create-vm) | 创建 VM 并输出 UUID |
+| 4 | [06-security-group](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/06-security-group) | 为 VM NIC 绑定安全组 |
+
+验收标准：`terraform plan` 可解释，VM UUID 和 NIC UUID 有输出，安全组 CIDR 来自可信来源。
+
+## 网络入口路径：VIP、EIP 和 LB
+
+| 步骤 | 示例 | 目标 |
+|---|---|---|
+| 1 | [05-eip](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/05-eip) | 创建 VIP 并绑定 EIP |
+| 2 | [11-load-balancer-web](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/11-load-balancer-web) | 创建 LB、listener 和 server group |
+| 3 | [12-vpc-routing](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/12-vpc-routing) | 验证 VPC 路由建模方式 |
+
+验收标准：VIP/LB/listener/server group UUID 可追踪，端口和 CIDR 经过评审。
+
+## 存储与镜像路径
+
+| 步骤 | 示例 | 目标 |
+|---|---|---|
+| 1 | [08-volume](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/08-volume) | 创建并挂载数据盘 |
+| 2 | [09-image-query-management](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/09-image-query-management) | 查询镜像并按需创建托管镜像 |
+| 3 | [20-backup-cdp](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/20-backup-cdp) | 理解备份/CDP 的环境依赖 |
+
+验收标准：disk offering、backup storage 和业务保留策略来自真实环境确认。
+
+## 平台治理路径
+
+| 步骤 | 示例 | 目标 |
+|---|---|---|
+| 1 | [14-tags](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/14-tags) | 建立标准 tag |
+| 2 | [15-iam-access-key](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/15-iam-access-key) | 创建自动化身份和 AccessKey |
+| 3 | [16-monitoring-notification](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/16-monitoring-notification) | 配置告警和通知基础对象 |
+| 4 | [18-global-config](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/18-global-config) | 以受控方式查询或管理全局配置 |
+
+验收标准：权限边界、敏感输出和管理员变更审批都已明确。
+
+## 生产参考路径
+
+| 目标 | 示例 |
+|---|---|
+| 三层 Web 应用基础设施 | [examples/production/three-tier-web](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/production/three-tier-web) |
+| Kubernetes 基础设施参考 | [examples/production/k8s-reference](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/production/k8s-reference) |
+| 存量 VM 批量纳管 | [examples/production/import-vm-fleet](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/production/import-vm-fleet) |
+| 自动化 IAM | [examples/production/automation-iam](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/production/automation-iam) |
+
+生产参考样例展示工程组织方式，不替代客户生产模块。正式使用前阅读 [生产化指南](../manual/production-guide.md)。
+
+---
+title: 生产参考样例
+url: /zh/scenarios/production-examples/
+path: docs/zh/scenarios/production-examples.md
+language: zh
+section: 中文 / 场景化示例
+---
+
+# 生产参考样例
+
+生产参考样例放在 `examples/production`。它们用于展示 Terraform 工程组织方式、
+资源边界和交付约束，不是开箱即用的生产模块。
+
+运行前先执行 [examples/common/02-query-existing-resources](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/02-query-existing-resources)，确认目标环境中的
+image、L3 network、offering、disk offering、public L3 等候选资源。
+
+| 样例 | 目录 | 说明 |
+|---|---|---|
+| 三层 Web 应用基础设施 | [examples/production/three-tier-web](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/production/three-tier-web) | 创建 web/app VM、数据盘、安全组、VIP/LB 和标准 tag |
+| Kubernetes 基础设施参考 | [examples/production/k8s-reference](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/production/k8s-reference) | 创建 control-plane/worker VM、API LB 和节点安全组，不安装 Kubernetes |
+| 存量 VM 批量纳管 | [examples/production/import-vm-fleet](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/production/import-vm-fleet) | 使用 import block 分批纳管已有 VM，强调 plan 收敛到 no-op |
+| 自动化 IAM | [examples/production/automation-iam](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/production/automation-iam) | 创建自动化 account、IAM2 project、virtual ID 和 AccessKey |
+
+## 使用边界
+
+- 生产样例应接入 remote backend，并启用 state 访问控制。
+- 凭证、AccessKey secret、Kubernetes token、证书和私钥必须来自 secret store。
+- 样例中的 CIDR、规格、镜像和网络名称必须按目标环境确认。
+- 对已有资源 import 后，必须反复执行 `terraform plan`，直到 no-op 或只包含明确接受的变更。
+- 如果 plan 出现 replacement，先停止并确认不可变字段，不要直接 apply。
+
+## 推荐验证顺序
+
+1. `three-tier-web`：适合验证 VM、volume、security group、VIP/LB 和 tag 的组合。
+2. `automation-iam`：适合验证 provider `1.1.3` 下 AccessKey `user_uuid` 行为。
+3. `import-vm-fleet`：先在专用测试 VM 上演练 import。
+4. `k8s-reference`：先 plan，确认节点规格和 API 入口设计，再交给 Kubernetes 安装流程。
+
+---
+title: 最佳实践
+url: /zh/best-practices/
+path: docs/zh/best-practices/index.md
+language: zh
+section: 中文
+---
+
+# 最佳实践
+
+## Provider 与认证
+
+- 优先使用 AccessKey。
+- 生产环境通过 CI/CD secret store 或环境变量传递凭证。
+- 不提交 `terraform.tfvars`、state、plan 文件和 AccessKey。
+- 本文档和公开示例基于 `ZStack-Robot/zstack` provider `1.1.3`。
+- Provider 开发环境可以使用开发 Registry source 或 Terraform CLI dev override；不要把开发 source 混入客户交付示例。
+- 离线客户环境优先通过 Terraform provider mirror 提供同一 provider source 和版本。
+- 升级 provider 时先统一修改 version 约束，再执行 `terraform init -upgrade` 和逐场景 `terraform plan`。
+
+## 查询资源
+
+- 自动化脚本或 CI/CD 配置优先使用 `uuid`。
+- 人工编写示例时，可使用唯一 `name`。
+- 谨慎使用 `name_pattern`，必须输出并确认匹配结果。
+- 查询已有资源后再创建依赖资源，避免硬编码不明来源的 UUID。
+
+## VM
+
+- 新配置使用 `network_interfaces`，不要把旧的 `l3_network_uuids` 作为推荐写法。
+- 批量 VM 优先 `for_each`，用 VM 名称作为稳定 key。
+- 如果 VM 需要独立生命周期的数据盘，使用 `zstack_volume` 单独管理。
+- 对会产生费用或资源占用的示例，明确提醒 `terraform destroy`。
+
+## State
+
+- 团队协作时使用 remote backend。
+- import 后先 `terraform plan`，不要直接 apply。
+- 在 plan 达到 no-op 或只包含明确接受的变更前，不要 apply 导入资源。
+- 如果 plan 显示 replacement，先确认不可变字段和 state 差异。
+
+## 生产场景
+
+- 生产参考样例放在 `examples/production`，用于展示工程组织方式，不替代客户生产模块。
+- VIP/EIP：输出 VIP/EIP UUID 和绑定的 VM NIC UUID，便于后续排障。
+- Load Balancer：listener 端口、后端端口、server group 使用变量管理。
+- VPC/路由：route table 与 route entry 分开建模，关联关系需按环境确认。
+- SSH/scripts：脚本内容不要包含明文密码、token 或私钥。
+- Tag：建立统一 tag 规范，例如 environment、owner、application、cost-center。
+- IAM：AccessKey 创建后立即写入 secret store，Terraform output 必须 `sensitive`。
+- Monitoring：metric namespace/name 必须来自真实环境，不要凭空填写。
+
+## 管理员场景
+
+- Scheduler：确认 job 类型、目标资源和触发时间，避免误操作生产资源。
+- Global Config：先使用 data source 查询当前值和默认值，再决定是否纳管。
+- License：license 文本必须作为敏感变量传入，不提交到仓库。
+- Backup/CDP：先确认 backup storage 类型、容量和带宽影响，再创建 task。
+- CDP task：使用明确资源 UUID，不要用模糊查询自动覆盖大量资源。
+
+## 示例编写质量
+
+- 只使用当前 provider 文档、示例和测试中确认存在的 resource 与字段。
+- 说明示例是否可直接运行，以及运行前必须替换哪些变量。
+- 如果缺少必要 UUID 或资源名称，应使用变量占位，不要编造值。
+- HCL 文件组织、变量、输出和命名规范见 [HCL 编写规范](../manual/hcl-style.md)。
+- 生产 apply 前按 [生产化指南](../manual/production-guide.md) 检查 state、凭证、审批和回滚。
+
+---
+title: 故障排查
+url: /zh/troubleshooting/
+path: docs/zh/troubleshooting/index.md
+language: zh
+section: 中文
+---
+
+# Troubleshooting
+
+## Provider 下载失败
+
+- 检查 `required_providers.zstack.source`。
+- 公网环境使用 `ZStack-Robot/zstack`。
+- 客户交付示例默认使用 `ZStack-Robot/zstack`；离线环境检查 Terraform provider mirror 是否提供该 source 和版本。
+- Provider 开发环境如果使用开发 Registry source 或 CLI dev override，确认 source 地址和本地 provider 构建路径一致。
+- 确认 Terraform CLI 能访问对应 registry。
+
+## 认证失败
+
+- 检查 `ZSTACK_HOST`、`ZSTACK_PORT`、AccessKey ID/Secret。
+- 确认运行 Terraform 的机器可以访问 ZStack 管理节点。
+- 确认 AccessKey 权限覆盖目标资源。
+- 不要同时混用 AccessKey 和账号密码。
+
+## Data Source 查不到资源
+
+- 先使用 ZStack 控制台确认资源名称或 UUID。
+- 优先使用 `uuid` 做精确查询。
+- 如果使用 `name_pattern`，输出完整结果检查匹配范围。
+- 检查资源状态，例如镜像是否 `Ready`、`Enabled`。
+
+## VM 创建失败
+
+- 检查 image、L3 network、instance offering 是否存在。
+- 检查 `network_interfaces` 是否使用正确 L3 UUID。
+- 静态 IP 失败时，确认 IP 在可用范围内且未被占用。
+- 使用 `cpu_num` + `memory_size` 时，不要再同时设置 `instance_offering_uuid`。
+
+## 安全组不生效
+
+- 确认安全组已通过 `zstack_networking_secgroup_attachment` 绑定到 VM NIC。
+- 检查规则方向：`Ingress` 或 `Egress`。
+- 检查 `ip_ranges`、`destination_port_ranges`、`priority` 和 `state`。
+
+## Import 后 plan 想重建资源
+
+- import 不会自动生成完整 HCL。
+- 补齐 resource block 后再次 plan。
+- 在 `terraform plan` 达到 no-op 或只包含明确接受的变更前，不要执行 `terraform apply`。
+- 如果是不可变字段差异，先决定是否接受 replacement。
+- 不确定时不要 apply。
+
+## Load Balancer 不通
+
+- 确认 VIP 所在 L3 网络可达。
+- 确认 listener 的 `load_balancer_port` 和 `instance_port` 正确。
+- 确认后端 VM 防火墙和安全组允许后端端口。
+- 输出并核对 LB、listener、server group UUID。
+
+## 脚本执行失败
+
+- 检查 `script_type`、`encoding_type` 和 `script_timeout`。
+- 确认目标 VM 状态和 guest agent/执行通道满足脚本执行要求。
+- 不要把复杂长脚本直接塞进 HCL，生产建议从模板或文件生成。
+
+## IAM / AccessKey 问题
+
+- AccessKey secret 创建后只在创建阶段可见，应及时保存。
+- Provider `1.1.3` 创建 `zstack_access_key` 时需要 `user_uuid`。
+- 检查 account、user、virtual ID 的权限边界。
+- 不要把敏感 output 打到普通 CI 日志。
+
+## 告警或通知不触发
+
+- 确认 metric namespace 和 metric name 在当前环境存在。
+- 创建 SNS email endpoint 时确认 `platform_uuid` 来自真实环境。
+- 检查 threshold、period、comparison operator。
+- 检查通知端点是否启用以及 Webhook URL 是否可达。
+
+## Scheduler 未按预期执行
+
+- 确认 `scheduler_type`、`cron`、`scheduler_interval` 和 `start_time`。
+- 检查 `job_type` 是否被当前环境支持。
+- 检查 target resource UUID 是否正确且资源状态允许执行任务。
+
+## Global Config 修改风险
+
+- 先查询当前值、默认值和描述。
+- 如果不确定影响范围，保持 `manage_global_config = false`。
+- 修改后如出现平台行为变化，使用变更记录恢复原值。
+
+## License 上传失败
+
+- 检查 management node UUID。
+- `zstack_license_authorized_nodes` 在 provider `1.1.3` 中不支持
+  `name_pattern`，不要沿用旧版本参数。
+- 确认 license 文本完整且没有换行/转义损坏。
+- 不要在日志中打印 license 内容。
+
+## Backup/CDP 失败
+
+- 确认 backup storage UUID 类型正确。
+- Volume backup 要使用支持的 ImageStoreBackupStorage。
+- 检查 CDP resource UUID、task type、容量和带宽限制。
+- ZBox backup 依赖具体 ZBox 环境，先使用 dry run。
+
+## Flow / Port Mirror 不采集数据
+
+- 检查 collector server 和 port 是否可达。
+- 确认 flow meter type/version 与采集端兼容。
+- 检查 mirror network UUID、source endpoint、destination endpoint 格式。
+
+## IPsec 或策略路由不生效
+
+- 确认 VIP、peer address、auth key 与对端配置一致。
+- 检查加密算法、认证算法和 PFS 设置。
+- 检查 policy route rule 的 route table UUID、rule number 和匹配条件。
+
+---
+title: 常见问题
+url: /zh/faq/
+path: docs/zh/faq/index.md
+language: zh
+section: 中文
+---
+
+# FAQ
+
+## Provider source 应该用哪个？
+
+客户文档和公开示例使用 `ZStack-Robot/zstack`。如果是 provider 开发环境，需要调试本地构建或开发 Registry，可以按开发环境配置 source 或 Terraform CLI dev override。离线客户环境应优先使用 Terraform provider mirror 提供同一 provider source 和版本，不要在交付示例里随意替换 source。
+
+## 为什么推荐 AccessKey？
+
+AccessKey 更适合自动化和权限管理。账号密码方式仅作为兼容选项。
+
+## 什么时候用 UUID，什么时候用 name？
+
+自动化脚本和 CI/CD 配置优先 UUID。人工编写且名称唯一时可以用 name。`name_pattern` 只适合探索和调试。
+
+## 示例可以直接用于生产吗？
+
+示例是可运行起点，不是完整生产模块。生产使用前需要补充 backend、变量校验、权限、命名规范、标签和审批流程。
+
+## 创建 VM 应该用 `l3_network_uuids` 吗？
+
+新配置不推荐。使用 `network_interfaces`，它能表达默认网卡、静态 IP 和多网卡。
+
+## 如何管理多个环境？
+
+使用不同的变量文件、workspace 或独立目录，并配合 remote backend。不要在同一个 state 中混放无关环境。
+
+## 如何导入已有资源？
+
+先写 resource block，再运行 `terraform import` 或使用 import block。导入后必须执行 `terraform plan` 并修正差异。
+
+## 是否支持离线环境？
+
+支持，但建议通过 Terraform provider mirror 提供 `ZStack-Robot/zstack` 的目标版本，并确认 runner 能从内网 mirror 获取 provider。
+
+## Provider 版本应该怎么升级？
+
+本文档和示例基于 provider `1.1.3`。升级时统一修改 `required_providers.zstack.version`，执行 `terraform init -upgrade`，再对要发布或演示的场景逐一执行 `terraform plan`。未验证的新版本按 migration 处理，不要直接批量替换后 apply。
+
+## 升级到 1.1.3 有哪些字段变化？
+
+`zstack_access_key` 需要 `user_uuid`，`zstack_sns_email_endpoint` 需要
+`platform_uuid`，`zstack_license_authorized_nodes` 不再支持
+`name_pattern`。资源编排功能及编排模板已取消，不再维护对应示例。
+
+## Load Balancer 示例为什么没有完整后端绑定？
+
+后端成员绑定方式和客户环境、provider 版本、网络模型有关。当前示例先创建 VIP、LB、listener 和 server group，并输出 UUID，便于按目标环境补充后端绑定。
+
+## 脚本初始化适合做什么？
+
+适合 day-1 初始化，例如安装软件、配置 guest agent、写入基础配置。不适合写入长期密钥、私钥或不可审计的大型脚本。
+
+## Tag 应该怎么设计？
+
+建议先统一少量标准 tag：`environment`、`owner`、`application`、`cost-center`。不要让每个团队自由发明一套命名。
+
+## IAM 示例可以直接在生产跑吗？
+
+不建议直接跑。IAM 会创建账号、虚拟身份和 AccessKey，必须先确认权限边界、密码策略和 secret 保存方式。
+
+## Global Config 可以直接交给 Terraform 管理吗？
+
+可以，但不建议直接在生产环境首次 apply。应先用 data source 查询当前值、默认值和说明，确认影响范围后再纳管。
+
+## License 文本应该放在哪里？
+
+放在 secret store、CI/CD secret 或本地未提交的敏感变量文件中。不要提交到 Git，也不要输出到普通日志。
+
+## CDP 和 Backup 示例为什么有很多 `replace-me`？
+
+备份/CDP 强依赖真实资源 UUID、backup storage 类型和业务保留策略。文档不能替客户编造这些值，必须由管理员从环境中确认。
+
+## Scheduler 的 job type 应该填什么？
+
+取决于 ZStack 环境支持的任务类型。使用前应查询或确认平台支持的 job type，不要自行猜测。
+
+## Network Observability 示例能直接套用吗？
+
+不能直接套用。采集器地址、端口、flow meter 类型、mirror endpoint 格式都依赖客户网络设计，需要先由管理员确认。
+
+## IPsec 的算法字段可以省略吗？
+
+如果 ZStack 和对端有默认协商策略，可以先省略；生产环境建议明确记录双方使用的算法、PFS 和 transform protocol。
+
+---
+title: 概览
+url: /zh/migration/
+path: docs/zh/migration/index.md
+language: zh
+section: 中文 / 迁移指南
+---
+
+# 迁移指南
+
+本章节说明如何把已有 ZStack 资源逐步纳入 Terraform 管理。
+
+迁移对象可能来自控制台手工创建、历史脚本/API 创建、旧 provider 版本管理，或尚未进入 Terraform state 的既有环境。
+
+迁移的核心原则是先观察、再导入、最后收敛配置，不要直接用新 HCL 覆盖生产资源。
+
+对已有资源执行 import 前，应先写出目标 resource block，并确认资源名称、UUID、规格、网络、镜像和生命周期字段。
+
+import 只会把远端对象写入 Terraform state，不会自动生成完整、可维护的 HCL。
+
+导入后必须执行 `terraform plan`，根据差异补齐配置，直到 plan 结果达到 no-op 或只包含明确接受的变更。
+
+如果 plan 显示 replacement，先停止操作并确认不可变字段，不要直接执行 `terraform apply`。
+
+不是所有资源都适合导入；对于不支持 import 或生命周期不清晰的资源，可以先用 data source 查询并作为依赖引用。
+
+迁移生产资源时建议先在低风险环境演练，并保留 state 备份和回滚方案。
+
+当前示例重点覆盖已有 VM 的导入流程，见“导入已有资源”章节和 [examples/common/10-import-existing-vm](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/10-import-existing-vm)。
+
+## Provider 1.1.3 注意事项
+
+从旧版本升级到 `1.1.3` 时，先统一修改 `required_providers.zstack.version`
+并执行 `terraform init -upgrade`，再逐个示例或模块执行
+`terraform validate` 和 `terraform plan`。
+
+已验证的 `1.1.3` 行为变化：
+
+- `zstack_access_key` 创建时需要显式设置 `user_uuid`。如果为新建 account
+  创建 AccessKey，可使用该 account 的 UUID 作为 owner。
+- `zstack_sns_email_endpoint` 需要 `platform_uuid`。当前 provider 未提供 SNS
+  platform data source，生产环境需要管理员从目标环境确认该 UUID。
+- `zstack_license_authorized_nodes` 不再支持 `name_pattern` 参数；查询时使用
+  provider schema 支持的 `uuid` 或 `filter`。
+- 资源编排功能及编排模板已取消，不再维护对应示例或手册页面。
+
+升级后如果 plan 出现非预期 replacement 或 readback drift，先记录字段差异，
+不要直接 apply 到生产环境。
+
+---
+title: 导入已有资源
+url: /zh/migration/import-existing-resources/
+path: docs/zh/migration/import-existing-resources.md
+language: zh
+section: 中文 / 迁移指南
+---
+
+# 导入已有资源
+
+当 ZStack 中已有资源需要转为 Terraform 管理时，使用 import。
+
+## 推荐流程
+
+1. 先编写目标 Terraform resource block，内容应接近最终期望配置。
+2. 使用 import 将远端已有对象导入 Terraform state。
+3. 执行 `terraform plan` 查看 state、HCL 与远端对象之间的差异。
+4. 按 plan 结果补齐或调整配置，直到不再出现非预期 replacement。
+
+!!! warning
+    import 后必须反复执行 `terraform plan` 并补齐 resource block，直到
+    plan 达到 no-op 或只包含明确接受的变更。在 plan 显示 replacement
+    或未知变更时不要执行 `terraform apply`，否则可能重建已有资源。
+
+## CLI Import
+
+```bash
+terraform import zstack_instance.existing <vm-uuid>
+terraform plan
+```
+
+## Import Block
+
+Terraform 1.5+ 可使用 import block：
+
+```hcl
+import {
+  to = zstack_instance.existing
+  id = var.existing_vm_uuid
+}
+```
+
+## 注意事项
+
+- import 只写入 state，不会自动生成完整 HCL。
+- import 后第一次 `plan` 可能出现差异，需要补齐 resource block。
+- 如果 plan 显示 replacement，先分析不可变字段，不要直接 apply。
+- 不是所有 resource 都适合导入；如果不支持 import，可先作为 data source 查询。
+
+## 对应示例
+
+见 [examples/common/10-import-existing-vm](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/10-import-existing-vm)。
+
+---
+title: 截图与架构图
+url: /zh/diagrams/
+path: docs/zh/diagrams/index.md
+language: zh
+section: 中文
+---
+
+# 截图与架构图
+
+本章节用于引用 `assets/diagrams` 和 `assets/screenshots` 中的架构图、流程图和控制台截图。
+
+当前页面只发布可在站点中直接渲染的 Mermaid 架构图。控制台截图需要来自真实 ZStack 环境并完成脱敏后再发布。
+
+## Terraform 与 ZStack 交互架构
+
+```mermaid
+flowchart LR
+  user[用户 / CI/CD] --> cli[Terraform CLI]
+  cli --> state[(Terraform State)]
+  cli --> provider[ZStack Terraform Provider]
+  provider --> api[ZStack Management Node API]
+  api --> compute[云主机 / 计算资源]
+  api --> network[网络 / 安全组 / EIP / LB]
+  api --> storage[存储 / 镜像 / 备份]
+  api --> iam[IAM / AccessKey]
+
+  subgraph repo[文档与代码仓库]
+    docs[客户文档]
+    examples[examples/common]
+  end
+
+  user --> docs
+  user --> examples
+```
+
+## Terraform 执行流程
+
+```mermaid
+flowchart TD
+  start[准备 Terraform 配置] --> init[terraform init]
+  init --> fmt[terraform fmt]
+  fmt --> validate[terraform validate]
+  validate --> plan[terraform plan]
+  plan --> review{人工审核计划}
+  review -- 通过 --> apply[terraform apply]
+  review -- 不通过 --> edit[修改配置]
+  edit --> fmt
+  apply --> state[更新 Terraform State]
+  state --> output[查看 outputs / ZStack 控制台]
+  output --> destroy{是否清理示例资源}
+  destroy -- 是 --> tfDestroy[terraform destroy]
+  destroy -- 否 --> keep[保留资源纳管]
+```
+
+## Provider 认证配置
+
+```mermaid
+flowchart LR
+  subgraph inputs[认证输入]
+    hcl[HCL provider block]
+    env[ZSTACK_* 环境变量]
+    secret[CI/CD Secret Store]
+  end
+
+  secret --> env
+  hcl --> provider[ZStack Provider]
+  env --> provider
+
+  provider --> accessKey{认证方式}
+  accessKey --> ak[AccessKey 推荐]
+  accessKey --> account[Account/Password 兼容]
+
+  ak --> api[ZStack API Client]
+  account --> api
+```
+
+## VM + L3 + Security Group + EIP
+
+```mermaid
+flowchart TB
+  tf[Terraform] --> image[data.zstack_images]
+  tf --> offering[data.zstack_instance_offerings]
+  tf --> l3[data.zstack_l3networks]
+
+  image --> vm[zstack_instance]
+  offering --> vm
+  l3 --> nic[VM NIC]
+  vm --> nic
+
+  sg[zstack_networking_secgroup] --> rule[zstack_networking_secgroup_rule]
+  sg --> attach[zstack_networking_secgroup_attachment]
+  nic --> attach
+
+  publicL3[Public L3 Network] --> vip[zstack_vip]
+  vip --> eip[zstack_eip]
+  nic --> eip
+
+  user[外部访问] --> eip
+  eip --> nic
+```
+
+## Load Balancer Web 场景
+
+```mermaid
+flowchart TB
+  public[Public L3 Network] --> vip[zstack_vip]
+  vip --> lb[zstack_load_balancer]
+  lb --> listener[zstack_load_balancer_listener]
+  lb --> group[zstack_lb_server_group]
+
+  listener --> group
+  group --> vm1[Backend VM 1]
+  group --> vm2[Backend VM 2]
+  group --> vmn[Backend VM N]
+
+  client[Client] --> vip
+```
+
+## VPC 路由场景
+
+```mermaid
+flowchart TB
+  l2[L2 Network] --> vpc[zstack_vpc]
+  vr[Virtual Router] --> vpc
+  vpc --> subnet[Subnet CIDR]
+
+  table[zstack_vrouter_route_table] --> entry[zstack_vrouter_route_entry]
+  entry --> dest[Destination CIDR]
+  entry --> target[Route Target]
+
+  workload[Private Workloads] --> subnet
+  subnet --> vr
+  vr --> table
+```
+
+---
+title: Overview
+url: /en/
+path: docs/en/index.md
+language: en
+section: English
+---
+
+# Terraform Provider ZStack Documentation
+
+This documentation helps presales engineers, developers, and customer
+administrators use Terraform to manage ZStack resources.
+
+The current documentation baseline is ZStack provider `1.1.3` from the public
+Terraform Registry:
+
+```hcl
+source  = "ZStack-Robot/zstack"
+version = "1.1.3"
+```
+
+Use the manual to understand provider configuration, common resources, import
+workflows, troubleshooting, and best practices. Runnable Terraform projects are
+kept under `examples/common` and are shared by all language versions.
+
+Resource orchestration and orchestration templates are outside the current
+provider `1.1.3` documentation and examples scope.
+
+## Start Here
+
+- Read [Installation And Environment](manual/install-environment.md) to confirm
+  Terraform CLI, network access, and credential delivery.
+- Read [Provider Initialization And Offline Mirrors](manual/provider-init-mirror.md)
+  to configure the public Registry, offline mirror, or provider development
+  source.
+- Read [Terraform Workflow](manual/terraform-workflow.md) to understand `init`,
+  `plan`, `apply`, `import`, and CI/CD flow.
+- Use [Authentication](manual/authentication.md) to configure AccessKey or
+  account/password authentication.
+- Use [Query Existing Resources](manual/query-existing-resources.md) before
+  creating VMs, networks, volumes, or images.
+- Use [Practice Tutorials](scenarios/practice-tutorials.md) to choose a learning
+  path for VM, network entry, storage/image, platform governance, or production
+  references.
+- Read the [Production Guide](manual/production-guide.md) before adapting
+  examples for real environments.
+
+---
+title: AI Native Entry Points
+url: /en/ai-native-site/
+path: docs/en/ai-native-site.md
+language: en
+section: English
+---
+
+# AI Native Entry Points
+
+This documentation site publishes entry points for both humans and AI agents.
+Repository files such as `AGENTS.md`, skills, and examples are useful for local
+developer tools. After the site is published, AI agents should prefer the stable
+URLs below for retrieval.
+
+| Entry Point | Purpose |
+|---|---|
+| [`/llms.txt`](/llms.txt) | Concise index for first-pass agent reading. |
+| [`/llms-full.txt`](/llms-full.txt) | Full Markdown context aggregated from MkDocs navigation. |
+| [`/api/catalog.json`](/api/catalog.json) | Structured page catalog with language, path, and discovery endpoints. |
+| [`/openapi.json`](/openapi.json) | OpenAPI specification for documentation discovery endpoints only; it is not the ZStack runtime API. |
+| [`/.well-known/mcp.json`](/.well-known/mcp.json) | Static MCP discovery manifest stating that the site does not expose a live MCP server. |
+| [`/robots.txt`](/robots.txt) | Crawler rules and AI discovery hints. |
+| [`/sitemap.xml`](/sitemap.xml) | Traditional SEO and page discovery entry point. |
+
+Recommended reading order:
+
+1. Read `/llms.txt` first to understand the site scope, provider version, and key constraints.
+2. Read `/api/catalog.json` for the structured page catalog.
+3. Read `/llms-full.txt` when full context is needed and page-by-page crawling would risk missing navigation pages.
+4. Before generating Terraform code, prefer the matching English or Chinese manual page and runnable examples.
+
+These endpoints describe the Terraform Provider ZStack documentation site. They
+do not represent the business API of a ZStack management node. For ZStack API
+calls, use the ZStack product API documentation and provider implementation as
+the source of truth.
+
+---
+title: Overview
+url: /en/manual/
+path: docs/en/manual/index.md
+language: en
+section: English / User Manual
+---
+
+# User Manual
+
+The user manual explains the customer-facing workflows for ZStack provider
+`1.1.3`. It is not a copy of the provider reference. It focuses on how to use
+resources safely in real delivery scenarios.
+
+Recommended reading order:
+
+1. Install Terraform and confirm the runner can reach the ZStack management
+   node.
+2. Initialize the provider through the public Registry, offline mirror, or
+   provider development configuration as appropriate.
+3. Understand Terraform workflow, concept mapping, and provider execution model.
+4. Configure authentication and query existing resources with data sources.
+5. Create a VM and attach networking, security group, volume, and image inputs.
+6. Add production scenarios such as EIP, load balancer, VPC, scripts, IAM, and
+   monitoring.
+7. Use import and migration guidance before bringing existing resources under
+   Terraform management.
+8. Read HCL style, diagnostics, and production guidance before production apply.
+
+---
+title: Installation And Environment
+url: /en/manual/install-environment/
+path: docs/en/manual/install-environment.md
+language: en
+section: English / User Manual
+---
+
+# Installation And Environment
+
+This page describes the local or CI environment required before running ZStack
+Terraform examples. Later chapters assume these requirements are in place.
+
+## Requirements
+
+| Item | Requirement |
+|---|---|
+| Terraform CLI | `1.5` or later |
+| ZStack management node | The Terraform runner can reach the management node host and API port |
+| Credentials | AccessKey ID and AccessKey Secret are recommended |
+| Provider | This documentation uses `ZStack-Robot/zstack` provider `1.1.3` |
+| Base resources | VM examples usually require existing image, L3 network, instance offering, and disk offering |
+| Version control | Do not commit `terraform.tfvars`, state, plan, log, or credential files |
+
+## Installation Check
+
+```bash
+terraform version
+terraform -help
+```
+
+If `terraform version` does not run, install Terraform CLI and make sure it is
+available on `PATH`.
+
+## Network Check
+
+The Terraform runner must reach the ZStack management node. Use an environment
+appropriate command to verify connectivity:
+
+```bash
+curl -I http://zstack.example.com:8080
+```
+
+The management node address, port, and access policy are environment-specific.
+Do not treat `zstack.example.com` as a real endpoint.
+
+## Credential Delivery
+
+For local debugging, use an uncommitted `terraform.tfvars` file. For team
+automation, use a CI/CD secret store or environment variables:
+
+```bash
+export ZSTACK_HOST="zstack.example.com"
+export ZSTACK_PORT="8080"
+export ZSTACK_ACCESS_KEY_ID="replace-me"
+export ZSTACK_ACCESS_KEY_SECRET="replace-me"
+```
+
+PowerShell example:
+
+```powershell
+$env:ZSTACK_HOST = "zstack.example.com"
+$env:ZSTACK_PORT = "8080"
+$env:ZSTACK_ACCESS_KEY_ID = "replace-me"
+$env:ZSTACK_ACCESS_KEY_SECRET = "replace-me"
+```
+
+Do not commit real AccessKeys, account passwords, license text, private keys, or
+tokens to Git.
+
+## Local Project Directory
+
+Use a separate directory for each example or delivery project:
+
+```text
+terraform-project/
+  main.tf
+  variables.tf
+  outputs.tf
+  terraform.tfvars
+```
+
+Keep `terraform.tfvars` local or inject it through CI secrets. For team
+collaboration, use a remote backend instead of sharing local state files.
+
+## Next Steps
+
+1. Read [Provider Initialization And Offline Mirrors](provider-init-mirror.md).
+2. Read [Authentication And Provider Configuration](authentication.md).
+3. Use [Query Existing Resources](query-existing-resources.md) to confirm image,
+   L3 network, and offering values.
+
+---
+title: Getting Started
+url: /en/manual/getting-started/
+path: docs/en/manual/getting-started.md
+language: en
+section: English / User Manual
+---
+
+# Getting Started
+
+Terraform Provider ZStack is used to declare ZStack cloud resources as code and
+manage changes through `plan/apply`.
+
+## Prerequisites
+
+- Terraform 1.5 or later.
+- Reachable ZStack management node.
+- AccessKey ID and AccessKey Secret.
+- Existing base resources: image, L3 network, instance offering, and disk
+  offering.
+
+## Recommended Learning Order
+
+1. Configure provider and authentication.
+2. Query existing resources.
+3. Create a single VM.
+4. Create multiple VMs.
+5. Add static IP, security group, and data disk to VM.
+6. Bind VIP/EIP or connect to Load Balancer.
+7. Import existing resources.
+
+## Basic Commands
+
+```bash
+terraform init
+terraform fmt
+terraform validate
+terraform plan
+terraform apply
+```
+
+## Examples
+
+Start from [examples/common/01-provider](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/01-provider). Each example contains:
+
+- `main.tf`
+- `variables.tf`
+- `terraform.tfvars.example`
+- `README.md`
+
+Copy `terraform.tfvars.example` to `terraform.tfvars`, then fill in real values.
+Do not commit real `terraform.tfvars`.
+
+---
+title: Provider Initialization And Offline Mirrors
+url: /en/manual/provider-init-mirror/
+path: docs/en/manual/provider-init-mirror.md
+language: en
+section: English / User Manual
+---
+
+# Provider Initialization And Offline Mirrors
+
+This page explains how to initialize the ZStack provider and how offline
+environments can keep the same provider source used by public examples.
+
+## Standard Configuration
+
+Customer-facing documentation and public examples use the public Terraform
+Registry source:
+
+```hcl
+terraform {
+  required_version = ">= 1.5"
+
+  required_providers {
+    zstack = {
+      source  = "ZStack-Robot/zstack"
+      version = "1.1.3"
+    }
+  }
+}
+```
+
+Initialize the project:
+
+```bash
+terraform init
+```
+
+When upgrading to a verified new version, update the version constraint
+consistently and run:
+
+```bash
+terraform init -upgrade
+terraform plan
+```
+
+Do not push a provider upgrade into a production apply workflow before plan
+validation is complete.
+
+## Recommended Offline Setup
+
+Offline customer environments should prefer a Terraform provider mirror that
+serves the same provider source and version. Avoid changing example source names
+to internal names.
+
+On a connected machine, prepare the mirror from a Terraform project directory:
+
+```bash
+terraform providers mirror /opt/terraform-provider-mirror
+```
+
+On the offline runner, use a Terraform CLI configuration file such as
+`~/.terraformrc`, or point `TF_CLI_CONFIG_FILE` to a dedicated file:
+
+```hcl
+provider_installation {
+  filesystem_mirror {
+    path    = "/opt/terraform-provider-mirror"
+    include = ["registry.terraform.io/ZStack-Robot/zstack"]
+  }
+
+  direct {
+    exclude = ["registry.terraform.io/ZStack-Robot/zstack"]
+  }
+}
+```
+
+The Terraform configuration still uses:
+
+```hcl
+source = "ZStack-Robot/zstack"
+```
+
+This keeps public examples, offline delivery, and upgrade validation aligned.
+
+## Provider Development Environments
+
+When developing the Terraform provider itself, a development registry source or
+Terraform CLI development override can be used to test a local provider build,
+for example:
+
+```hcl
+source = "zstack.io/terraform-provider-zstack/zstack"
+```
+
+Use this only for provider development or debugging. Do not mix development
+sources into customer delivery examples.
+
+## Initialization Troubleshooting
+
+| Symptom | Check |
+|---|---|
+| Provider download fails | Check `source`, `version`, network proxy, and mirror path |
+| Offline runner still reaches the public internet | Confirm the CLI config is loaded through `TF_CLI_CONFIG_FILE` or the default path |
+| Version mismatch | Check `.terraform.lock.hcl`, mirror contents, and `required_providers` constraints |
+| Local development build is not used | Check dev override path, provider binary name, and platform architecture |
+
+See [Troubleshooting](../troubleshooting/index.md) for more diagnostics.
+
+---
+title: Authentication
+url: /en/manual/authentication/
+path: docs/en/manual/authentication.md
+language: en
+section: English / User Manual
+---
+
+# Authentication And Provider Configuration
+
+ZStack provider needs the management node endpoint and API credentials. AccessKey
+authentication is recommended for automation.
+
+## Provider Source
+
+Public Terraform Registry:
+
+```hcl
+terraform {
+  required_providers {
+    zstack = {
+      source  = "ZStack-Robot/zstack"
+      version = "1.1.3"
+    }
+  }
+}
+```
+
+In provider development environments, you may use a development registry source
+or Terraform CLI development overrides while testing a local provider build, for
+example:
+
+```hcl
+source = "zstack.io/terraform-provider-zstack/zstack"
+```
+
+The development source above is only an example. Customer-facing documentation
+and public examples should default to `ZStack-Robot/zstack`. Offline customer
+environments should prefer a Terraform provider mirror that serves the same
+provider source and version instead of changing the source in examples.
+
+## AccessKey Authentication
+
+```hcl
+provider "zstack" {
+  host              = var.zstack_host
+  port              = var.zstack_port
+  access_key_id     = var.zstack_access_key_id
+  access_key_secret = var.zstack_access_key_secret
+}
+```
+
+Mark the secret variable as sensitive:
+
+```hcl
+variable "zstack_access_key_secret" {
+  description = "ZStack AccessKey Secret."
+  type        = string
+  sensitive   = true
+}
+```
+
+## Environment Variables
+
+The provider can read configuration from:
+
+- `ZSTACK_HOST`
+- `ZSTACK_PORT`
+- `ZSTACK_ACCESS_KEY_ID`
+- `ZSTACK_ACCESS_KEY_SECRET`
+- `ZSTACK_ACCOUNT_NAME`
+- `ZSTACK_ACCOUNT_PASSWORD`
+
+Use environment variables or CI/CD secret stores for automation.
+
+## Account And Password
+
+Account/password authentication is supported for compatibility:
+
+```hcl
+provider "zstack" {
+  host             = var.zstack_host
+  port             = var.zstack_port
+  account_name     = var.zstack_account_name
+  account_password = var.zstack_account_password
+}
+```
+
+Customer examples default to AccessKey authentication.
+
+## Related Example
+
+See [examples/common/01-provider](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/01-provider).
+
+---
+title: Terraform Workflow
+url: /en/manual/terraform-workflow/
+path: docs/en/manual/terraform-workflow.md
+language: en
+section: English / User Manual
+---
+
+# Terraform Workflow
+
+This page defines the standard command sequence from initialization to cleanup,
+and how to control changes in a team environment.
+
+## Recommended Directory Layout
+
+```text
+project/
+  versions.tf
+  providers.tf
+  variables.tf
+  main.tf
+  outputs.tf
+  terraform.tfvars
+```
+
+Small examples can keep everything in `main.tf`. Production projects should
+separate provider configuration, variables, resources, and outputs.
+
+## Basic Command Sequence
+
+```bash
+terraform init
+terraform fmt
+terraform validate
+terraform plan
+terraform apply
+```
+
+Clean up example resources with:
+
+```bash
+terraform destroy
+```
+
+In shared environments, do not skip `plan` and go directly to `apply`. If the
+plan includes replacement, deletion, or high-risk admin resources, stop for
+review.
+
+## Controlled Apply
+
+For production, save a reviewed plan and apply that exact plan:
+
+```bash
+terraform plan -out=tfplan
+terraform apply tfplan
+```
+
+Plan files can contain sensitive values. Treat them as sensitive files and do
+not commit them to Git.
+
+## Variable Files
+
+Local examples usually start from a template:
+
+```bash
+cp terraform.tfvars.example terraform.tfvars
+```
+
+`terraform.tfvars` should contain only target-environment values. Prefer
+environment variables or secret stores for real credentials.
+
+## Import Workflow
+
+When bringing existing resources under Terraform management:
+
+1. Write the minimal resource block.
+2. Run `terraform import` or use an import block.
+3. Run `terraform plan`.
+4. Fill in HCL until the plan is no-op or only contains accepted differences.
+5. Then continue with the apply workflow.
+
+Do not treat the first replacement after import as a normal change.
+
+## CI/CD Workflow
+
+CI should run at least:
+
+```bash
+terraform fmt -check
+terraform validate
+terraform plan
+```
+
+Production apply should add approval, change windows, state access control, and
+credential isolation. A normal pull request workflow should not automatically
+apply to a real ZStack environment.
+
+---
+title: Concepts
+url: /en/manual/concepts/
+path: docs/en/manual/concepts.md
+language: en
+section: English / User Manual
+---
+
+# Terraform And ZStack Concepts
+
+This page maps Terraform terminology to ZStack resources. It explains why
+examples query existing resources before creating dependent resources.
+
+## Terraform Concepts
+
+| Concept | Description |
+|---|---|
+| Provider | The Terraform plugin that calls ZStack APIs. This manual uses `ZStack-Robot/zstack` |
+| Resource | A ZStack object Terraform creates, updates, or deletes, such as VM, volume, or security group |
+| Data source | A query for an existing ZStack object; it does not create resources |
+| State | Terraform's mapping between Terraform addresses and ZStack UUIDs |
+| Plan | The proposed diff after Terraform compares HCL, state, and remote objects |
+| Variable | External input such as management node address, image name, or network UUID |
+| Output | Value exposed for review or downstream workflows, such as VM UUID, NIC UUID, or VIP address |
+| Import | Binding an existing ZStack resource into Terraform state |
+
+## ZStack Resource Mapping
+
+| ZStack object | Common Terraform use |
+|---|---|
+| Zone, cluster, host | Usually queried as data sources to locate existing compute resources |
+| Image | VM creation input; image chapters can query or create images |
+| Backup storage | Image/backup storage used by images, image import, and some backup/CDP workflows |
+| Instance offering | VM size; `cpu_num` and `memory_size` can be used instead |
+| Disk offering | Data volume size profile |
+| L2 network | Layer-2 network foundation, usually prepared by platform administrators |
+| L3 network | Network foundation for VM NICs, VIP, EIP, and VPC networks |
+| VPC / virtual router | Carrier for VPC networking and routing capabilities |
+| VIP / EIP | External entry address and public access binding |
+| Security group | Access control rule set attached to VM NICs |
+| Volume | Data disk; model separately when it needs an independent lifecycle |
+| Account, user, IAM2, AccessKey | Automation identity and permission boundary |
+| Global config, license, scheduler | Administrator-level resources that require change review before production apply |
+
+## Identity Field Selection
+
+- Prefer `uuid` for automation and CI/CD.
+- Use exact `name` only when the name is unique.
+- Use `name_pattern` only for discovery, then output and review matches.
+- Do not invent UUIDs, metric names, job types, route targets, or external
+  system addresses in examples.
+
+## Resource Dependencies
+
+Terraform builds dependencies from expression references, such as a VM referring
+to image UUID, L3 network UUID, and offering UUID. Use explicit dependencies
+only when the dependency cannot be represented through references.
+
+Common order:
+
+1. Query image, network, and offering.
+2. Create the VM.
+3. Create and attach security group, volume, VIP/EIP, or load balancer.
+4. Output UUIDs and addresses for diagnostics or downstream integration.
+
+---
+title: How It Works
+url: /en/manual/how-it-works/
+path: docs/en/manual/how-it-works.md
+language: en
+section: English / User Manual
+---
+
+# How It Works
+
+Terraform Provider ZStack converts desired state declared in HCL into ZStack API
+calls, and records the relationship between Terraform addresses and ZStack UUIDs
+in state.
+
+## Execution Model
+
+1. Terraform reads `.tf` files, variables, and provider constraints.
+2. `terraform init` downloads the ZStack provider or loads it from a mirror.
+3. `terraform plan` calls data sources and resource read APIs to build a diff.
+4. `terraform apply` calls ZStack APIs in dependency order to create, update, or
+   delete resources.
+5. Terraform writes the result to state.
+
+## Data Sources
+
+Data sources read existing ZStack objects such as images, L3 networks,
+offerings, zones, and clusters. They do not create resources, but they affect
+the plan result.
+
+If a data source uses an overly broad `name_pattern`, later resources can refer
+to the wrong object. Production configurations should prefer `uuid` or unique
+`name`.
+
+## Resources
+
+Resources are managed by Terraform lifecycle. After creation, state stores the
+corresponding ZStack UUID. Later plans compare:
+
+- Desired values declared in HCL.
+- Known values saved in state.
+- Current values read from ZStack APIs.
+
+If a field cannot be updated in place by the provider or ZStack API, Terraform
+may show replacement. Review the reason before applying replacement.
+
+## State And Drift
+
+State is the core file Terraform uses to decide resource ownership. Do not edit
+state manually unless you are following a deliberate recovery procedure.
+
+If someone changes resources in the ZStack console outside Terraform, the next
+plan may show drift. First decide whether the console change should be kept,
+then update HCL, revert the console change, or accept the Terraform change.
+
+## Import
+
+Import only writes an existing resource into state. It does not generate complete
+HCL. After import, run `terraform plan` and fill in the resource block until the
+plan converges.
+
+## Sensitive Values
+
+Terraform state and plan files can contain sensitive values. Even when variables
+or outputs are marked `sensitive`, do not share state, plan files, or debug logs
+as ordinary files.
+
+## Boundaries
+
+The provider calls ZStack APIs. It does not replace change approval, capacity
+planning, naming rules, permission design, network security review, or backup
+strategy. Production delivery must handle these outside the Terraform project.
+
+---
+title: HCL Style Guide
+url: /en/manual/hcl-style/
+path: docs/en/manual/hcl-style.md
+language: en
+section: English / User Manual
+---
+
+# HCL Style Guide
+
+This page provides Terraform HCL conventions that keep examples and delivery
+projects readable, reviewable, and reusable.
+
+## File Layout
+
+| File | Content |
+|---|---|
+| `versions.tf` | `required_version` and `required_providers` |
+| `providers.tf` | `provider "zstack"` configuration |
+| `variables.tf` | External inputs and validation |
+| `main.tf` | Main resources and data sources |
+| `outputs.tf` | UUIDs, addresses, and diagnostic values to expose |
+| `terraform.tfvars.example` | Committable variable template without real secrets |
+
+Small examples can use fewer files, but variable descriptions, sensitive flags,
+and output boundaries should still be present.
+
+## Naming
+
+- Use `lower_snake_case` for Terraform variables, locals, and outputs.
+- Use stable semantic resource names such as `web`, `app`, or
+  `database_volume`.
+- Use `for_each` with stable keys for batch resources instead of drifting
+  numeric indexes.
+- Express environment, application, owner, and cost center through tags or
+  variables.
+
+## Variables
+
+Every variable should include a `description`. Sensitive variables must be
+marked:
+
+```hcl
+variable "zstack_access_key_secret" {
+  description = "ZStack AccessKey Secret."
+  type        = string
+  sensitive   = true
+}
+```
+
+Add `validation` for CIDR, port, and boolean-control variables. Security group
+ingress CIDRs should not default to uncontrolled networks.
+
+## ZStack Conventions
+
+- Use `network_interfaces` for new VMs. Do not recommend old
+  `l3_network_uuids`.
+- In `network_interfaces`, `l3_network_uuid` is required, while `default_l3` and
+  `static_ip` are optional.
+- Omit `static_ip` when fixed IP is not required. If it is passed through a
+  variable, `default = null` lets Terraform treat it as unset.
+- Prefer UUIDs for automation. Use names only when they are known to be unique.
+- Use `name_pattern` only for discovery, and output matched results for review.
+- Do not invent metric names, scheduler job types, route targets, IPsec
+  algorithms, or external endpoint formats.
+
+## Outputs
+
+Outputs are for diagnostics and downstream integration. Prefer UUIDs and key
+addresses:
+
+```hcl
+output "vm_uuid" {
+  description = "Created VM UUID."
+  value       = zstack_instance.web.uuid
+}
+```
+
+AccessKey secrets, passwords, license text, tokens, private keys, and webhook
+secrets must use `sensitive = true` and should not appear in ordinary CI logs.
+
+## Formatting And Validation
+
+Before delivery, run:
+
+```bash
+terraform fmt
+terraform validate
+terraform plan
+```
+
+Examples in this documentation repository must also pass the repository quality
+gate.
+
+---
+title: Query Existing Resources
+url: /en/manual/query-existing-resources/
+path: docs/en/manual/query-existing-resources.md
+language: en
+section: English / User Manual
+---
+
+# Query Existing Resources
+
+Use data sources before creating VMs, data volumes, security group attachments,
+VIP/EIP, load balancers, VPCs, or administrator resources. This page lists all
+data sources registered by provider `1.1.3` and marks their recommended priority
+and usage frequency.
+
+Priority guide:
+
+- **Foundation first**: learn these first when connecting to an environment.
+  VM and most examples depend on them.
+- **Common extension**: frequently used by networking, storage, security group,
+  scripts, and tag workflows.
+- **Scenario-specific**: used only in the matching capability area, such as load
+  balancer, port forwarding, affinity group, or auto scaling.
+- **Admin/specialized**: platform administrator or specialized capabilities,
+  usually requiring extra permissions and change review.
+
+## Complete Data Source Index
+
+| Data source | Priority | Frequency | Purpose |
+|---|---|---|---|
+| `zstack_images` | Foundation first | High | Query images for VM creation or image management workflows. |
+| `zstack_l3networks` | Foundation first | High | Query L3 networks for VM NICs, VIP/EIP, VPC, and network resources. |
+| `zstack_instance_offerings` | Foundation first | High | Query VM compute offerings for CPU and memory sizing. |
+| `zstack_disk_offerings` | Foundation first | Common | Query disk offerings for data volumes, image, or backup-related workflows. |
+| `zstack_zone` | Foundation first | Common | Query zones to confirm where resources are placed. |
+| `zstack_clusters` | Foundation first | Common | Query clusters for placement or host-scope decisions. |
+| `zstack_hosts` | Foundation first | Common | Query physical hosts for placement or troubleshooting. |
+| `zstack_instances` | Common extension | Common | Query existing VMs for EIP binding, security group attachment, import, or troubleshooting. |
+| `zstack_l2networks` | Common extension | Common | Query L2 networks for L3, VPC, or advanced networking scenarios. |
+| `zstack_virtual_routers` | Common extension | Common | Query virtual routers for VPC, route table, and route entry context. |
+| `zstack_vips` | Common extension | Common | Query VIPs for EIP, load balancer, port forwarding, or public entry diagnostics. |
+| `zstack_eips` | Common extension | Common | Query existing EIPs for public access binding, migration, or troubleshooting. |
+| `zstack_primary_storages` | Common extension | Common | Query primary storage for capacity, type, or placement context. |
+| `zstack_backup_storages` | Common extension | Common | Query image/backup storage for images, image import, backup, or CDP workflows. |
+| `zstack_volumes` | Common extension | Common | Query existing data volumes for attachment, import, snapshot, or backup workflows. |
+| `zstack_volume_snapshots` | Common extension | Common | Query volume snapshots for restore, audit, or snapshot management workflows. |
+| `zstack_networking_secgroups` | Common extension | Common | Query security groups for VM NIC attachment or security group governance. |
+| `zstack_networking_secgroup_rules` | Common extension | Common | Query security group rules for audit, migration, or conflict diagnostics. |
+| `zstack_tags` | Common extension | Common | Query tags for resource governance, cost ownership, or migration checks. |
+| `zstack_user_tags` | Common extension | Common | Query user tags for business metadata governance or migration checks. |
+| `zstack_ssh_key_pairs` | Common extension | Common | Query SSH key pairs for VM initialization or login access workflows. |
+| `zstack_instance_scripts` | Common extension | Common | Query VM initialization/execution scripts for day-1 initialization or diagnostics. |
+| `zstack_accounts` | Scenario-specific | On demand | Query accounts for IAM, permission boundary, or automation identity governance. |
+| `zstack_iam2_projects` | Scenario-specific | On demand | Query IAM2 projects for project-level permission and automation identity workflows. |
+| `zstack_affinity_groups` | Scenario-specific | On demand | Query affinity groups for VM placement strategy or HA deployment. |
+| `zstack_auto_scaling_groups` | Scenario-specific | On demand | Query auto scaling groups for elasticity governance or troubleshooting. |
+| `zstack_disks` | Scenario-specific | On demand | Query disk objects for existing disk audit or low-level disk diagnostics. |
+| `zstack_l2vlan_networks` | Scenario-specific | On demand | Query VLAN L2 networks for VLAN and L3 network construction. |
+| `zstack_reserved_ips` | Scenario-specific | On demand | Query reserved IPs for address planning or conflict diagnostics. |
+| `zstack_subnet_ip_ranges` | Scenario-specific | On demand | Query subnet IP ranges for L3 network address pool confirmation and planning. |
+| `zstack_load_balancers` | Scenario-specific | On demand | Query load balancers for LB migration, binding, or troubleshooting. |
+| `zstack_load_balancer_listeners` | Scenario-specific | On demand | Query LB listeners for port listening, backend binding, or troubleshooting. |
+| `zstack_port_forwarding_rules` | Scenario-specific | On demand | Query port forwarding rules for public entry migration or conflict diagnostics. |
+| `zstack_virtual_router_images` | Scenario-specific | On demand | Query virtual router images for VPC/VR foundation construction. |
+| `zstack_virtual_router_offerings` | Scenario-specific | On demand | Query virtual router offerings for VPC/VR resource construction. |
+| `zstack_global_configs` | Admin/specialized | Controlled | Query current and default global config values for controlled admin changes. |
+| `zstack_license_authorized_capacity` | Admin/specialized | Controlled | Query license authorized capacity for capacity audit or license operations. |
+| `zstack_license_authorized_nodes` | Admin/specialized | Controlled | Query license authorized nodes for node authorization audit or license operations. |
+| `zstack_mn_nodes` | Admin/specialized | Controlled | Query management nodes for platform operations, license, or HA diagnostics. |
+| `zstack_sdn_controllers` | Admin/specialized | Controlled | Query SDN controllers for SDN-specific networking capabilities. |
+| `zstack_gpu_devices` | Admin/specialized | Controlled | Query GPU devices for GPU pools, scheduling, or hardware diagnostics. |
+| `zstack_hook_scripts` | Admin/specialized | Controlled | Query hook scripts for platform scripts or compatibility diagnostics. |
+| `zstack_instance_guest_tools` | Admin/specialized | Controlled | Query VM guest tools state for scripts, guest capability, or troubleshooting. |
+
+## Lookup Strategy
+
+Most list-style data sources support these inputs. A few administrator or
+platform-state data sources have custom parameters or no input parameters, so
+check the provider reference page before using them.
+
+| Method | Use case | Guidance |
+|---|---|---|
+| `uuid` | Automation, CI/CD, known resource UUID | Most stable; usually returns 0 or 1 item; mutually exclusive with `name` / `name_pattern` |
+| `name` | Human-authored examples, unique names | Common in customer examples; output and review results if names may repeat |
+| `name_pattern` | Fuzzy lookup and environment discovery | Similar to SQL `LIKE`; `%` matches multiple characters and `_` matches one character; discovery only |
+| `filter` | Narrow by state, type, architecture, ownership, or similar fields | Useful for reducing candidates after name/name_pattern or broad list queries |
+
+A common execution order is: first use `uuid`, `name`, or `name_pattern` to
+limit the ZStack API query, then let the provider apply `filter` to returned
+items. If neither UUID nor unique name is known, run discovery first, output the
+candidates, and do not feed the first returned item directly into resource
+creation.
+
+## Data Source Shape
+
+A typical data source has three parts:
+
+1. **Selectors**: `uuid`, `name`, `name_pattern`, or custom parameters such as
+   `category`.
+2. **Filters**: one or more `filter` blocks.
+3. **Result list**: read-only attributes such as `images`, `l3networks`, or
+   `vminstances`.
+
+Example:
+
+```hcl
+data "zstack_images" "ready_linux" {
+  name_pattern = var.image_name_pattern
+
+  filter {
+    name   = "state"
+    values = ["Enabled"]
+  }
+
+  filter {
+    name   = "status"
+    values = ["Ready"]
+  }
+
+  filter {
+    name   = "architecture"
+    values = ["x86_64", "aarch64"]
+  }
+}
+
+output "candidate_images" {
+  description = "Image candidates after name pattern and filters."
+  value       = data.zstack_images.ready_linux.images
+}
+```
+
+This example first uses `name_pattern`, then keeps only images whose `state` is
+`Enabled`, `status` is `Ready`, and architecture is either `x86_64` or
+`aarch64`.
+
+## Filter Rules
+
+`filter` uses this shape:
+
+```hcl
+filter {
+  name   = "field_name"
+  values = ["value1", "value2"]
+}
+```
+
+Rules:
+
+- `name` is a field on the returned item, such as `state`, `status`,
+  `architecture`, `category`, or `zone_uuid`.
+- `values` is a set of strings. Prefer strings even for numeric or boolean
+  fields, for example `values = ["1"]` or `values = ["true"]`.
+- Multiple `values` inside one `filter` block are OR: the field can equal any
+  listed value.
+- Multiple `filter` blocks are AND: every block must match.
+- `filter` is exact matching, not fuzzy matching. Use `name_pattern` for fuzzy
+  name discovery.
+- Prefer top-level scalar fields from the returned item. Do not use nested list
+  fields, such as VM NIC lists, as filter keys unless the provider reference or
+  tests explicitly show support.
+- Field names must come from the corresponding data source schema. Do not guess
+  Terraform field names from raw ZStack API names.
+
+Common filter examples:
+
+```hcl
+data "zstack_l3networks" "private" {
+  filter {
+    name   = "category"
+    values = ["Private"]
+  }
+}
+
+data "zstack_instances" "running_kvm" {
+  filter {
+    name   = "state"
+    values = ["Running"]
+  }
+
+  filter {
+    name   = "hypervisor_type"
+    values = ["KVM"]
+  }
+}
+```
+
+If the filter key is wrong, the provider returns an invalid-field error. If
+values are too broad, the result can contain many candidates. Production
+configuration should expose candidates for human review or pipeline policy
+checks.
+
+## Output And Review
+
+The goal of discovery is not to automatically select the first item. It is to
+produce a reviewable candidate set. Prefer these fields in outputs:
+
+- `uuid`
+- `name`
+- `state` / `status`
+- `category` / `type`
+- Ownership fields such as `zone_uuid`, `cluster_uuid`, `host_uuid`, or
+  `l3_network_uuid`
+
+After review, pass an explicit `uuid` or unique `name` to create examples. Do
+not let production resources depend on implicit ordering from broad
+`name_pattern` results.
+
+## Example
+
+For first-time environment validation, source only the root `.env`
+authentication variables and run
+[examples/common/02-query-existing-resources](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/02-query-existing-resources). The example intentionally queries only foundation-first data sources so the first run does not produce excessive output. It uses broad discovery patterns by default and outputs candidate resources for later examples.
+
+```hcl
+data "zstack_images" "ubuntu" {
+  name = var.image_name
+}
+
+data "zstack_l3networks" "default" {
+  name = var.l3_network_name
+}
+
+data "zstack_instance_offerings" "small" {
+  name = var.instance_offering_name
+}
+```
+
+## Automation Guidance
+
+If automation already has the UUID, use it directly:
+
+```hcl
+data "zstack_l3networks" "selected" {
+  uuid = var.l3_network_uuid
+}
+```
+
+Avoid broad patterns such as `name_pattern = "%Ubuntu%"` in automation. They
+can match multiple images and lead to unpredictable selection.
+
+## Related Example
+
+See [examples/common/02-query-existing-resources](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/02-query-existing-resources).
+
+---
+title: Create VM
+url: /en/manual/create-vm/
+path: docs/en/manual/create-vm.md
+language: en
+section: English / User Manual
+---
+
+# Create VM
+
+Creating a VM is the most common starting scenario. Minimal dependencies include:
+
+- Image UUID.
+- L3 network UUID.
+- Instance offering UUID, or direct `cpu_num` plus `memory_size`.
+- Optional: root disk, static IP, multiple NICs, host/cluster/zone placement, and
+  user data.
+
+## Recommended Workflow
+
+1. Query image, L3 network, and instance offering by name or UUID.
+2. Organize VM input parameters in `locals`.
+3. Use `zstack_instance` to create one VM.
+4. Output VM UUID, name, and IP address for later troubleshooting.
+
+## Network Configuration
+
+New configurations should use `network_interfaces`:
+
+```hcl
+resource "zstack_instance" "vm" {
+  name                   = var.vm_name
+  image_uuid             = data.zstack_images.image.images[0].uuid
+  instance_offering_uuid = data.zstack_instance_offerings.offering.instance_offers[0].uuid
+
+  network_interfaces = [
+    {
+      l3_network_uuid = data.zstack_l3networks.network.l3networks[0].uuid
+      default_l3      = true
+      static_ip       = var.static_ip
+    }
+  ]
+}
+```
+
+`l3_network_uuid` is the required L3 network binding for the NIC. `default_l3`
+and `static_ip` are optional fields. Single-NIC scenarios usually can omit
+`default_l3`; set `static_ip` only when a fixed IP is required. When `static_ip`
+is omitted, ZStack allocates the address automatically. If it is passed through
+a variable as in the example, use `default = null` so Terraform treats it as
+unset.
+
+Do not recommend old `l3_network_uuids` for new examples.
+
+## Multiple VMs
+
+For multiple VMs, prefer `for_each` and use VM names as stable keys. This avoids
+unrelated VM replacement when adding or removing one VM later.
+
+## Initialization Scripts
+
+Advanced scenarios often need initialization scripts after VM creation. Related
+resources:
+
+| Terraform object | Type | Purpose |
+|---|---|---|
+| `zstack_ssh_key_pair` | resource | Create an SSH key pair for VM login or initialization script execution. |
+| `zstack_instance_scripts` | resource | Create an instance script definition containing script content and type. |
+| `zstack_instance_scripts_execution` | resource | Create a script execution record and apply the script to a target VM. |
+
+Initialization scripts are suitable for package installation, guest agent
+configuration, and baseline configuration. Parameterize script content and
+timeout, and do not embed sensitive information in script text.
+
+## Related Examples
+
+- [examples/common/03-create-vm](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/03-create-vm)
+- [examples/common/04-create-10-vms](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/04-create-10-vms)
+- [examples/common/13-vm-init-scripts](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/13-vm-init-scripts)
+
+---
+title: Networking
+url: /en/manual/networking/
+path: docs/en/manual/networking.md
+language: en
+section: English / User Manual
+---
+
+# Networking
+
+The networking chapter prioritizes the capabilities most commonly used when
+creating VMs: L3 lookup, VM NICs, static IP, security groups, VIP/EIP.
+
+## VM Network Interfaces
+
+`zstack_instance` uses `network_interfaces` to configure NICs:
+
+```hcl
+network_interfaces = [
+  {
+    l3_network_uuid = data.zstack_l3networks.network.l3networks[0].uuid
+    default_l3      = true
+    static_ip       = var.static_ip
+  }
+]
+```
+
+`l3_network_uuid` is required. `default_l3` and `static_ip` are optional:
+single-NIC scenarios usually can omit `default_l3`; set `static_ip` only when a
+fixed address is required. When `static_ip` is omitted, ZStack allocates the
+address automatically. If the value is passed through a variable, set the
+variable default to `null` so Terraform treats it as unset.
+
+## Network Foundations
+
+Most VM examples only query existing L3 networks. Create L2, L3, IP range, VPC,
+or routing resources only when Terraform should manage network infrastructure;
+these values usually require network administrator confirmation.
+
+| Terraform object | Type | Purpose |
+|---|---|---|
+| `zstack_l2networks` | data source | Query existing L2 networks for L3 networks, VPC, or advanced network resources. |
+| `zstack_l3networks` | data source | Query existing L3 networks for VM NICs, VIP/EIP, load balancer, and related resources. |
+| `zstack_virtual_routers` | data source | Query virtual routers for VPC, route tables, and route entries. |
+| `zstack_l2vlan_network` | resource | Create VLAN L2 networks; usually requires physical network, VLAN ID, and layer-2 planning. |
+| `zstack_l3network` | resource | Create L3 networks; usually depends on L2 network and address range planning. |
+| `zstack_subnet_ip_range` | resource | Configure subnet/IP address ranges and allocatable address ranges. |
+| `zstack_reserved_ip` | resource | Reserve a specific IP to avoid automatic assignment to VMs or other resources. |
+| `zstack_vpc` | resource | Create a VPC network that provides isolated private network space. |
+
+## Security Group
+
+Common security group resources:
+
+| Terraform object | Type | Purpose |
+|---|---|---|
+| `zstack_networking_secgroup` | resource | Create a security group container that carries inbound and outbound rules. |
+| `zstack_networking_secgroup_rule` | resource | Create a security group rule with direction, protocol, port, CIDR, priority, and action. |
+| `zstack_networking_secgroup_attachment` | resource | Attach a security group to a VM NIC so rules apply to that NIC. |
+
+Security group rules should explicitly set direction, protocol, port, CIDR,
+priority, and state. As a secure default, examples do not allow IPv4
+`0.0.0.0/0` as an ingress CIDR. Use an explicit trusted CIDR such as bastion,
+office, or business network. If public ingress is truly required, handle it
+through separate network and security approval before adjusting the rule.
+
+## VIP And EIP
+
+Common resources:
+
+| Terraform object | Type | Purpose |
+|---|---|---|
+| `zstack_vip` | resource | Request a VIP on a specified L3 network as an EIP or load balancer entry address. |
+| `zstack_eip` | resource | Bind a VIP to a VM NIC and expose services on that NIC. |
+
+EIP binding requires VIP UUID and VM NIC UUID.
+
+## VPC And Routing
+
+VPC depends on L2 network, virtual router, and subnet planning, and is strongly
+environment-dependent. A basic VPC scenario usually includes route table and
+route entry:
+
+| Terraform object | Type | Purpose |
+|---|---|---|
+| `zstack_vpc` | resource | Create a VPC network that provides isolated private network space. |
+| `zstack_vrouter_route_table` | resource | Create a virtual router route table for custom routes. |
+| `zstack_vrouter_route_entry` | resource | Create a route entry with destination CIDR and next hop/target. |
+
+Before production use, confirm how the route table is associated with the
+virtual router or VPC.
+
+## Related Examples
+
+- [examples/common/03-create-vm](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/03-create-vm)
+- [examples/common/04-create-10-vms](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/04-create-10-vms)
+- [examples/common/05-eip](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/05-eip)
+- [examples/common/06-security-group](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/06-security-group)
+- [examples/common/07-vpc](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/07-vpc)
+- [examples/common/12-vpc-routing](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/12-vpc-routing)
+
+---
+title: Storage
+url: /en/manual/storage/
+path: docs/en/manual/storage.md
+language: en
+section: English / User Manual
+---
+
+# Storage
+
+The storage chapter prioritizes VM data volumes, snapshots, and storage
+lookups.
+
+## Common Resources
+
+| Terraform object | Type | Purpose |
+|---|---|---|
+| `zstack_disk_offerings` | data source | Query disk offerings for creating data volumes or confirming disk size profiles. |
+| `zstack_primary_storages` | data source | Query primary storage, which carries VM root volumes and data volumes. |
+| `zstack_backup_storages` | data source | Query image/backup storage, commonly used by image, image import, and some backup/CDP workflows. |
+| `zstack_volume` | resource | Create and manage a data volume that can be attached to a VM independently. |
+| `zstack_volume_snapshot` | resource | Create and manage data volume snapshots for backup or recovery points. |
+
+## Data Volume Modeling
+
+There are two common patterns:
+
+1. Use `data_disks` inside `zstack_instance`, suitable when data disks follow the
+   VM lifecycle.
+2. Use `zstack_volume` independently and set `vm_instance_uuid`, suitable when
+   data disks have an independent lifecycle.
+
+This manual prioritizes the second pattern because it is more explicit and
+easier to import, resize, and back up separately.
+
+## Example
+
+```hcl
+resource "zstack_volume" "data" {
+  name               = var.data_volume_name
+  disk_offering_uuid = data.zstack_disk_offerings.data.disk_offers[0].uuid
+  vm_instance_uuid   = zstack_instance.vm.uuid
+}
+```
+
+## Related Example
+
+See [examples/common/08-volume](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/08-volume).
+
+---
+title: Image
+url: /en/manual/image/
+path: docs/en/manual/image.md
+language: en
+section: English / User Manual
+---
+
+# Image
+
+Images are the foundation for VM creation. Query existing images first, then
+create or manage images only when needed.
+
+## Common Resources
+
+| Terraform object | Type | Purpose |
+|---|---|---|
+| `zstack_images` | data source | Query existing images and select `image_uuid` for VM creation or image workflows. |
+| `zstack_image` | resource | Create and manage an image with image URL, format, platform metadata, and backup storage UUID. |
+
+## Query Existing Images
+
+```hcl
+data "zstack_images" "ubuntu" {
+  name = var.image_name
+
+  filter {
+    name   = "status"
+    values = ["Ready"]
+  }
+}
+```
+
+Use versioned, recognizable image names such as `Ubuntu-24.04-2026-04`. Avoid
+overly broad names such as `Ubuntu`.
+
+## Create Image
+
+Creating images is an administrator workflow. It usually requires:
+
+- Image URL.
+- Format: `qcow2`, `raw`, `vmdk`, and similar.
+- Backup storage UUID.
+- Platform, guest OS, architecture, and boot mode.
+
+```hcl
+resource "zstack_image" "managed" {
+  name                 = var.new_image_name
+  url                  = var.new_image_url
+  format               = "qcow2"
+  platform             = "Linux"
+  guest_os_type        = "Linux"
+  backup_storage_uuids = [var.backup_storage_uuid]
+}
+```
+
+## Related Example
+
+See [examples/common/09-image-query-management](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/09-image-query-management).
+
+---
+title: IAM
+url: /en/manual/iam/
+path: docs/en/manual/iam.md
+language: en
+section: English / User Manual
+---
+
+# IAM
+
+IAM is mainly used for multi-tenancy, project isolation, and automation
+credential management.
+
+## Common Resources
+
+| Terraform object | Type | Purpose |
+|---|---|---|
+| `zstack_account` | resource | Create a ZStack account as the permission boundary for users, AccessKeys, or resource ownership. |
+| `zstack_access_key` | resource | Create an AccessKey for Terraform or automation systems to call ZStack APIs. |
+| `zstack_user` | resource | Create a user under an account for more granular login or API identity. |
+| `zstack_role` | resource | Create a role that carries a set of permission policies. |
+| `zstack_policy` | resource | Create a policy that defines allowed or restricted operation scope. |
+| `zstack_iam2_project` | resource | Create an IAM2 project for project-level resource and permission isolation. |
+| `zstack_iam2_virtual_id` | resource | Create an IAM2 virtual identity for automation or service identity inside a project. |
+| `zstack_iam2_organization` | resource | Create an IAM2 organization node for organization structure and member management. |
+
+## Guidance
+
+- Prefer a dedicated AccessKey for Terraform automation.
+- Use different accounts or AccessKeys for different environments.
+- AccessKey secret is visible only after creation and should be saved to a
+  secret store immediately.
+- Provider `1.1.3` requires `user_uuid` when creating `zstack_access_key`; when
+  creating an AccessKey for a new account, the account UUID can be used.
+- Account, project, role, and policy changes affect permission boundaries and
+  require production approval.
+- Do not print newly created AccessKeys to ordinary logs. Terraform outputs
+  should be marked `sensitive`.
+
+## Related Example
+
+See [examples/common/15-iam-access-key](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/15-iam-access-key).
+
+---
+title: Load Balancer
+url: /en/manual/load-balancer/
+path: docs/en/manual/load-balancer.md
+language: en
+section: English / User Manual
+---
+
+# Load Balancer
+
+Load Balancer is a core production service entry capability. It is usually used
+with VIP, listener, server group, and backend VMs.
+
+## Common Resources
+
+| Terraform object | Type | Purpose |
+|---|---|---|
+| `zstack_vip` | resource | Create an entry VIP as the access address for the load balancer. |
+| `zstack_load_balancer` | resource | Create a load balancer instance, bind the VIP, and carry listeners. |
+| `zstack_load_balancer_listener` | resource | Create a listener, defining frontend protocol/port and backend port. |
+| `zstack_lb_server_group` | resource | Create a backend server group for backend VM/NIC members. |
+
+## Basic Model
+
+```hcl
+data "zstack_l3networks" "public" {
+  name_pattern = var.public_l3_network_name_pattern
+}
+
+resource "zstack_vip" "web" {
+  name            = var.vip_name
+  l3_network_uuid = data.zstack_l3networks.public.l3networks[0].uuid
+}
+
+resource "zstack_load_balancer" "web" {
+  name     = var.load_balancer_name
+  vip_uuid = zstack_vip.web.uuid
+}
+
+resource "zstack_load_balancer_listener" "http" {
+  name               = var.listener_name
+  load_balancer_uuid = zstack_load_balancer.web.uuid
+  protocol           = "http"
+  load_balancer_port = 80
+  instance_port      = 8080
+}
+```
+
+## Guidance
+
+- Clearly distinguish the public or entry L3 network used by VIP.
+- Manage listener ports and backend ports through variables.
+- Output VIP, LB, listener, and server group UUIDs so backend members can be
+  connected for the target environment.
+- If one LB serves multiple applications, prefer module boundaries around
+  listener/server group.
+
+## Related Example
+
+See [examples/common/11-load-balancer-web](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/11-load-balancer-web).
+
+---
+title: Monitoring & Notification
+url: /en/manual/monitoring-notification/
+path: docs/en/manual/monitoring-notification.md
+language: en
+section: English / User Manual
+---
+
+# Monitoring And Notification
+
+Monitoring and notification connect resource state and business events to
+operations response workflows.
+
+## Common Resources
+
+| Terraform object | Type | Purpose |
+|---|---|---|
+| `zstack_alarm` | resource | Create an alarm rule triggered by metric namespace/name, threshold, and comparison condition. |
+| `zstack_sns_topic` | resource | Create a notification topic to organize alarm delivery targets. |
+| `zstack_sns_email_endpoint` | resource | Create an email endpoint to send alarms to email. |
+| `zstack_sns_http_endpoint` | resource | Create an HTTP endpoint to push alarms to an HTTP service. |
+| `zstack_webhook` | resource | Create a webhook for external operations, alerting, or automation systems. |
+| `zstack_monitor_template` | resource | Create a monitoring template to reuse a group of monitoring rule settings. |
+| `zstack_monitor_group` | resource | Create a monitoring group to organize monitored resources or template scope. |
+
+## Basic Model
+
+```hcl
+resource "zstack_sns_topic" "ops" {
+  name = var.topic_name
+}
+
+resource "zstack_alarm" "cpu" {
+  name                = var.alarm_name
+  namespace           = var.metric_namespace
+  metric_name         = var.metric_name
+  comparison_operator = "GreaterThanOrEqualTo"
+  threshold           = 80
+}
+```
+
+## Guidance
+
+- Confirm metric namespace and metric name in the target ZStack environment.
+- Provider `1.1.3` requires `platform_uuid` when creating SNS email endpoints;
+  confirm SNS platform UUID in the target environment first.
+- Manage notification endpoints and alarm rules separately to avoid deleting
+  endpoints while changing alarms.
+- Webhook URLs and opaque payloads may contain sensitive information and should
+  be managed as sensitive variables.
+- The current example creates only basic objects. Alarm and notification action
+  binding should be confirmed for the target environment.
+
+## Related Example
+
+See [examples/common/16-monitoring-notification](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/16-monitoring-notification).
+
+---
+title: Admin Operations
+url: /en/manual/admin-operations/
+path: docs/en/manual/admin-operations.md
+language: en
+section: English / User Manual
+---
+
+# Admin Operations
+
+Admin operations cover Scheduler, Global Config, and License. These resources
+usually affect platform behavior or license state, so production use requires
+approval and rollback review.
+
+## Scheduler
+
+Common resources:
+
+| Terraform object | Type | Purpose |
+|---|---|---|
+| `zstack_scheduler_job` | resource | Create a scheduled action definition, including job type and target resource UUID. |
+| `zstack_scheduler_trigger` | resource | Create a scheduled trigger, defining one-time, interval, or cron execution time. |
+
+Scheduler job defines what action is executed against which resource. Trigger
+defines when it is executed.
+
+```hcl
+resource "zstack_scheduler_job" "target" {
+  name                 = var.job_name
+  type                 = var.job_type
+  target_resource_uuid = var.target_resource_uuid
+}
+
+resource "zstack_scheduler_trigger" "schedule" {
+  name           = var.trigger_name
+  scheduler_type = "cron"
+  cron           = var.cron
+}
+```
+
+Before running, confirm:
+
+- Whether `job_type` is supported by the target ZStack environment.
+- Whether the target resource UUID is correct.
+- Whether the trigger is one-time, interval-based, or cron.
+- Whether the action stops, deletes, or modifies production resources.
+
+Related example:
+[examples/common/17-scheduler](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/17-scheduler).
+
+## Global Config
+
+Common resource and data source:
+
+| Terraform object | Type | Purpose |
+|---|---|---|
+| `data.zstack_global_configs` | data source | Query current value, default value, and description of platform global configs. |
+| `zstack_global_config` | resource | Manage and modify a specific global config item. |
+
+Global Config is platform-level configuration. Query first, then decide whether
+to manage it:
+
+```hcl
+data "zstack_global_configs" "selected" {
+  category = var.global_config_category
+  name     = var.global_config_name
+}
+```
+
+Set `manage_global_config = true` only after confirming `category`, `name`,
+current value, default value, and impact scope.
+
+Related example:
+[examples/common/18-global-config](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/18-global-config).
+
+## License
+
+Common resources and data sources:
+
+| Terraform object | Type | Purpose |
+|---|---|---|
+| `data.zstack_license_authorized_capacity` | data source | Query authorized license capacity for routine checks and capacity confirmation. |
+| `data.zstack_license_authorized_nodes` | data source | Query authorized license nodes to confirm node authorization scope. |
+| `zstack_license` | resource | Upload and manage license text. |
+
+License content is sensitive and should not be committed. Confirm management
+node UUID before uploading a license.
+
+```hcl
+resource "zstack_license" "uploaded" {
+  management_node_uuid = var.management_node_uuid
+  license              = var.license_text
+}
+```
+
+Guidance:
+
+- Query authorized capacity and nodes for routine checks.
+- Provider `1.1.3` authorized nodes data source does not support
+  `name_pattern`; use schema-supported `uuid` or `filter` if you need to narrow
+  the result.
+- Upload license only through an approved change process.
+- `license_text` must come from a secret store.
+
+Related example:
+[examples/common/19-license](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/19-license).
+
+---
+title: Backup & CDP
+url: /en/manual/backup-cdp/
+path: docs/en/manual/backup-cdp.md
+language: en
+section: English / User Manual
+---
+
+# Backup And CDP
+
+Backup and CDP scenarios cover data protection, recovery point management, and
+platform backup. These resources affect capacity and performance, so production
+use requires confirmed backup windows, retention policy, and storage type.
+
+## Common Resources
+
+| Terraform object | Type | Purpose |
+|---|---|---|
+| `zstack_cdp_policy` | resource | Create a CDP policy, defining recovery point frequency, retention time, and full backup interval. |
+| `zstack_cdp_task` | resource | Create a CDP task that applies a CDP policy to specific resource UUIDs. |
+| `zstack_volume_backup` | resource | Create a volume backup, requiring volume UUID and compatible backup storage UUID. |
+| `zstack_database_backup` | resource | Create a platform database backup for platform-level recovery scenarios. |
+| `zstack_zbox_backup` | resource | Create a ZBox backup for environments with ZBox components. |
+
+## CDP Policy
+
+CDP policy defines recovery points, retention time, and full backup interval:
+
+```hcl
+resource "zstack_cdp_policy" "daily" {
+  name                      = var.cdp_policy_name
+  recovery_point_per_second = var.recovery_point_per_second
+  retention_time_per_day    = var.retention_time_per_day
+}
+```
+
+## CDP Task
+
+CDP task applies a policy to a resource list:
+
+```hcl
+resource "zstack_cdp_task" "resources" {
+  name                = var.cdp_task_name
+  policy_uuid         = zstack_cdp_policy.daily.uuid
+  backup_storage_uuid = var.backup_storage_uuid
+  resource_uuids      = var.cdp_resource_uuids
+  task_type           = var.cdp_task_type
+}
+```
+
+## Volume Backup
+
+`zstack_volume_backup` requires volume UUID and backup storage UUID. Provider
+documentation states that `backup_storage_uuid` must point to
+ImageStoreBackupStorage; SftpBackupStorage does not support volume backup.
+
+## Database / ZBox Backup
+
+`zstack_database_backup` is for platform database backup.
+`zstack_zbox_backup` is for ZBox scenarios and has stronger environment
+dependencies.
+
+## Guidance
+
+- Confirm backup storage type first.
+- Evaluate backup capacity and bandwidth impact.
+- Test production resources with a small scope first.
+- Use explicit resource UUIDs for CDP tasks. Do not use fuzzy selection to apply
+  tasks to many resources automatically.
+
+Related example:
+[examples/common/20-backup-cdp](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/20-backup-cdp).
+
+---
+title: Network Observability
+url: /en/manual/network-observability/
+path: docs/en/manual/network-observability.md
+language: en
+section: English / User Manual
+---
+
+# Network Observability
+
+Network observability covers traffic collection, port mirroring, and network
+troubleshooting. These configurations depend on network paths and collection
+systems, so production use requires confirming collector address, ports, mirror
+network, and endpoint format.
+
+## Common Resources
+
+| Terraform object | Type | Purpose |
+|---|---|---|
+| `zstack_flow_meter` | resource | Create traffic metering/export configuration, including collection type, server, port, and version. |
+| `zstack_flow_collector` | resource | Create traffic collector configuration and send flow meter data to the collector service. |
+| `zstack_port_mirror` | resource | Create a port mirror base object to copy selected network traffic. |
+| `zstack_port_mirror_session` | resource | Create a port mirror session, defining source endpoint, destination endpoint, and mirror relationship. |
+
+## Flow Meter / Collector
+
+```hcl
+resource "zstack_flow_meter" "netflow" {
+  type    = var.flow_meter_type
+  server  = var.flow_meter_server
+  port    = var.flow_meter_port
+  version = var.flow_meter_version
+}
+
+resource "zstack_flow_collector" "collector" {
+  flow_meter_uuid = zstack_flow_meter.netflow.uuid
+  server          = var.flow_collector_server
+  port            = var.flow_collector_port
+}
+```
+
+## Port Mirror
+
+Port mirror requires a mirror network UUID, and a session specifies source and
+destination endpoints.
+
+Related example:
+[examples/common/21-network-observability](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/21-network-observability).
+
+---
+title: Advanced Network
+url: /en/manual/advanced-network/
+path: docs/en/manual/advanced-network.md
+language: en
+section: English / User Manual
+---
+
+# Advanced Network
+
+Advanced networking covers site-to-site connectivity and policy routing. These
+configurations strongly depend on network planning. Do not invent peer
+addresses, keys, route tables, or policy values.
+
+## Common Resources
+
+| Terraform object | Type | Purpose |
+|---|---|---|
+| `zstack_ipsec_connection` | resource | Create an IPsec site-to-site connection, configuring VIP, peer address, and auth key. |
+| `zstack_policy_route_rule_set` | resource | Create a policy route rule set to organize a group of policy route rules. |
+| `zstack_policy_route_rule` | resource | Create a policy route rule, matching source/destination address, protocol, and route table. |
+
+## IPsec
+
+```hcl
+resource "zstack_ipsec_connection" "site_to_site" {
+  name         = var.ipsec_name
+  vip_uuid     = var.vip_uuid
+  peer_address = var.peer_address
+  auth_key     = var.auth_key
+}
+```
+
+`auth_key` is sensitive and should be passed through a sensitive variable.
+
+## Policy Route
+
+Policy routing consists of a rule set and rules. Each rule needs a route table:
+
+```hcl
+resource "zstack_policy_route_rule" "main" {
+  rule_set_uuid = zstack_policy_route_rule_set.main.uuid
+  table_uuid    = var.route_table_uuid
+  rule_number   = var.rule_number
+  dest_ip       = var.dest_ip
+}
+```
+
+If `protocol` is set, use uppercase values accepted by the provider schema:
+`TCP`, `UDP`, or `ICMP`.
+
+Related example:
+[examples/common/22-advanced-network](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/22-advanced-network).
+
+---
+title: Specialized Resources
+url: /en/manual/specialized-resources/
+path: docs/en/manual/specialized-resources.md
+language: en
+section: English / User Manual
+---
+
+# Specialized Resources
+
+Specialized resources are for industry, hardware, or integration scenarios. They
+usually depend on specific environments, external systems, or hardware devices,
+and should not be reused directly as general getting-started examples.
+
+Before using these resources, confirm the target environment, resource
+dependencies, creation order, cleanup method, and rollback strategy. Without
+real environment validation, documentation should provide only resource indexes
+and risk notes.
+
+## Baremetal
+
+Use cases: baremetal resource management, PXE boot, and baremetal instance
+delivery.
+
+Resources:
+
+| Terraform object | Type | Purpose |
+|---|---|---|
+| `zstack_baremetal_chassis` | resource | Manage baremetal chassis or physical server onboarding objects. |
+| `zstack_baremetal_instance` | resource | Manage baremetal instance lifecycle. |
+| `zstack_baremetal_pxe_server` | resource | Manage baremetal PXE boot service. |
+
+Notes:
+
+- Requires a real baremetal environment and network boot configuration.
+- PXE, chassis, and instance resources have strong dependencies. Do not invent
+  UUIDs.
+- Start with read-only queries and single-resource import when possible.
+
+## External And Hybrid Cloud
+
+Use cases: external virtualization platform onboarding, hybrid cloud, or Alibaba
+Cloud proxy resources.
+
+Resources:
+
+| Terraform object | Type | Purpose |
+|---|---|---|
+| `zstack_vcenter` | resource | Manage vCenter resources connected to ZStack. |
+| `zstack_aliyun_proxy_vpc` | resource | Manage Alibaba Cloud VPC proxy objects on the ZStack side. |
+| `zstack_aliyun_proxy_vswitch` | resource | Manage Alibaba Cloud vSwitch proxy objects on the ZStack side. |
+| `zstack_aliyun_nas_access_group` | resource | Manage Alibaba Cloud NAS access group related configuration. |
+
+Notes:
+
+- Requires external platform accounts, network reachability, and authorization.
+- Terraform manages ZStack-side resources; external cloud state may still need
+  validation with external tools.
+- Do not place real cloud accounts, AK/SK, or network addresses in generic
+  examples.
+
+## Security Machines
+
+Use cases: connecting industry security devices, cryptographic appliances, or
+dedicated security capabilities.
+
+Resources:
+
+| Terraform object | Type | Purpose |
+|---|---|---|
+| `zstack_jit_security_machine` | resource | Manage JIT security machine onboarding objects. |
+| `zstack_san_sec_security_machine` | resource | Manage SAN_SEC security machine onboarding objects. |
+| `zstack_info_sec_security_machine` | resource | Manage information security machine onboarding objects. |
+| `zstack_fi_sec_security_machine` | resource | Manage FI_SEC security machine onboarding objects. |
+| `zstack_flk_sec_security_machine` | resource | Manage FLK_SEC security machine onboarding objects. |
+
+Notes:
+
+- Strongly depends on vendor devices, certificates, networks, and security
+  policy.
+- Changes require security team approval.
+- Examples should use only placeholder variables and must not contain real
+  device addresses or credentials.
+
+## Storage Hardware
+
+Use cases: connecting and managing specialized storage resources.
+
+Resources:
+
+| Terraform object | Type | Purpose |
+|---|---|---|
+| `zstack_iscsi_server` | resource | Manage iSCSI storage server onboarding objects. |
+| `zstack_nvme_server` | resource | Manage NVMe storage server onboarding objects. |
+| `zstack_ceph_pool` | resource | Manage Ceph pools. |
+| `zstack_ceph_primary_storage` | resource | Manage Ceph primary storage for VM root/data volumes. |
+| `zstack_ceph_backup_storage` | resource | Manage Ceph image/backup storage for images and backup data. |
+
+Notes:
+
+- Requires a real storage cluster, network, and authentication information.
+- Ceph pool, primary storage, and backup storage lifecycle and capacity impact
+  are significant.
+- Confirm whether business data already exists before production use.
+
+## Other Platform Resources
+
+Use cases: platform auxiliary capabilities, logs, billing, datasets, container
+endpoints, and related platform resources.
+
+Resources:
+
+| Terraform object | Type | Purpose |
+|---|---|---|
+| `zstack_directory` | resource | Manage platform directory objects. |
+| `zstack_dataset` | resource | Manage dataset objects, commonly used in data or AI scenarios. |
+| `zstack_price_table` | resource | Manage price tables, affecting the billing model. |
+| `zstack_email_media` | resource | Manage email media configuration for notification delivery. |
+| `zstack_log_server` | resource | Manage external log server integration. |
+| `zstack_snmp_agent` | resource | Manage SNMP agent integration. |
+| `zstack_container_management_endpoint` | resource | Manage container platform endpoint integration. |
+
+Notes:
+
+- `zstack_price_table` affects the billing model and requires approval.
+- `zstack_log_server` and `zstack_snmp_agent` depend on external operations
+  systems.
+- `zstack_container_management_endpoint` depends on container platform
+  connection information.
+- `zstack_dataset` is suitable for AI/data scenarios and requires confirming
+  data lifecycle and permissions.
+
+## Pre-Use Checklist
+
+Before writing runnable examples or managing specialized resources in
+production, confirm at least:
+
+- A real environment is available for validation.
+- Provider docs, examples, or tests cover the key lifecycle.
+- Resource dependencies, creation order, cleanup method, and rollback strategy
+  are clear.
+- Missing UUIDs, device addresses, credentials, or external-system details are
+  represented as variables.
+- Examples that have not been validated in a real environment are not marked as
+  production-ready.
+
+---
+title: Debugging And Diagnostics
+url: /en/manual/debugging-diagnostics/
+path: docs/en/manual/debugging-diagnostics.md
+language: en
+section: English / User Manual
+---
+
+# Debugging And Diagnostics
+
+Use this page to troubleshoot Terraform and ZStack provider issues. Collect
+facts first, then decide whether the cause is configuration, network, permission,
+schema, or remote resource state.
+
+## Collect Facts First
+
+Record:
+
+- Terraform CLI version.
+- ZStack provider source and version.
+- Exact command and working directory.
+- ZStack management node host and port.
+- Authentication method, with real credentials hidden.
+- Related resource names, UUIDs, and statuses.
+- Sanitized plan, error message, and provider logs.
+
+Do not send raw AccessKey secrets, account passwords, license text, private
+keys, tokens, or state files to others.
+
+## Initialization Issues
+
+```bash
+terraform init
+terraform providers
+```
+
+Check:
+
+- Whether `required_providers.zstack.source` is expected.
+- Whether offline environments load the provider mirror configuration.
+- Whether `.terraform.lock.hcl` matches the documented or project version
+  constraint.
+
+## Authentication Issues
+
+Check environment variables:
+
+```bash
+env | grep '^ZSTACK_'
+```
+
+Confirm the runner can reach the management node and the AccessKey has
+permissions for target resources. Do not mix AccessKey and account/password in
+one provider configuration unless you have a clear reason.
+
+## Data Source Issues
+
+If a query finds no resource:
+
+- Confirm the resource exists in the ZStack console.
+- Prefer exact `uuid` lookup.
+- If using `name`, confirm the name is unique.
+- If using `name_pattern`, output and review matched results.
+- Check resource state, for example image `Ready` or `Enabled`.
+
+## Plan Issues
+
+`terraform plan` is the primary diagnostic entry point. Check for:
+
+- Replacement.
+- Unexpected deletion.
+- Administrator-level resource changes.
+- Missing HCL fields after import.
+- Drift caused by console-side changes.
+
+Do not apply when the reason is unclear.
+
+## Debug Logs
+
+For detailed provider logs, temporarily enable:
+
+```bash
+TF_LOG=DEBUG TF_LOG_PATH=terraform.log terraform plan
+```
+
+Logs can contain request parameters, resource attributes, or sensitive values.
+Sanitize before sharing and delete logs after troubleshooting.
+
+## When To Escalate
+
+If local configuration, permissions, and network access are confirmed but you
+still see provider panics, schema mismatch, API anomalies, or remote state that
+cannot converge, include:
+
+- Minimal reproducible HCL.
+- `terraform version`.
+- Provider source and version.
+- Sanitized error logs.
+- Related ZStack resource UUIDs and statuses.
+
+---
+title: Production Guide
+url: /en/manual/production-guide/
+path: docs/en/manual/production-guide.md
+language: en
+section: English / User Manual
+---
+
+# Production Guide
+
+Examples are for learning and provider behavior validation. They are not
+production modules. Add the capabilities on this page before using Terraform in
+a real ZStack environment.
+
+## Production Readiness Checklist
+
+| Area | Requirement |
+|---|---|
+| State | Use remote backend, restrict access, and enable backup or version retention |
+| Credentials | Inject through secret store or CI/CD secrets; keep them out of Git and normal logs |
+| Provider | Pin versions and run scenario-level plans before upgrades |
+| Variables | Express environment differences through variables and add required validation |
+| Naming and tags | Standardize environment, owner, application, cost center, and related tags |
+| Approval | Review plan through human or pipeline policy before apply |
+| Change window | Deletion, replacement, and admin resource changes need a controlled window |
+| Rollback | Define rollback method, data protection, and irreversible-operation boundaries |
+
+## Environment Isolation
+
+Use separate directories, workspaces, or backends for different environments.
+The key rule is a clear state boundary: do not mix unrelated environments in one
+state.
+
+Example:
+
+```text
+envs/
+  dev/
+  test/
+  prod/
+modules/
+  vm/
+  network/
+```
+
+Turn examples into reusable modules only when module boundaries are stable and
+the team already has a review workflow.
+
+## Change Workflow
+
+Recommended workflow:
+
+1. Change HCL or variables.
+2. Run formatting and validation.
+3. Generate a plan.
+4. Review replacement, deletion, admin resources, and security group rules.
+5. Apply during an approved window.
+6. Record the change and key outputs.
+
+Production apply should not be triggered automatically by a normal pull request.
+
+## High-Risk Resources
+
+These resource types need extra review:
+
+- `zstack_global_config`
+- License resources
+- IAM, account, and AccessKey
+- Scheduler
+- Backup / CDP
+- IPsec, policy route, and VPC route
+- Security group ingress rules and public VIP/EIP
+
+If the impact is unclear, validate with a test environment or dedicated
+resources first.
+
+## Existing Resource Adoption
+
+Before importing existing resources, confirm ownership, naming, tags, and change
+window. After import, iterate on plan until it is no-op or only contains
+accepted differences.
+
+Do not let Terraform manage resources still modified by another automation
+system unless field ownership is explicit.
+
+## Security And Audit
+
+- Expose only UUIDs, addresses, and states required for diagnostics.
+- Mark sensitive outputs with `sensitive = true`.
+- Treat plan, state, and logs as sensitive files.
+- Security groups and public entry points need trusted CIDRs, business owner,
+  and approval records.
+- Record operator, time, plan summary, and rollback notes for admin changes.
+
+---
+title: Common Examples
+url: /en/scenarios/
+path: docs/en/scenarios/index.md
+language: en
+section: English / Scenario Examples
+---
+
+# Scenario Examples
+
+This section explains runnable Terraform examples under `examples/common` by
+real customer scenario. Larger production shapes are listed in
+[Production Examples](production-examples.md). For step-by-step learning paths,
+see [Practice Tutorials](practice-tutorials.md).
+
+## Common Scenarios
+
+| Scenario | Example |
+|---|---|
+| Provider authentication | [examples/common/01-provider](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/01-provider) |
+| Query existing resources | [examples/common/02-query-existing-resources](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/02-query-existing-resources) |
+| Create one VM | [examples/common/03-create-vm](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/03-create-vm) |
+| Create multiple VMs | [examples/common/04-create-10-vms](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/04-create-10-vms) |
+| VIP/EIP | [examples/common/05-eip](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/05-eip) |
+| VM + security group | [examples/common/06-security-group](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/06-security-group) |
+| Basic VPC network | [examples/common/07-vpc](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/07-vpc) |
+| VM + data volume | [examples/common/08-volume](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/08-volume) |
+| Image query/management | [examples/common/09-image-query-management](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/09-image-query-management) |
+| Import existing VM | [examples/common/10-import-existing-vm](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/10-import-existing-vm) |
+| Web load balancing | [examples/common/11-load-balancer-web](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/11-load-balancer-web) |
+| VPC routing | [examples/common/12-vpc-routing](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/12-vpc-routing) |
+| VM initialization scripts | [examples/common/13-vm-init-scripts](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/13-vm-init-scripts) |
+| Tag management | [examples/common/14-tags](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/14-tags) |
+| IAM and AccessKey | [examples/common/15-iam-access-key](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/15-iam-access-key) |
+| Monitoring notification | [examples/common/16-monitoring-notification](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/16-monitoring-notification) |
+| Scheduler | [examples/common/17-scheduler](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/17-scheduler) |
+| Global Config | [examples/common/18-global-config](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/18-global-config) |
+| License | [examples/common/19-license](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/19-license) |
+| Backup / CDP | [examples/common/20-backup-cdp](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/20-backup-cdp) |
+| Network Observability | [examples/common/21-network-observability](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/21-network-observability) |
+| Advanced Network | [examples/common/22-advanced-network](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/22-advanced-network) |
+
+Each example directory contains `main.tf`, `variables.tf`,
+`terraform.tfvars.example`, and `README.md`. Before running, copy the variable
+file and replace placeholders with real resource names or UUIDs from the target
+ZStack environment.
+
+---
+title: Practice Tutorials
+url: /en/scenarios/practice-tutorials/
+path: docs/en/scenarios/practice-tutorials.md
+language: en
+section: English / Scenario Examples
+---
+
+# Practice Tutorials
+
+This page organizes `examples/common` and `examples/production` into executable
+learning paths. Each path queries existing resources before creating dependent
+resources.
+
+## Beginner Path: Create One VM
+
+| Step | Example | Goal |
+|---|---|---|
+| 1 | [01-provider](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/01-provider) | Validate authentication and provider initialization |
+| 2 | [02-query-existing-resources](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/02-query-existing-resources) | Find image, L3 network, and offering |
+| 3 | [03-create-vm](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/03-create-vm) | Create a VM and output UUIDs |
+| 4 | [06-security-group](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/06-security-group) | Attach a security group to the VM NIC |
+
+Acceptance criteria: `terraform plan` is explainable, VM UUID and NIC UUID are
+output, and security group CIDR comes from a trusted source.
+
+## Network Entry Path: VIP, EIP, And LB
+
+| Step | Example | Goal |
+|---|---|---|
+| 1 | [05-eip](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/05-eip) | Create a VIP and bind EIP |
+| 2 | [11-load-balancer-web](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/11-load-balancer-web) | Create load balancer, listener, and server group |
+| 3 | [12-vpc-routing](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/12-vpc-routing) | Validate VPC routing modeling |
+
+Acceptance criteria: VIP, LB, listener, and server group UUIDs are traceable,
+and ports and CIDRs have been reviewed.
+
+## Storage And Image Path
+
+| Step | Example | Goal |
+|---|---|---|
+| 1 | [08-volume](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/08-volume) | Create and attach a data volume |
+| 2 | [09-image-query-management](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/09-image-query-management) | Query images and optionally create a managed image |
+| 3 | [20-backup-cdp](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/20-backup-cdp) | Understand backup/CDP environment dependencies |
+
+Acceptance criteria: disk offering, backup storage, and business retention policy
+come from the real environment.
+
+## Platform Governance Path
+
+| Step | Example | Goal |
+|---|---|---|
+| 1 | [14-tags](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/14-tags) | Establish standard tags |
+| 2 | [15-iam-access-key](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/15-iam-access-key) | Create automation identity and AccessKey |
+| 3 | [16-monitoring-notification](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/16-monitoring-notification) | Configure alarm and notification primitives |
+| 4 | [18-global-config](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/18-global-config) | Query or manage global config in a controlled way |
+
+Acceptance criteria: permission boundary, sensitive outputs, and admin change
+approval are explicit.
+
+## Production Reference Path
+
+| Goal | Example |
+|---|---|
+| Three-tier web infrastructure | [examples/production/three-tier-web](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/production/three-tier-web) |
+| Kubernetes infrastructure reference | [examples/production/k8s-reference](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/production/k8s-reference) |
+| Existing VM fleet import | [examples/production/import-vm-fleet](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/production/import-vm-fleet) |
+| Automation IAM | [examples/production/automation-iam](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/production/automation-iam) |
+
+Production examples demonstrate project organization. They are not complete
+customer production modules. Read the [Production Guide](../manual/production-guide.md)
+before formal use.
+
+---
+title: Production Examples
+url: /en/scenarios/production-examples/
+path: docs/en/scenarios/production-examples.md
+language: en
+section: English / Scenario Examples
+---
+
+# Production Examples
+
+Production examples live under `examples/production`. They demonstrate
+Terraform project structure, resource boundaries, and delivery constraints.
+They are references, not complete production modules.
+
+Run [examples/common/02-query-existing-resources](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/02-query-existing-resources) first to confirm candidate
+images, L3 networks, offerings, disk offerings, and public L3 networks in the
+target ZStack environment.
+
+| Example | Directory | Purpose |
+|---|---|---|
+| Three-tier web infrastructure | [examples/production/three-tier-web](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/production/three-tier-web) | Creates web/app VMs, data volumes, security groups, VIP/LB, and standard tags |
+| Kubernetes infrastructure reference | [examples/production/k8s-reference](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/production/k8s-reference) | Creates control-plane/worker VMs, API LB, and node security group without installing Kubernetes |
+| Existing VM fleet import | [examples/production/import-vm-fleet](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/production/import-vm-fleet) | Imports existing VMs in reviewed batches and drives the plan toward no-op |
+| Automation IAM | [examples/production/automation-iam](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/production/automation-iam) | Creates automation account, IAM2 project, virtual ID, and AccessKey |
+
+## Boundaries
+
+- Production use should add a remote backend and state access controls.
+- Credentials, AccessKey secrets, Kubernetes tokens, certificates, and private
+  keys must come from a secret store.
+- CIDRs, offerings, images, and network names must be confirmed in the target
+  environment.
+- After importing existing resources, iterate on `terraform plan` until the
+  result is no-op or only contains accepted changes.
+- If the plan shows replacement, stop and confirm immutable fields before
+  applying.
+
+## Suggested Validation Order
+
+1. `three-tier-web`: validate VM, volume, security group, VIP/LB, and tag
+   composition.
+2. `automation-iam`: validate provider `1.1.3` AccessKey `user_uuid` behavior.
+3. `import-vm-fleet`: rehearse import with dedicated test VMs.
+4. `k8s-reference`: plan first, confirm node sizing and API entry design, then
+   hand off to the Kubernetes installation workflow.
+
+---
+title: Best Practices
+url: /en/best-practices/
+path: docs/en/best-practices/index.md
+language: en
+section: English
+---
+
+# Best Practices
+
+## Provider And Authentication
+
+- Prefer AccessKey authentication.
+- Pass production credentials through CI/CD secret stores or environment
+  variables.
+- Do not commit `terraform.tfvars`, state files, plan files, or AccessKeys.
+- This documentation and public examples are based on `ZStack-Robot/zstack`
+  provider `1.1.3`.
+- Provider development environments may use a development registry source or
+  Terraform CLI development overrides. Do not mix development provider sources
+  into customer delivery examples.
+- Offline customer environments should prefer a Terraform provider mirror that
+  serves the same provider source and version.
+- When upgrading the provider, update version constraints consistently, then run
+  `terraform init -upgrade` and scenario-level `terraform plan`.
+
+## Data Sources
+
+- Prefer `uuid` for automation and CI/CD configuration.
+- Use exact `name` in human-authored examples only when the name is unique.
+- Use `name_pattern` carefully, and always output and review matched results.
+- Query existing resources before creating dependent resources; avoid
+  hard-coding UUIDs from unknown sources.
+
+## VM
+
+- Use `network_interfaces` for new configurations. Do not recommend old
+  `l3_network_uuids`.
+- Prefer `for_each` for multiple VMs, using VM names as stable keys.
+- Use `zstack_volume` separately when a VM needs a data disk with an independent
+  lifecycle.
+- For examples that consume capacity or cost, clearly remind users to run
+  `terraform destroy`.
+
+## State
+
+- Use a remote backend for team collaboration.
+- After import, run `terraform plan` before applying.
+- Do not apply imported resources until the plan is no-op or only contains
+  explicitly accepted changes.
+- If the plan shows replacement, confirm immutable fields and state differences
+  first.
+
+## Production Scenarios
+
+- Production reference examples live in `examples/production`; they show project
+  organization and are not customer production modules.
+- VIP/EIP: output VIP/EIP UUID and bound VM NIC UUID for troubleshooting.
+- Load Balancer: manage listener ports, backend ports, and server groups through
+  variables.
+- VPC/routing: model route tables and route entries separately; confirm
+  associations per environment.
+- SSH/scripts: script content must not contain plaintext passwords, tokens, or
+  private keys.
+- Tags: establish a shared tag standard such as environment, owner,
+  application, and cost-center.
+- IAM: save AccessKey secrets to a secret store immediately; Terraform outputs
+  must be `sensitive`.
+- Monitoring: metric namespace/name must come from the real environment. Do not
+  invent them.
+
+## Admin Scenarios
+
+- Scheduler: confirm job type, target resource, and trigger time to avoid
+  unintended operations on production resources.
+- Global Config: query current and default values before deciding whether to
+  manage a setting.
+- License: pass license text as a sensitive variable and do not commit it.
+- Backup/CDP: confirm backup storage type, capacity, and bandwidth impact before
+  creating tasks.
+- CDP task: use explicit resource UUIDs. Do not use fuzzy queries to
+  automatically cover many resources.
+
+## Example Quality
+
+- Use only resources and attributes confirmed in the current provider docs,
+  examples, tests, or this documentation repository.
+- Explain whether an example is directly runnable and which variables must be
+  replaced before running it.
+- Use variables or placeholders for missing UUIDs or names. Do not invent
+  values.
+- See [HCL Style Guide](../manual/hcl-style.md) for file layout, variables,
+  outputs, and naming conventions.
+- Before production apply, use the [Production Guide](../manual/production-guide.md)
+  to check state, credentials, approval, and rollback.
+
+---
+title: Troubleshooting
+url: /en/troubleshooting/
+path: docs/en/troubleshooting/index.md
+language: en
+section: English
+---
+
+# Troubleshooting
+
+## Provider Download Fails
+
+- Check `required_providers.zstack.source`.
+- Use `ZStack-Robot/zstack` for the public Terraform Registry.
+- Customer delivery examples default to `ZStack-Robot/zstack`; for offline
+  environments, verify that the Terraform provider mirror serves that source and
+  version.
+- In provider development environments, verify that any development registry
+  source or CLI dev override matches the local provider build path.
+- Make sure Terraform CLI can reach the selected registry or mirror.
+
+## Authentication Fails
+
+- Check `ZSTACK_HOST`, `ZSTACK_PORT`, AccessKey ID, and AccessKey Secret.
+- Make sure the Terraform runner can reach the ZStack management node.
+- Confirm the AccessKey has permission for the target resources.
+- Do not mix AccessKey and account/password authentication at the same time.
+
+## Data Source Finds No Resource
+
+- Confirm the resource name or UUID in the ZStack console first.
+- Prefer `uuid` for exact lookup.
+- If using `name_pattern`, output and review the full matching range.
+- Check resource status, for example image `Ready` or `Enabled`.
+
+## VM Creation Fails
+
+- Confirm image, L3 network, and instance offering exist.
+- Check that `network_interfaces` uses the correct L3 UUID.
+- For static IP failures, confirm the IP is in range and not already used.
+- Do not set both `instance_offering_uuid` and `cpu_num` plus `memory_size`.
+
+## Security Group Does Not Take Effect
+
+- Confirm the security group is attached to the VM NIC through
+  `zstack_networking_secgroup_attachment`.
+- Check rule direction: `Ingress` or `Egress`.
+- Check `ip_ranges`, `destination_port_ranges`, `priority`, and `state`.
+
+## Import Plan Wants Replacement
+
+- Import does not generate complete HCL.
+- Fill in the resource block and run `terraform plan` again.
+- Do not run `terraform apply` until the plan is no-op or only contains
+  intentionally accepted changes.
+- If immutable fields differ, decide whether replacement is acceptable first.
+- Do not apply when unsure.
+
+## Load Balancer Does Not Work
+
+- Confirm the VIP L3 network is reachable.
+- Check listener `load_balancer_port` and `instance_port`.
+- Confirm backend VM firewall and security group allow the backend port.
+- Output and verify LB, listener, and server group UUIDs.
+
+## Script Execution Fails
+
+- Check `script_type`, `encoding_type`, and `script_timeout`.
+- Confirm target VM state and guest agent/execution channel requirements.
+- Do not embed complex long scripts directly in HCL. For production, generate
+  them from templates or files.
+
+## IAM / AccessKey Issues
+
+- AccessKey secret is visible only during creation and should be saved
+  immediately.
+- Provider `1.1.3` requires `user_uuid` when creating `zstack_access_key`.
+- Check account, user, and virtual ID permission boundaries.
+- Do not print sensitive outputs to ordinary CI logs.
+
+## Alarm Or Notification Does Not Trigger
+
+- Confirm metric namespace and metric name exist in the current environment.
+- When creating SNS email endpoints, confirm `platform_uuid` from the real
+  environment.
+- Check threshold, period, and comparison operator.
+- Check whether notification endpoints are enabled and whether webhook URLs are
+  reachable.
+
+## Scheduler Does Not Run As Expected
+
+- Confirm `scheduler_type`, `cron`, `scheduler_interval`, and `start_time`.
+- Check whether `job_type` is supported by the current environment.
+- Check target resource UUID and whether the resource state allows the action.
+
+## Global Config Change Risk
+
+- Query current value, default value, and description first.
+- If the impact is unclear, keep `manage_global_config = false`.
+- If platform behavior changes after modification, use the change record to
+  restore the original value.
+
+## License Upload Fails
+
+- Check management node UUID.
+- `zstack_license_authorized_nodes` in provider `1.1.3` does not support
+  `name_pattern`; do not reuse old-version parameters.
+- Confirm license text is complete and not damaged by newline or escaping
+  changes.
+- Do not print license content in logs.
+
+## Backup/CDP Fails
+
+- Confirm backup storage UUID type.
+- Volume backup requires supported ImageStoreBackupStorage.
+- Check CDP resource UUID, task type, capacity, and bandwidth limits.
+- ZBox backup depends on a concrete ZBox environment. Use a dry run first.
+
+## Flow / Port Mirror Does Not Collect Data
+
+- Check collector server and port reachability.
+- Confirm flow meter type/version is compatible with the collector.
+- Check mirror network UUID, source endpoint, and destination endpoint format.
+
+## IPsec Or Policy Routing Does Not Take Effect
+
+- Confirm VIP, peer address, and auth key match the peer-side configuration.
+- Check encryption algorithm, authentication algorithm, and PFS settings.
+- Check policy route rule route table UUID, rule number, and matching
+  conditions.
+
+---
+title: FAQ
+url: /en/faq/
+path: docs/en/faq/index.md
+language: en
+section: English
+---
+
+# FAQ
+
+## Which Provider Source Should I Use?
+
+Use `ZStack-Robot/zstack` for customer-facing documentation and public examples.
+If you are developing the provider itself and need to test a local build or
+development registry, configure the source or Terraform CLI development
+override for that development environment. Offline customer environments should
+prefer a Terraform provider mirror that serves the same provider source and
+version; do not casually change source names in delivery examples.
+
+## Why Is AccessKey Recommended?
+
+AccessKey authentication is better suited for automation and permission
+management. Account/password authentication is kept as a compatibility option.
+
+## When Should I Use UUID Or Name?
+
+Prefer UUID for automation scripts and CI/CD configuration. Use exact names only
+when human-authored configurations guarantee uniqueness. Use `name_pattern` only
+for exploration and debugging.
+
+## Can Examples Be Used Directly In Production?
+
+Examples are runnable starting points, not complete production modules. Add
+backend configuration, variable validation, permission boundaries, naming rules,
+tags, and approval workflows before production use.
+
+## Should VM Creation Use `l3_network_uuids`?
+
+No for new configurations. Use `network_interfaces`, which can express the
+default NIC, static IP, and multi-NIC requirements.
+
+## How Do I Manage Multiple Environments?
+
+Use different variable files, workspaces, or separate directories together with
+a remote backend. Do not mix unrelated environments in one state.
+
+## How Do I Import Existing Resources?
+
+Write the resource block first, then run `terraform import` or use an import
+block. After import, run `terraform plan` and fix differences.
+
+## Does Offline Deployment Work?
+
+Yes. Prefer a Terraform provider mirror for the target `ZStack-Robot/zstack`
+version, and confirm that the runner can fetch the provider from the internal
+mirror.
+
+## How Should I Upgrade Provider Versions?
+
+This documentation and the runnable examples are based on provider `1.1.3`.
+When upgrading, update `required_providers.zstack.version` consistently, run
+`terraform init -upgrade`, and then run `terraform plan` for each scenario that
+will be published or demonstrated. Treat unverified new versions as migration
+work; do not batch replace versions and apply directly.
+
+## What Changed In Provider 1.1.3?
+
+`zstack_access_key` requires `user_uuid`, `zstack_sns_email_endpoint` requires
+`platform_uuid`, and `zstack_license_authorized_nodes` no longer supports
+`name_pattern`. Resource orchestration and orchestration templates are canceled,
+so related examples are no longer maintained.
+
+## Why Does The Load Balancer Example Not Include Complete Backend Binding?
+
+Backend membership depends on the customer environment, provider version, and
+network model. The current example creates VIP, load balancer, listener, and
+server group first, and outputs UUIDs so backend binding can be completed for
+the target environment.
+
+## What Are Initialization Scripts Good For?
+
+They are suitable for day-1 initialization, such as installing packages,
+configuring guest agents, or writing baseline configuration. They are not
+suitable for long-lived secrets, private keys, or large unaudited scripts.
+
+## How Should Tags Be Designed?
+
+Start with a small shared set of standard tags: `environment`, `owner`,
+`application`, and `cost-center`. Do not let each team invent a separate naming
+system.
+
+## Can The IAM Example Run Directly In Production?
+
+Not recommended. IAM examples create accounts, virtual identities, and
+AccessKeys. Confirm permission boundaries, password policy, and secret storage
+before running them.
+
+## Can Global Config Be Managed By Terraform Directly?
+
+Yes, but do not apply it directly in production for the first run. Query current
+values, default values, and descriptions first, then manage the setting only
+after the impact is understood.
+
+## Where Should License Text Be Stored?
+
+Store it in a secret store, CI/CD secret, or local uncommitted sensitive
+variable file. Do not commit it to Git and do not print it to ordinary logs.
+
+## Why Do CDP And Backup Examples Have Many `replace-me` Values?
+
+Backup/CDP depends heavily on real resource UUIDs, backup storage type, and
+business retention policy. The documentation cannot invent these values for a
+customer environment; an administrator must confirm them.
+
+## What Should Scheduler Job Type Be?
+
+It depends on the task types supported by the target ZStack environment. Query
+or confirm supported job types before use. Do not guess.
+
+## Can Network Observability Examples Be Reused Directly?
+
+No. Collector address, port, flow meter type, and mirror endpoint format depend
+on customer network design and must be confirmed by an administrator.
+
+## Can IPsec Algorithm Fields Be Omitted?
+
+If ZStack and the peer side have default negotiation policies, you can start by
+omitting them. In production, document the algorithms, PFS, and transform
+protocol used on both sides.
+
+---
+title: Overview
+url: /en/migration/
+path: docs/en/migration/index.md
+language: en
+section: English / Migration Guide
+---
+
+# Migration Guide
+
+Migration focuses on bringing existing ZStack resources under Terraform control.
+The main workflow is:
+
+1. Write the Terraform resource block that describes the intended final state.
+2. Import the existing remote object into Terraform state.
+3. Run `terraform plan`.
+4. Fill in missing arguments until the plan is stable.
+5. Apply only after the changes are understood and accepted.
+
+Start with [Import Existing Resources](import-existing-resources.md).
+
+## Provider 1.1.3 Notes
+
+When upgrading from an older provider version to `1.1.3`, update
+`required_providers.zstack.version`, run `terraform init -upgrade`, then run
+`terraform validate` and `terraform plan` for each example or module.
+
+Validated `1.1.3` behavior changes:
+
+- `zstack_access_key` requires `user_uuid`. When creating an AccessKey for a
+  newly created account, use that account UUID as the owner.
+- `zstack_sns_email_endpoint` requires `platform_uuid`. The provider does not
+  expose an SNS platform data source, so administrators must confirm the UUID in
+  the target environment.
+- `zstack_license_authorized_nodes` no longer supports `name_pattern`; use
+  schema-supported `uuid` or `filter` arguments.
+- Resource orchestration and orchestration templates are canceled and are no
+  longer maintained as examples or manual pages.
+
+If an upgrade plan shows unexpected replacement or readback drift, record the
+field difference and do not apply to production until the change is understood.
+
+---
+title: Import Existing Resources
+url: /en/migration/import-existing-resources/
+path: docs/en/migration/import-existing-resources.md
+language: en
+section: English / Migration Guide
+---
+
+# Import Existing Resources
+
+Use import when existing ZStack resources need to be brought under Terraform
+management.
+
+## Recommended Workflow
+
+1. Write the target Terraform resource block first. It should be close to the
+   final desired configuration.
+2. Import the existing remote object into Terraform state.
+3. Run `terraform plan` to review differences between state, HCL, and the
+   remote object.
+4. Fill in or adjust configuration based on the plan until no unexpected
+   replacement remains.
+
+!!! warning
+    After import, repeatedly run `terraform plan` and fill in the resource block
+    until the plan is no-op or only contains explicitly accepted changes. Do not
+    run `terraform apply` while the plan shows replacement or unknown changes,
+    otherwise Terraform may recreate an existing resource.
+
+## CLI Import
+
+```bash
+terraform import zstack_instance.existing <vm-uuid>
+terraform plan
+```
+
+## Import Block
+
+Terraform 1.5+ can use import blocks:
+
+```hcl
+import {
+  to = zstack_instance.existing
+  id = var.existing_vm_uuid
+}
+```
+
+## Notes
+
+- Import writes state only. It does not generate complete HCL.
+- The first `plan` after import may show differences. Fill in the resource block.
+- If the plan shows replacement, analyze immutable fields first and do not apply
+  directly.
+- Not every resource is suitable for import. If import is unsupported, query it
+  as a data source first.
+
+## Related Example
+
+See [examples/common/10-import-existing-vm](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/10-import-existing-vm).
+
+---
+title: Screenshots & Diagrams
+url: /en/diagrams/
+path: docs/en/diagrams/index.md
+language: en
+section: English
+---
+
+# Screenshots & Diagrams
+
+This section references architecture diagrams, flow diagrams, and console
+screenshots for the documentation package.
+
+The current page publishes only Mermaid diagrams that can render directly in the
+site. Console screenshots should be added only after they are captured from a
+real ZStack environment and sanitized.
+
+## Terraform And ZStack Interaction Architecture
+
+```mermaid
+flowchart LR
+  user[User / CI/CD] --> cli[Terraform CLI]
+  cli --> state[(Terraform State)]
+  cli --> provider[ZStack Terraform Provider]
+  provider --> api[ZStack Management Node API]
+  api --> compute[VMs / Compute Resources]
+  api --> network[Networks / Security Groups / EIP / LB]
+  api --> storage[Storage / Images / Backup]
+  api --> iam[IAM / AccessKey]
+
+  subgraph repo[Documentation And Code Repository]
+    docs[Customer Documentation]
+    examples[examples/common]
+  end
+
+  user --> docs
+  user --> examples
+```
+
+## Terraform Execution Flow
+
+```mermaid
+flowchart TD
+  start[Prepare Terraform Configuration] --> init[terraform init]
+  init --> fmt[terraform fmt]
+  fmt --> validate[terraform validate]
+  validate --> plan[terraform plan]
+  plan --> review{Review Plan}
+  review -- Approved --> apply[terraform apply]
+  review -- Not Approved --> edit[Edit Configuration]
+  edit --> fmt
+  apply --> state[Update Terraform State]
+  state --> output[Review Outputs / ZStack Console]
+  output --> destroy{Clean Up Example Resources?}
+  destroy -- Yes --> tfDestroy[terraform destroy]
+  destroy -- No --> keep[Keep Resources Managed]
+```
+
+## Provider Authentication Configuration
+
+```mermaid
+flowchart LR
+  subgraph inputs[Authentication Inputs]
+    hcl[HCL provider block]
+    env[ZSTACK_* Environment Variables]
+    secret[CI/CD Secret Store]
+  end
+
+  secret --> env
+  hcl --> provider[ZStack Provider]
+  env --> provider
+
+  provider --> accessKey{Authentication Method}
+  accessKey --> ak[AccessKey Recommended]
+  accessKey --> account[Account/Password Compatible]
+
+  ak --> api[ZStack API Client]
+  account --> api
+```
+
+## VM + L3 + Security Group + EIP
+
+```mermaid
+flowchart TB
+  tf[Terraform] --> image[data.zstack_images]
+  tf --> offering[data.zstack_instance_offerings]
+  tf --> l3[data.zstack_l3networks]
+
+  image --> vm[zstack_instance]
+  offering --> vm
+  l3 --> nic[VM NIC]
+  vm --> nic
+
+  sg[zstack_networking_secgroup] --> rule[zstack_networking_secgroup_rule]
+  sg --> attach[zstack_networking_secgroup_attachment]
+  nic --> attach
+
+  publicL3[Public L3 Network] --> vip[zstack_vip]
+  vip --> eip[zstack_eip]
+  nic --> eip
+
+  user[External Access] --> eip
+  eip --> nic
+```
+
+## Load Balancer Web Scenario
+
+```mermaid
+flowchart TB
+  public[Public L3 Network] --> vip[zstack_vip]
+  vip --> lb[zstack_load_balancer]
+  lb --> listener[zstack_load_balancer_listener]
+  lb --> group[zstack_lb_server_group]
+
+  listener --> group
+  group --> vm1[Backend VM 1]
+  group --> vm2[Backend VM 2]
+  group --> vmn[Backend VM N]
+
+  client[Client] --> vip
+```
+
+## VPC Routing Scenario
+
+```mermaid
+flowchart TB
+  l2[L2 Network] --> vpc[zstack_vpc]
+  vr[Virtual Router] --> vpc
+  vpc --> subnet[Subnet CIDR]
+
+  table[zstack_vrouter_route_table] --> entry[zstack_vrouter_route_entry]
+  entry --> dest[Destination CIDR]
+  entry --> target[Route Target]
+
+  workload[Private Workloads] --> subnet
+  subnet --> vr
+  vr --> table
+```
+
+---
+title: Overview
+url: /examples/
+path: docs/examples/index.md
+language: neutral
+section: Examples
+---
+
+# Examples
+
+Runnable Terraform examples are kept in the repository root under
+`examples/common` and `examples/production`. They are shared by all language
+versions of the documentation.
+
+## Common Examples
+
+| Directory | Scenario |
+|---|---|
+| [`examples/common/01-provider`](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/01-provider) | Provider and AccessKey authentication |
+| [`examples/common/02-query-existing-resources`](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/02-query-existing-resources) | Query existing images, networks, offerings, zones, clusters, and hosts |
+| [`examples/common/03-create-vm`](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/03-create-vm) | Create one VM with `network_interfaces` |
+| [`examples/common/04-create-10-vms`](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/04-create-10-vms) | Create multiple VMs with stable `for_each` keys |
+| [`examples/common/05-eip`](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/05-eip) | Create VIP and bind EIP to a VM NIC |
+| [`examples/common/06-security-group`](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/06-security-group) | Create VM, security group, rules, and attachment |
+| [`examples/common/07-vpc`](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/07-vpc) | Create a basic VPC network |
+| [`examples/common/08-volume`](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/08-volume) | Create VM and attach data volume |
+| [`examples/common/09-image-query-management`](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/09-image-query-management) | Query existing image and optionally create a managed image |
+| [`examples/common/10-import-existing-vm`](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/10-import-existing-vm) | Import an existing VM into Terraform state |
+| [`examples/common/11-load-balancer-web`](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/11-load-balancer-web) | Create VIP, load balancer, listener, and server group |
+| [`examples/common/12-vpc-routing`](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/12-vpc-routing) | Create VPC network and route table entries |
+| [`examples/common/13-vm-init-scripts`](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/13-vm-init-scripts) | Create VM, SSH key, instance script, and script execution |
+| [`examples/common/14-tags`](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/14-tags) | Create and attach tags |
+| [`examples/common/15-iam-access-key`](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/15-iam-access-key) | Create account, IAM2 objects, and AccessKey |
+| [`examples/common/16-monitoring-notification`](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/16-monitoring-notification) | Create alarm and notification primitives |
+| [`examples/common/17-scheduler`](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/17-scheduler) | Create scheduler job and trigger |
+| [`examples/common/18-global-config`](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/18-global-config) | Query and optionally manage global config |
+| [`examples/common/19-license`](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/19-license) | Query license capacity/nodes and optionally upload license |
+| [`examples/common/20-backup-cdp`](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/20-backup-cdp) | Create CDP and backup resources |
+| [`examples/common/21-network-observability`](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/21-network-observability) | Create flow and port mirror observability resources |
+| [`examples/common/22-advanced-network`](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/common/22-advanced-network) | Create IPsec and policy route resources |
+
+Each directory contains `main.tf`, `variables.tf`, `terraform.tfvars.example`,
+and `README.md`.
+
+## Production Examples
+
+| Directory | Scenario |
+|---|---|
+| [`examples/production/three-tier-web`](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/production/three-tier-web) | Three-tier web infrastructure reference |
+| [`examples/production/k8s-reference`](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/production/k8s-reference) | Kubernetes infrastructure reference |
+| [`examples/production/import-vm-fleet`](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/production/import-vm-fleet) | Existing VM fleet import workflow |
+| [`examples/production/automation-iam`](https://github.com/terraform-zstack-modules/terraform-provider-zstack-docs/tree/main/examples/production/automation-iam) | Automation IAM and AccessKey reference |
+
+## Provider Version Policy
+
+All published examples should use the same provider source and version policy.
+Public examples use `ZStack-Robot/zstack` and currently pin provider version
+`1.1.3`. Provider development examples may use a development registry source or
+Terraform CLI development overrides, but customer-facing examples should not mix
+development sources with the public baseline.
+
+When upgrading examples, update the provider constraint consistently, run
+`terraform init -upgrade`, and verify `terraform plan` for every scenario that
+will be published. Any unverified provider version should be handled as
+migration work.
+
+## Example Quality Rules
+
+All new variables must include a `description`; sensitive inputs must also set
+`sensitive = true`. Examples should remain runnable teaching material, so avoid
+hard-coded customer UUIDs, credentials, or environment-specific names.

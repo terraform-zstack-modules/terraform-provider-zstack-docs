@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+
+Sitemap: /sitemap.xml
+LLMs: /llms.txt
+LLMs-Full: /llms-full.txt
+API-Catalog: /api/catalog.json

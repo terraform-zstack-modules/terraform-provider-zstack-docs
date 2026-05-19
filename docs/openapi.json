@@ -1,0 +1,95 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Terraform Provider ZStack Documentation Discovery",
+    "version": "1.0.0",
+    "description": "Machine-readable discovery endpoints for the static ZStack Terraform provider documentation site. This is not the ZStack runtime API."
+  },
+  "paths": {
+    "/llms.txt": {
+      "get": {
+        "summary": "Concise LLM index",
+        "responses": {
+          "200": {
+            "description": "Text index for AI agents.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/llms-full.txt": {
+      "get": {
+        "summary": "Full Markdown aggregation",
+        "responses": {
+          "200": {
+            "description": "Aggregated Markdown content from the documentation navigation.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/catalog.json": {
+      "get": {
+        "summary": "Structured documentation catalog",
+        "responses": {
+          "200": {
+            "description": "Structured catalog of documentation pages and machine-readable endpoints.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/.well-known/mcp.json": {
+      "get": {
+        "summary": "MCP discovery manifest",
+        "responses": {
+          "200": {
+            "description": "Static manifest explaining MCP availability and alternate machine-readable resources.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/robots.txt": {
+      "get": {
+        "summary": "Robots and AI discovery policy",
+        "responses": {
+          "200": {
+            "description": "Robots policy with machine-readable endpoint hints.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
